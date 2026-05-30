@@ -16,9 +16,11 @@ export type CommandId =
   | 'ungroup'
   | 'page.addSection'
   | 'page.addSlide'
+  | 'page.copy'
   | 'page.delete'
   | 'section.delete'
   | 'section.rename'
+  | 'pages.copySelected'
   | 'pages.deleteSelected'
 
 export type MenuContextType = 'canvas' | 'element' | 'page' | 'section' | 'pages'
