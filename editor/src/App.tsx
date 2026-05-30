@@ -34,6 +34,7 @@ import { PageType } from '@editor/react/src/widgets/AddPageWidget'
 import { deletePage as deletePageApi } from './api/page'
 import { getUrlParameter, changeMenu } from './utils/common'
 import { Moveable as MoveableContainer } from './components/Moveable'
+import { ShortcutProvider } from './components/ShortcutProvider'
 import { useRegisterSW } from 'virtual:pwa-register/react'
 import { fontBootstrap, fontConfigList, FontFormatCollection } from '@slide/fonts'
 import useAppFn from './hooks/useAppFn'
@@ -139,6 +140,7 @@ const App: React.FC<Iprops> = ({ setLoading, setNoPermission }) => {
     <GlobalDataContext.Provider value={{ globalData, setGlobalData }}>
       <GlobalResourceContext.Provider value={{ globalResource, setGlobalResource }}>
         <Designer engine={engine}>
+          <ShortcutProvider />
           {/* <Workbench> */}
           <StudioPanel>
             <ToolbarPanel

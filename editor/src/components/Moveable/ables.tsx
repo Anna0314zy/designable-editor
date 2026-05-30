@@ -104,7 +104,7 @@ const useAbles = ({ lastWorkspaceId, saveCurrentPage }: Props) => {
 				...cloneNode.props.style,
 				transform: newStr,
 			};
-			closestNode.append(cloneNode);
+			closestNode.apappendpend(cloneNode);
 			// newTreeNode.push(cloneNode);
 		});
 		// 选中新添加的节点
