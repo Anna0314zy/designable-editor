@@ -1,18 +1,18 @@
 import { useEffect } from 'react'
-import { useDesigner } from '@editor/react'
+import { useCommandManager } from '../commands/CommandProvider'
 import { ShortcutManager } from '../shortcuts/ShortcutManager'
 
 export const ShortcutProvider = () => {
-  const engine = useDesigner()
+  const commandManager = useCommandManager()
 
   useEffect(() => {
-    const manager = new ShortcutManager(engine)
+    const manager = new ShortcutManager(commandManager)
     manager.mount()
 
     return () => {
       manager.unmount()
     }
-  }, [engine])
+  }, [commandManager])
 
   return null
 }

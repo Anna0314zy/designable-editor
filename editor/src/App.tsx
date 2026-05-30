@@ -10,12 +10,10 @@ import {
   WorkspacePanel,
   ToolbarPanel,
   ViewportPanel,
-  ThumbnailPanelWithErrorBoundary as ThumbnailPanel,
   ContentPanel,
   StatusbarPanel,
   MainLayoutPanel,
   MarkPanel,
-  // MoveableContainer,
   AnimationWidgetWithErrorBoundary as AnimationWidget,
 } from '@editor/react'
 import { GlobalDataContext, GlobalResourceContext } from '@editor/react/src/globalDataContext'
@@ -35,6 +33,8 @@ import { deletePage as deletePageApi } from './api/page'
 import { getUrlParameter, changeMenu } from './utils/common'
 import { Moveable as MoveableContainer } from './components/Moveable'
 import { ShortcutProvider } from './components/ShortcutProvider'
+import { CommandProvider } from './commands/CommandProvider'
+import { ThumbnailPanelWithCommands as ThumbnailPanel } from './components/ThumbnailPanelWithCommands'
 import { useRegisterSW } from 'virtual:pwa-register/react'
 import { fontBootstrap, fontConfigList, FontFormatCollection } from '@slide/fonts'
 import useAppFn from './hooks/useAppFn'
@@ -140,92 +140,94 @@ const App: React.FC<Iprops> = ({ setLoading, setNoPermission }) => {
     <GlobalDataContext.Provider value={{ globalData, setGlobalData }}>
       <GlobalResourceContext.Provider value={{ globalResource, setGlobalResource }}>
         <Designer engine={engine}>
-          <ShortcutProvider />
-          {/* <Workbench> */}
-          <StudioPanel>
-            <ToolbarPanel
-              showGameModel={showGameModel}
-              hiddenGameModel={hiddenGameModel}
-              logo={<Logo />}
-              actions={<Actions />}
-              title={slideTitle}
-              genMenuList={GenMenuList}
-              text={saveText}
-            ></ToolbarPanel>
-            <ContentPanel>
-              <MainLayoutPanel>
-                <ThumbnailPanel
-                  resourceHost={resourceHost}
-                  thumbnailList={workspaceList}
-                  currentWorkspaceId={currentWorkspaceId}
-                  components={ViewContentComponent}
-                  changeMenu={changeMenu}
-                  setWorkspaceList={setWorkspaceList}
-                  setCurrentWorkspaceId={setCurrentWorkspaceId}
-                  handleCreatePageId={handleCreatePageId}
-                  deletePage={handleDeletePage}
-                ></ThumbnailPanel>
-                <ContextMenu>
-                  <div style={{ display: 'flex', flex: '1' }}>
-                    {workspaceList.map(({ id, pageType }) => {
-                      return id !== currentWorkspaceId ? null : (
-                        <Workspace id={id} key={id} pageType={pageType}>
-                          <WorkspacePanel>
-                            <ViewportPanel>
-                              <ViewPanel
-                                type="DESIGNABLE"
-                                resourceHost={resourceHost}
-                                extra={
-                                  <>
-                                    <MoveableContainer
-                                      setSettingTitle={setSettingTitle}
-                                      lastWorkspaceId={lastWorkspaceId}
-                                      saveCurrentPage={saveCurrentPage}
-                                    />
-                                  </>
-                                }
-                              >
-                                <TreeContent />
-                              </ViewPanel>
-                            </ViewportPanel>
-                            <MarkPanel>
-                              {/* <ResourceManager></ResourceManager> */}
-                            </MarkPanel>
-                          </WorkspacePanel>
-                        </Workspace>
-                      )
-                    })}
-                  </div>
-                </ContextMenu>
-                <CompositePanel direction={'right'} showNavTitle={true}>
-                  <CompositePanel.Item title={settingTitle} icon="Setting">
-                    <SettingsForm updateThumbnail={() => { updateThumbnail() }} extra={{ ...settingComponents }} />
-                  </CompositePanel.Item>
-                  {workbench.currentWorkspace.pageType ===
-										PageType.normalPage && (
-										<CompositePanel.Item
-											title="panels.OutlinedTree"
-											icon="Outline"
-										>
-											<OutlineTreeWidget />
-										</CompositePanel.Item>
-									)}
-                  {/* <CompositePanel.Item title="panels.History" icon="History">
+          <CommandProvider>
+            <ShortcutProvider />
+            {/* <Workbench> */}
+            <StudioPanel>
+              <ToolbarPanel
+                showGameModel={showGameModel}
+                hiddenGameModel={hiddenGameModel}
+                logo={<Logo />}
+                actions={<Actions />}
+                title={slideTitle}
+                genMenuList={GenMenuList}
+                text={saveText}
+              ></ToolbarPanel>
+              <ContentPanel>
+                <MainLayoutPanel>
+                  <ThumbnailPanel
+                    resourceHost={resourceHost}
+                    thumbnailList={workspaceList}
+                    currentWorkspaceId={currentWorkspaceId}
+                    components={ViewContentComponent}
+                    changeMenu={changeMenu}
+                    setWorkspaceList={setWorkspaceList}
+                    setCurrentWorkspaceId={setCurrentWorkspaceId}
+                    handleCreatePageId={handleCreatePageId}
+                    deletePage={handleDeletePage}
+                  ></ThumbnailPanel>
+                  <ContextMenu>
+                    <div style={{ display: 'flex', flex: '1' }}>
+                      {workspaceList.map(({ id, pageType }) => {
+                        return id !== currentWorkspaceId ? null : (
+                          <Workspace id={id} key={id} pageType={pageType}>
+                            <WorkspacePanel>
+                              <ViewportPanel>
+                                <ViewPanel
+                                  type="DESIGNABLE"
+                                  resourceHost={resourceHost}
+                                  extra={
+                                    <>
+                                      <MoveableContainer
+                                        setSettingTitle={setSettingTitle}
+                                        lastWorkspaceId={lastWorkspaceId}
+                                        saveCurrentPage={saveCurrentPage}
+                                      />
+                                    </>
+                                  }
+                                >
+                                  <TreeContent />
+                                </ViewPanel>
+                              </ViewportPanel>
+                              <MarkPanel>
+                                {/* <ResourceManager></ResourceManager> */}
+                              </MarkPanel>
+                            </WorkspacePanel>
+                          </Workspace>
+                        )
+                      })}
+                    </div>
+                  </ContextMenu>
+                  <CompositePanel direction={'right'} showNavTitle={true}>
+                    <CompositePanel.Item title={settingTitle} icon="Setting">
+                      <SettingsForm updateThumbnail={() => { updateThumbnail() }} extra={{ ...settingComponents }} />
+                    </CompositePanel.Item>
+                    {workbench.currentWorkspace.pageType ===
+                      PageType.normalPage && (
+                      <CompositePanel.Item
+                        title="panels.OutlinedTree"
+                        icon="Outline"
+                      >
+                        <OutlineTreeWidget />
+                      </CompositePanel.Item>
+                    )}
+                    {/* <CompositePanel.Item title="panels.History" icon="History">
                   <HistoryWidget />
                 </CompositePanel.Item> */}
-                  <CompositePanel.Item title="panels.Animation" icon="Animation">
-                    <AnimationWidget />
-                  </CompositePanel.Item>
-                </CompositePanel>
-              </MainLayoutPanel>
-            </ContentPanel>
-            <StatusbarPanel
-              workspaceList={workspaceList}
-            ></StatusbarPanel>
-          </StudioPanel>
-          {/* </Workbench> */}
-          <GameModal ref={gameModalRef}/>
-          <Preview selfRef={previewRef} slideId={slideId} pageId={currentWorkspaceId} slideTitle={slideTitle} productId={productId}  fileList={globalResource}/>
+                    <CompositePanel.Item title="panels.Animation" icon="Animation">
+                      <AnimationWidget />
+                    </CompositePanel.Item>
+                  </CompositePanel>
+                </MainLayoutPanel>
+              </ContentPanel>
+              <StatusbarPanel
+                workspaceList={workspaceList}
+              ></StatusbarPanel>
+            </StudioPanel>
+            {/* </Workbench> */}
+            <GameModal ref={gameModalRef}/>
+            <Preview selfRef={previewRef} slideId={slideId} pageId={currentWorkspaceId} slideTitle={slideTitle} productId={productId}  fileList={globalResource}/>
+          </CommandProvider>
         </Designer>
     
       </GlobalResourceContext.Provider>
