@@ -1,0 +1,41 @@
+@import '@/variables.less';
+
+@gutter: 8px;
+@wrapper-padding:20px;
+
+.ld-course-list {
+    height: 100%;
+    width: 100%;
+    background-color: @bg;
+    padding: @wrapper-padding;
+    box-sizing: border-box;
+    .content {
+        margin-top:@wrapper-padding;
+    }
+    .table-search{
+        background-color:@white;
+        padding: @wrapper-padding;
+        border-radius: 4px;
+        .ant-form-item {
+            margin-bottom: @gutter;
+        }
+        .ant-form-item-label  {
+            min-width: 100px!important;
+        }
+        .row-item {
+            margin-right: @gutter;
+            :last-child {
+                margin-right: 0;
+            }
+        }
+        .base-row {
+            margin-bottom: 0;
+        }
+    }
+    .ant-pagination {
+        background-color: @white;
+        padding: 16px 16px 16px 0;
+        margin: 0!important;
+    }
+
+}

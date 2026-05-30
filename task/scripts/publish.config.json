@@ -1,0 +1,8 @@
+{
+    "test": {
+        "prefix": "/home"
+    },
+    "prod": {
+        "prefix": "/home"
+    }
+}

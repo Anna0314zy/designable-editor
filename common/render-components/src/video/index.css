@@ -1,0 +1,4 @@
+/* 隐藏视频控制条上的全屏按钮 */
+.player::-webkit-media-controls-fullscreen-button {
+    display: none;
+}

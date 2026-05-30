@@ -1,0 +1,160 @@
+{
+  "slideVersion": 1359,
+  "slideId": "596abd934a0848cca08e6dec843e0a5d",
+  "slidePublishRecordId": 181,
+  "baseResource": {
+    "size": 102844,
+    "urlList": [
+      "https://slides-resources-test.ledupeiyou.com/packZip/slideResource/596abd934a0848cca08e6dec843e0a5d/1359/596abd934a0848cca08e6dec843e0a5d-1359-base.zip"
+    ],
+    "md5": "816c37756a6aba32cf062c1b1dc4670d"
+  },
+  "gameCustomResourceList": [
+    {
+      "gameId": 1000946,
+      "size": 3496776,
+      "urlList": [
+        "https://slides-resources-test.ledupeiyou.com/packZip/games/1000946/1000946-1705717758488.zip"
+      ],
+      "gameTemplateId": 211,
+      "md5": "1e26b0e8a14ffcede3c22ba33ec4590f"
+    },
+    {
+      "gameId": 1000957,
+      "size": 147851,
+      "urlList": [
+        "https://slides-resources-test.ledupeiyou.com/packZip/games/1000957/1000957-1705719111514.zip"
+      ],
+      "gameTemplateId": 211,
+      "md5": "a9e78b4b110c9711efcefe2ef69feb81"
+    },
+    {
+      "gameId": 1000965,
+      "size": 146789,
+      "urlList": [
+        "https://slides-resources-test.ledupeiyou.com/packZip/games/1000965/1000965-1705720051853.zip"
+      ],
+      "gameTemplateId": 211,
+      "md5": "36f054eb545856143ddef469e7f4944e"
+    },
+    {
+      "gameId": 1001093,
+      "size": 146828,
+      "urlList": [
+        "https://slides-resources-test.ledupeiyou.com/packZip/games/1001093/1001093-1705904738468.zip"
+      ],
+      "gameTemplateId": 197,
+      "md5": "bf08016b56dbdef4444db5a5c04bac36"
+    },
+    {
+      "gameId": 1001219,
+      "size": 294080,
+      "urlList": [
+        "https://slides-resources-test.ledupeiyou.com/packZip/games/1001219/1001219-1705930109679.zip"
+      ],
+      "gameTemplateId": 199,
+      "md5": "7f8c9241f7b5de18983d40fb1098ef9c"
+    }
+  ],
+  "commonResourceList": [
+    {
+      "customIdentityId": "public-model-custom",
+      "packageResourceType": "common",
+      "size": 951243,
+      "packageResourceId": 214,
+      "urlList": [
+        "https://slides-resources-test.ledupeiyou.com/packZip/packageResource/common/public-model-custom/common-public-model-custom-1.0.24.zip"
+      ],
+      "version": "1.0.24",
+      "md5": "d67ffafb7b8d3d9c56348df6d2687657"
+    },
+    {
+      "customIdentityId": "mccPlayer",
+      "packageResourceType": "common",
+      "size": 1410007,
+      "packageResourceId": 219,
+      "urlList": [
+        "https://slides-resources-test.ledupeiyou.com/packZip/packageResource/common/mccPlayer/common-mccPlayer-0.5.25.zip"
+      ],
+      "version": "0.5.25",
+      "md5": "351b243be291ab9a0e47db88a729d5bf"
+    },
+    {
+      "customIdentityId": "slidePreview",
+      "packageResourceType": "common",
+      "size": 1795593,
+      "packageResourceId": 218,
+      "urlList": [
+        "https://slides-resources-test.ledupeiyou.com/packZip/packageResource/common/slidePreview/common-slidePreview-0.2.15.zip"
+      ],
+      "version": "0.2.22",
+      "md5": "d0898de8dc8b658ce088fd7446089cff"
+    },
+    {
+      "customIdentityId": "game-container",
+      "packageResourceType": "common",
+      "size": 3298,
+      "packageResourceId": 151,
+      "urlList": [
+        "https://slides-resources-test.ledupeiyou.com/packZip/packageResource/common/game-container/common-game-container-1.0.0.zip"
+      ],
+      "version": "1.0.0",
+      "md5": "87fe39f19f662f09d4052b81099fa8bd"
+    },
+    {
+      "customIdentityId": "frame",
+      "packageResourceType": "common",
+      "size": 934490,
+      "packageResourceId": 206,
+      "urlList": [
+        "https://slides-resources-test.ledupeiyou.com/packZip/packageResource/common/frame/common-frame-1.0.17.zip"
+      ],
+      "version": "1.0.17",
+      "md5": "23e56962bf14e81219157273454abaa7"
+    }
+  ],
+  "gameTemplateResourceList": [
+    {
+      "size": 2590708,
+      "urlList": [
+        "https://slides-resources-test.ledupeiyou.com/packZip/packageResource/gameTemplate/211/gameTemplate-211-1.0.5.zip"
+      ],
+      "gameTemplateId": 211,
+      "version": "1.0.5",
+      "md5": "6ec638562c09e866cbafaf536a374a23"
+    },
+    {
+      "size": 2011436,
+      "urlList": [
+        "https://slides-resources-test.ledupeiyou.com/packZip/packageResource/gameTemplate/199/gameTemplate-199-1.0.17.zip"
+      ],
+      "gameTemplateId": 199,
+      "version": "1.0.17",
+      "md5": "3e05663a637e10fb37c6623236504197"
+    },
+    {
+      "size": 2847697,
+      "urlList": [
+        "https://slides-resources-test.ledupeiyou.com/packZip/packageResource/gameTemplate/197/gameTemplate-197-1.0.16.zip"
+      ],
+      "gameTemplateId": 197,
+      "version": "1.0.16",
+      "md5": "b642e0c8a6dcfd59b76bffee2c9a71ac"
+    }
+  ],
+  "pageResourceList": [
+    {
+      "size": 3348874,
+      "urlList": [
+        "https://slides-resources-test.ledupeiyou.com/packZip/slideResource/596abd934a0848cca08e6dec843e0a5d/1359/5600b1142fcd4f31aaaa2096b829d37e-page.zip"
+      ],
+      "pageId": "5600b1142fcd4f31aaaa2096b829d37e",
+      "md5": "8fc434862fdf412ef5b6ef1c109e7b2c"
+    }
+  ],
+  "mccPlayerPathDefinition": {
+    "cdnPathList": ["https://slides-resources-test.ledupeiyou.com"],
+    "remotePath": "/packageResources/common/mccPlayer/0.5.25",
+    "localPath": "/packageResources/common/mccPlayer/0.5.25"
+  }
+}

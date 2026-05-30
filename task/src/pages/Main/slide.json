@@ -1,0 +1,99 @@
+{
+    "slideId": "1234567890",
+    "slideName": "这里是课件名称",
+    "pageList": [
+        {
+            "id": "aaaaaaaa",
+            "pageType": 1,
+            "pageInfo": {
+                "id": "aaaaaaaa",
+                "componentName": "Root",
+                "sourceName": "",
+                "props": {
+                    "style": {
+                        "backgroundColor": "rgba(148,132,228,1)"
+                    },
+                    "info":{
+                        "name":"aaaa"
+                    }
+                },
+                "hidden": false,
+                "children": [
+                    {
+                        "id": "zubgam180bq",
+                        "componentName": "Shape",
+                        "sourceName": "",
+                        "props": {
+                            "title": "形状",
+                            "style": {
+                                "width": "100px",
+                                "height": "100px",
+                                "transform": "translate(443.3246924573728px, 562.1344942449127px)"
+                            },
+                            "x-component": "Shape",
+                            "shapeKey": "chord"
+                        },
+                        "hidden": false,
+                        "children": []
+                    },
+                    {
+                        "id": "nmyyme1tnim",
+                        "componentName": "Img",
+                        "sourceName": "",
+                        "props": {
+                            "title": "图片",
+                            "x-decorator": "FormItem",
+                            "x-component": "Img",
+                            "style": {
+                                "transform": " translate(599px, 362px) ",
+                                "width": "300px",
+                                "height": "auto"
+                            },
+                            "src": "https://class-slides-res-test-1313601664.cos.ap-beijing.myqcloud.com/image/a2bf9b1a-8a11-4681-86e8-e253d07fb80a.png"
+                        },
+                        "hidden": false,
+                        "children": []
+                    }
+                ]
+            }
+        },
+        {
+            "id": "g5zi0s1mhft",
+            "pageType": 2,
+            "pageInfo": {
+                "id": "g5zi0s1mhft",
+                "componentName": "Root",
+                "sourceName": "",
+                "props": {},
+                "hidden": false,
+                "children": [{
+                    "id": "ey0km1kzbke",
+                    "componentName": "Game",
+                    "sourceName": "",
+                    "props": {
+                        "title": "游戏",
+                        "x-decorator": "FormItem",
+                        "x-component": "Game",
+                        "gameUrl": "https://ceshi-courseware-game.saasp.vdyoo.com/81adc4f1-0418-3fce-8d7e-5861ef43d9c7/23_zcd11_01/student/index.html",
+                        "picUrl": "https://ceshi-courseware-vod-ali.saasp.vdyoo.com/81adc4f1-0418-3fce-8d7e-5861ef43d9c7/23_zcd11_01/student/cover.jpg",
+                        "gameCoursewareId": 3600
+                    },
+                    "hidden": false,
+                    "children": []
+                }]
+            }
+        },
+        {
+            "id": "g5zi0s1mhf22t",
+            "pageType": 1,
+            "pageInfo": {
+                "id": "g5zi0s441mhft",
+                "componentName": "Root",
+                "sourceName": "",
+                "props": {},
+                "hidden": false,
+                "children": []
+            }
+        }
+    ]
+}

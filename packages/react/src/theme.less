@@ -1,0 +1,227 @@
+@import './variables.less';
+
+:root {
+  //品牌色
+  --ld-brand-color: rgba(24, 144, 255, 1);
+  --ld-brand-hovering: rgba(64, 169, 255, 1);
+  --ld-brand-dragging: rgba(24, 144, 255, 0.26);
+  --ld-brand-dropping: rgba(24, 144, 255, 0.34);
+  --ld-brand-moving: rgba(24, 144, 255, 0.5);
+  //白色调色版
+  --ld-white: #fff;
+  --ld-white-gray: #d9d9d9;
+  --ld-white-gray-light: #eee;
+  --ld-white-gray-lighter: #f0f0f0;
+  --ld-white-gray-dark: #aaa;
+  //灰色调色板
+  --ld-gray: #333;
+  --ld-gray-light: #444;
+  --ld-gray-lighter: #666;
+  --ld-gray-dark: #222;
+  --ld-black: #1a1a1a;
+}
+
+.@{prefix-cls}-light {
+  --ld-aux-cover-rect-dragging-color: var(--ld-brand-dragging);
+  --ld-aux-cover-rect-dropping-color: var(--ld-brand-dropping);
+  --ld-aux-free-selection-background-color: var(--ld-brand-color);
+  --ld-aux-free-selection-border-color: var(--ld-brand-color);
+  --ld-aux-insertion-color: var(--ld-brand-color);
+  --ld-aux-dashed-box-color: var(--ld-brand-color);
+  --ld-aux-dashed-box-title-color: var(--ld-gray);
+  --ld-aux-selection-box-border-color: var(--ld-brand-color);
+  --ld-aux-selection-box-color: var(--ld-gray);
+  --ld-ghost-color: var(--ld-white);
+  --ld-ghost-bg-color: var(--ld-brand-moving);
+  --ld-outline-tree-bg-color: var(--ld-white);
+  --ld-outline-tree-header-border-color: var(--ld-white-gray-light);
+  --ld-outline-tree-color: var(--ld-gray);
+  --ld-outline-tree-insertion-bg-color: var(--ld-brand-color);
+  --ld-outline-tree-node-header-color: var(--ld-gray);
+  --ld-outline-tree-node-hover-color: var(--ld-brand-color);
+
+  --ld-toolbar-input-color: var(--ld-gray-dark);
+  --ld-toolbar-input-bg-color: var(--ld-white);
+  --ld-toolbar-input-border-color: var(--ld-white-gray-light);
+  --ld-toolbar-input-hover-border-color: var(--ld-white-gray-light);
+  --ld-toolbar-input-handler-bg-color: var(--ld-white);
+
+  --ld-resize-handle-bg-color: var(--ld-white-gray-light);
+  --ld-resize-handle-hover-bg-color: var(--ld-white-gray-lighter);
+  --ld-resize-handle-color: var(--ld-gray-light);
+  --ld-resize-handle-hover-color: var(--ld-white-lighter);
+
+  --ld-mobile-simulator-bg-color: var(--ld-white-gray-light);
+  --ld-mobile-simulator-body-bg-color: var(--ld-white);
+  --ld-mobile-simulator-border-color: var(--ld-gray-dark);
+  --ld-responsive-simulator-bg-color: var(--ld-white);
+  --ld-pc-simulator-bg-color: var(--ld-white);
+
+  --ld-aux-selector-btn-color: var(--ld-white);
+  --ld-aux-selector-btn-bg-color: var(--ld-brand-color);
+  --ld-aux-selector-btn-border-color: var(--ld-brand-color);
+  --ld-aux-selector-btn-hover-color: var(--ld-white);
+  --ld-aux-selector-btn-hover-bg-color: var(--ld-brand-hovering);
+  --ld-aux-selector-btn-hover-border-color: var(--ld-brand-hovering);
+  --ld-aux-selector-btn-active-color: var(--ld-white);
+  --ld-aux-selector-btn-active-bg-color: var(--ld-brand-hovering);
+  --ld-aux-selector-btn-active-border-color: var(--ld-brand-hovering);
+
+  --ld-panel-border-color: var(--ld-white-gray);
+  --ld-panel-active-bg-color: var(--ld-white-gray-light);
+  --ld-resource-content-bg-color: var(--ld-white);
+
+  --ld-composite-panel-tabs-bg-color: var(--ld-white);
+  --ld-composite-panel-tabs-active-bg-color: var(--ld-white);
+  --ld-composite-panel-highlight-bg-color: var(--ld-white-gray-light);
+  --ld-composite-panel-tabs-color: var(--ld-gray-lighter);
+  --ld-composite-panel-tabs-hover-color: var(--ld-brand-color);
+  --ld-composite-panel-tabs-content-bg-color: var(--ld-white);
+  --ld-composite-panel-tabs-header-color: var(--ld-gray-lighter);
+
+  --ld-collapse-header-color: var(--ld-gray);
+
+  --ld-resource-item-color: var(--ld-gray);
+  --ld-resource-item-hover-border-color: var(--ld-brand-color);
+  --ld-resource-item-hover-color: var(--ld-brand-color);
+
+  --ld-main-panel-header-bg-color: var(--ld-white);
+  --ld-workspace-panel-bg-color: var(--ld-white-gray-light);
+
+  --ld-scrollbar-color: var(--ld-white-gray);
+  --ld-scrollbar-hover-color: var(--white-ld-gray-lighter);
+
+  --ld-empty-bg-color: var(--ld-white);
+
+  --ld-droppable-bg-color: var(--ld-white-gray-lighter);
+  --ld-droppable-border-color: var(--ld-white-gray-dark);
+  --ld-droppable-color: var(--ld-gray-lighter);
+
+  --ld-toolbar-panel-menu-item-hover-bg-color: var(--ld-brand-color);
+  --ld-toolbar-panel-menu-item-active-bg-color: var(--ld-brand-color);
+}
+
+.@{prefix-cls}-dark {
+  --ld-aux-cover-rect-dragging-color: var(--ld-brand-dragging);
+  --ld-aux-cover-rect-dropping-color: var(--ld-brand-dropping);
+  --ld-aux-free-selection-background-color: var(--ld-brand-color);
+  --ld-aux-free-selection-border-color: var(--ld-brand-color);
+  --ld-aux-insertion-color: var(--ld-brand-color);
+  --ld-aux-dashed-box-color: var(--ld-brand-color);
+  --ld-aux-dashed-box-title-color: var(--ld-brand-color);
+  --ld-aux-selection-box-border-color: var(--ld-brand-color);
+  --ld-aux-selection-box-color: var(--ld-gray);
+  --ld-ghost-color: var(--ld-white);
+  --ld-ghost-bg-color: var(--ld-brand-moving);
+  --ld-outline-tree-bg-color: var(--ld-gray-dark);
+  --ld-outline-tree-header-border-color: var(--ld-gray);
+  --ld-outline-tree-color: var(--ld-white-gray);
+  --ld-outline-tree-insertion-bg-color: var(--ld-brand-color);
+  --ld-outline-tree-node-header-color: var(--ld-white-gray);
+  --ld-outline-tree-node-hover-color: var(--ld-white-gray);
+
+  --ld-toolbar-input-color: var(--ld-white-gray);
+  --ld-toolbar-input-bg-color: transparent;
+  --ld-toolbar-input-border-color: var(--ld-gray-light);
+  --ld-toolbar-input-hover-border-color: var(--ld-brand-color);
+  --ld-toolbar-input-handler-bg-color: var(--ld-gray-light);
+  --ld-resize-handle-bg-color: var(--ld-gray-light);
+  --ld-resize-handle-hover-bg-color: var(--ld-gray-lighter);
+  --ld-resize-handle-color: var(--ld-gray-lighter);
+  --ld-resize-handle-hover-color: var(--ld-white-gray-dark);
+
+  --ld-mobile-simulator-bg-color: var(--ld-black);
+  --ld-mobile-simulator-body-bg-color: var(--ld-black);
+  --ld-mobile-simulator-border-color: var(--ld-black);
+  --ld-responsive-simulator-bg-color: var(--ld-black);
+  --ld-pc-simulator-bg-color: var(--ld-black);
+
+  --ld-aux-selector-btn-color: var(--ld-white);
+  --ld-aux-selector-btn-bg-color: var(--ld-brand-color);
+  --ld-aux-selector-btn-border-color: var(--ld-brand-color);
+  --ld-aux-selector-btn-hover-color: var(--ld-white);
+  --ld-aux-selector-btn-hover-bg-color: var(--ld-brand-hovering);
+  --ld-aux-selector-btn-hover-border-color: var(--ld-brand-hovering);
+  --ld-aux-selector-btn-active-color: var(--ld-white);
+  --ld-aux-selector-btn-active-bg-color: var(--ld-brand-hovering);
+  --ld-aux-selector-btn-active-border-color: var(--ld-brand-hovering);
+
+  --ld-panel-border-color: var(--ld-gray-light);
+  --ld-panel-active-bg-color: var(--ld-gray);
+  --ld-resource-content-bg-color: var(--ld-gray-dark);
+
+  --ld-composite-panel-tabs-bg-color: var(--ld-gray-dark);
+  --ld-composite-panel-tabs-active-bg-color: var(--ld-gray-dark);
+  --ld-composite-panel-highlight-bg-color: var(--ld-black);
+  --ld-composite-panel-tabs-color: var(--ld-white-gray-dark);
+  --ld-composite-panel-tabs-hover-color: var(--ld-brand-color);
+  --ld-composite-panel-tabs-content-bg-color: var(--ld-gray-dark);
+  --ld-composite-panel-tabs-header-color: var(--ld-white-gray);
+
+  --ld-collapse-header-color: var(--ld-white-gray);
+
+  --ld-resource-item-color: var(--ld-white-gray);
+  --ld-resource-item-hover-color: var(--ld-brand-color);
+
+  --ld-main-panel-header-bg-color: var(--ld-gray-dark);
+  --ld-workspace-panel-bg-color: var(--ld-gray-dark);
+
+  --ld-scrollbar-color: var(--ld-gray-light);
+  --ld-scrollbar-hover-color: var(--ld-gray-lighter);
+
+  --ld-empty-bg-color: var(--ld-gray-dark);
+
+  --ld-droppable-bg-color: var(--ld-gray);
+  --ld-droppable-border-color: var(--ld-gray-light);
+  --ld-droppable-color: var(--ld-white);
+}
+
+.@{prefix-cls}-app {
+  ::-webkit-scrollbar {
+    width: 5px;
+    height: 5px;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background-color: var(--ld-scrollbar-color);
+    border-radius: 0;
+    transition: all 0.25s ease-in-out;
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    background-color: var(--ld-scrollbar-hover-color);
+  }
+
+  color: var(--ld-gray-dark);
+  font-size: 14px;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto,
+    'Helvetica Neue', Arial, 'Noto Sans', sans-serif, 'Apple Color Emoji',
+    'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
+  font-variant: tabular-nums;
+  line-height: 1.5715;
+  font-feature-settings: 'tnum';
+
+  * {
+    box-sizing: border-box;
+  }
+
+  *[contenteditable='true'] {
+    min-width: 1px;
+    min-height: 14px;
+    cursor: text !important;
+    outline: none !important;
+  }
+
+  *[data-content-editable]:not(*[contenteditable='true']) {
+    &:empty::before {
+      content: 'Please Input';
+      display: block;
+      opacity: 0.6;
+    }
+
+    &:hover {
+      cursor: text !important;
+      opacity: 0.8;
+    }
+  }
+}

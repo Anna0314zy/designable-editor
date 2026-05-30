@@ -1,0 +1,42 @@
+@ant-prefix: ant;
+.ld-fold-item {
+  .@{ant-prefix}-slides-item-label-content {
+    overflow: visible;
+  }
+
+  &-base {
+    cursor: pointer;
+  }
+
+  &-title {
+    display: flex;
+    align-items: center;
+    // margin-left: -10px;
+    cursor: pointer;
+    .ld-icon {
+      transform: translateX(-3px);
+
+      svg {
+        transition: all 0.15s ease-in-out;
+        transform: rotate(-90deg);
+      }
+    }
+
+    &.expand {
+      .ld-icon {
+        svg {
+          transform: rotate(0deg);
+        }
+      }
+    }
+  }
+
+  &-extra {
+    margin-top: -10px;
+    // margin-left: -10px;
+    margin-right: -10px;
+    margin-bottom: 10px;
+    padding: 10px 10px 0 10px;
+    background-color: var(--ld-composite-panel-highlight-bg-color);
+  }
+}

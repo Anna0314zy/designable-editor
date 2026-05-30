@@ -1,0 +1,57 @@
+{
+  "name": "slides-engine",
+  "private": true,
+  "version": "0.0.1",
+  "type": "module",
+  "workspaces": [
+    "packages/*",
+    "slides/*",
+    "play",
+    "render-core",
+    "preview",
+    "slide-shape",
+    "slide-editor",
+    "animate"
+  ],
+  "scripts": {
+    "play": "cd play && vite",
+    "preview": "cd preview && vite",
+    "render-core": "cd render-core && vite",
+    "mcc-player": "cd mcc-player && vite",
+    "mcc-demo": "cd mcc-demo && vite",
+    "prepare": "husky install"
+  },
+  "dependencies": {
+    "@ant-design/icons": "5.2.6",
+    "@ld/file-upload": "^1.0.14",
+    "@types/node": "^20.5.9",
+    "@vitejs/plugin-react": "^4.0.4",
+    "antd": "^5.12.8",
+    "axios": "^1.6.2",
+    "classnames": "^2.3.2",
+    "hoist-non-react-statics": "^3.3.2",
+    "less": "^4.2.0",
+    "react": "^18.2.0",
+    "react-beautiful-dnd": "^13.1.1",
+    "react-dom": "^18.2.0",
+    "react-error-boundary": "^4.0.12",
+    "scheduler": "^0.23.0",
+    "spark-md5": "^3.0.2",
+    "use-context-selector": "^1.4.1"
+  },
+  "devDependencies": {
+    "@commitlint/cli": "^18.4.3",
+    "@commitlint/config-conventional": "^18.4.3",
+    "@types/react": "^18.2.15",
+    "@types/react-dom": "^18.2.7",
+    "@typescript-eslint/eslint-plugin": "^6.0.0",
+    "@typescript-eslint/parser": "^6.0.0",
+    "@vitejs/plugin-react-swc": "^3.3.2",
+    "eslint": "^8.45.0",
+    "eslint-plugin-react-hooks": "^4.6.0",
+    "eslint-plugin-react-refresh": "^0.4.3",
+    "husky": "^8.0.3",
+    "typescript": "^5.0.2",
+    "vite": "^4.4.5"
+  }
+}

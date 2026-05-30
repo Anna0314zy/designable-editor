@@ -1,0 +1,127 @@
+{
+    "remote": {
+        "common": [
+            {
+                "name": "slide",
+                "version": "1.0.0",
+                "hosts": [
+                    "https://static.ledupeiyou.com",
+                    "https://static.xuepeiyou.com"
+                ],
+                "path": "common/slide/1.0.0"
+            },
+            {
+                "name": "player",
+                "version": "1.0.1",
+                "hosts": [
+                    "https://static.ledupeiyou.com",
+                    "https://static.xuepeiyou.com"
+                ],
+                "path": "common/slide/1.0.0"
+            }
+        ],
+        "bootstrap": {
+            "id": "xxxxxx",
+            "name": "bootstrap",
+            "version": "1.0.0",
+            "hosts": [
+                "https://static.ledupeiyou.com",
+                "https://static.xuepeiyou.com"
+            ],
+            "path": "/test-json/pageInfo.json?123"
+        },
+        "staticPathDefinition": {
+			"pathConfigList ": [{
+				"type": "video",
+				"name": "视频",
+				"path": "/slides/resources/video"
+			}, {
+				"type": "audio",
+				"name": "音频",
+				"path": "/slides/resources/audio"
+			}, {
+				"type": "pic",
+				"name": "图片",
+				"path": "/slides/resources/pic"
+			}, {
+				"type": "page",
+				"name": "课件页信息",
+				"path": "/slides/slide/{slideId}/{slideVersion}/pages"
+			}, {
+				"type": "slide",
+				"name": "课件目录信息",
+				"path": "/slides/slide/{slideId}/{slideVersion}"
+			}],
+			"cdnPathList": ["https://slides-resources-test.ledupeiyou.com"]
+		}
+    },
+    "local": {
+        "common": [
+            {
+                "name": "slide",
+                "version": "1.0.0",
+                "baseDir": "file:///DIYDIR",
+                "path": "common/slide/1.0.0",
+                "availability": true
+            },
+            {
+                "name": "player",
+                "version": "1.0.1",
+                "baseDir": "file:///DIYDIR",
+                "path": "common/slide/1.0.0",
+                "availability": true
+            }
+        ],
+        "bootstrap": {
+            "id": "bootstrap",
+            "name": "xxxxxx",
+            "version": "1.0.0",
+            "baseDir": "file:///Users/zhoudongchen/code/slides-engine/mcc-demo/src",
+            "path": "/json-demo/pageInfo.json",
+            "availability": true
+        },
+        "pages": [
+            {
+                "id": "aaaaaaaa",
+                "pageType": 1,
+                "baseDir": "file:///Users/zhoudongchen/code/slides-engine/mcc-demo/src",
+                "path":"/test-json/test1.json"
+            },
+            {
+                "id": "g5zi0s1mhft",
+                "pageType": 2,
+                "baseDir": "file:///Users/zhoudongchen/code/slides-engine/mcc-demo/src",
+                "path":"/test-json/test2.json"
+            },
+            {
+                "id": "lffx0hkvq46",
+                "pageType": 3,
+                "baseDir": "file:///Users/zhoudongchen/code/slides-engine/mcc-demo/src",
+                "path":"/test-json/test3.json"
+            }
+        ],
+        "staticPathDefinition": {
+			"pathConfigList ": [{
+				"type": "video",
+				"name": "视频",
+				"path": "/slides/resources/video"
+			}, {
+				"type": "audio",
+				"name": "音频",
+				"path": "/slides/resources/audio"
+			}, {
+				"type": "pic",
+				"name": "图片",
+				"path": "/slides/resources/pic"
+			}, {
+				"type": "page",
+				"name": "课件页信息",
+				"path": "/slides/slide/{slideId}/{slideVersion}/pages"
+			}, {
+				"type": "slide",
+				"name": "课件目录信息",
+				"path": "/slides/slide/{slideId}/{slideVersion}"
+			}]
+		}
+    }
+}

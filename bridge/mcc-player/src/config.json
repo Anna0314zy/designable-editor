@@ -1,0 +1,178 @@
+{
+    "slideId": "dd29e223498a4b1f9f53de7afef048a4",
+    "slideVersion": "1.0.0",
+    "remoteResourcePathDefinition": {
+        "commonPathDefinition": {
+            "cdnPathList": [
+                "https://slides-resources.ledupeiyou.com",
+                "https://slides-resources-test.ledupeiyou.com"
+            ],
+            "path": "/packageResources/common/{customIdentityId}/{version}"
+        },
+        "gameTemplatePathDefinition": {
+            "cdnPathList": [
+                "https://slides-resources-test.ledupeiyou.com"
+            ],
+            "path": "/packageResources/gameTemplate/{gameTemplateId}/{version}"
+        },
+        "gameCustomPathDefinition": {
+            "cdnPathList": [
+                "https://slides-resources.ledupeiyou.com",
+                "https://slides-resources-test.ledupeiyou.com"
+                
+            ],
+            "path": "/games/{gameId}"
+        },
+        "staticPathDefinition": {
+            "pathConfigList": [
+                {
+                    "type": "video",
+                    "name": "视频",
+                    "path": "/slides/resources/video"
+                },
+                {
+                    "type": "audio",
+                    "name": "音频",
+                    "path": "/slides/resources/audio"
+                },
+                {
+                    "type": "pic",
+                    "name": "图片",
+                    "path": "/slides/resources/pic"
+                },
+                {
+                    "type": "font",
+                    "name": "字体",
+                    "path": "/slides/resources/font"
+                },
+                {
+                    "type": "page",
+                    "name": "课件页信息",
+                    "path": "/slides/slide/{slideId}/{slideVersion}/pages"
+                },
+                {
+                    "type": "slide",
+                    "name": "课件目录信息",
+                    "path": "/slides/slide/{slideId}/{slideVersion}"
+                }
+            ],
+            "cdnPathList": [
+                "https://slides-resources.ledupeiyou.com",
+                "https://slides-resources-test.ledupeiyou.com"
+            ]
+        }
+    },
+    "localResourcePathDefinition": {
+        "basePath": "自定义",
+        "slideResourcePath": "/slideLocal/{slideId}",
+        "commonResourcePath": "/packageResources/common/",
+        "gameTemplateResourcePath": "/packageResources/gameTemplate/",
+        "gameCustomResourcePath": "/games/"
+    },
+    "localResourcePathDefinition1": {
+        "pathConfigList": [
+            {
+                "type": "video",
+                "name": "视频",
+                "path": "/slideLocal/{slideId}/video/"
+            },
+            {
+                "type": "audio",
+                "name": "音频",
+                "path": "/slideLocal/{slideId}/{slideVersion}/audio/"
+            },
+            {
+                "type": "pic",
+                "name": "图片",
+                "path": "/slideLocal/{slideId}/{slideVersion}/pic/"
+            }
+        ]
+    },
+    "baseResource": {
+        "baseZipUrlList": [
+            "https://kjds-cdn.speiyou.com/webkjdsfiles/901d21492ca14b87b2826124053cb1f3.zip"
+        ],
+        "baseZipSize": 43997539,
+        "version": "1",
+        "baseZipMd5": "24571ef38574f30ac50146f03cf035ac",
+        "localPath": "/slideLocal/{slideId}"
+    },
+    "pageResourceList": [
+        {
+            "pageId": "2222",
+            "pageType": "normalPage",
+            "zipUrlList": [
+                "https://kjds-cdn.speiyou.com/webkjdsfiles/901d21492ca14b87b2826124053cb1f3.zip"
+            ],
+            "zipMd5": "24571ef38574f30ac50146f03cf035ac",
+            "zipSize": 43997539,
+            "imgUrlList": [
+                "https://kjds-qcdn.speiyou.com/kejian-jietu/14697727ffa5468d907bd370a9873f04_editer/875a870e82f07f942dba19a14c737b425782.jpeg",
+                "https://kjds-wcdn.speiyou.com/kejian-jietu/14697727ffa5468d907bd370a9873f04_editer/875a870e82f07f942dba19a14c737b425782.jpeg"
+            ]
+        },
+        {
+            "pageId": "3333",
+            "pageType": "videoPage",
+            "zipUrlList": [
+                "https://kjds-cdn.speiyou.com/webkjdsfiles/901d21492ca14b87b2826124053cb1f3.zip"
+            ],
+            "zipMd5": "24571ef38574f30ac50146f03cf035ac",
+            "zipSize": 43997539,
+            "imgUrlList": [
+                "https://kjds-qcdn.speiyou.com/kejian-jietu/14697727ffa5468d907bd370a9873f04_editer/875a870e82f07f942dba19a14c737b425782.jpeg",
+                "https://kjds-wcdn.speiyou.com/kejian-jietu/14697727ffa5468d907bd370a9873f04_editer/875a870e82f07f942dba19a14c737b425782.jpeg"
+            ]
+        }
+    ],
+    "gameTemplateResourceList": [
+        {
+            "gameTemplateId": 20630,
+            "version": "1.0.1",
+            "zipUrlList": [
+                "https://courseware-game.saasp.vdyoo.com/90c378df-8f21-3b06-913e-ae41f2f15820/23_kje2_5.zip"
+            ],
+            "zipSize": 3951167,
+            "zipMd5": "7b2380e44a0efd5afa2f8dda919af51e",
+            "localPath": "/xxxx/xxx/1.0.1"
+        }
+    ],
+    "gameCustomResourceList": [
+        {
+            "gameId": 20630,
+            "gameTemplateId": 20630,
+            "zipUrlList": [
+                "https://courseware-game.saasp.vdyoo.com/90c378df-8f21-3b06-913e-ae41f2f15820/23_kje2_5.zip"
+            ],
+            "zipSize": 3951167,
+            "zipMd5": "7b2380e44a0efd5afa2f8dda919af51e",
+            "localPath": "/games/gameId"
+        }
+    ],
+    "commonResourceList": [
+        {
+            "packageResourceId": 1,
+            "packageResourceType": "common",
+            "customIdentityId": "classPlayer",
+            "version": "1.0.1",
+            "zipUrlList": [
+                "https://courseware-game.saasp.vdyoo.com/90c378df-8f21-3b06-913e-ae41f2f15820/23_kje2_5.zip"
+            ],
+            "zipSize": 3951167,
+            "zipMd5": "7b2380e44a0efd5afa2f8dda919af51e",
+            "localPath": "/packageResources/common/"
+        },
+        {
+            "packageResourceId": 2,
+            "packageResourceType": "common",
+            "customIdentityId": "gameCommonResources",
+            "version": "1.0.1",
+            "zipUrlList": [
+                "https://courseware-game.saasp.vdyoo.com/90c378df-8f21-3b06-913e-ae41f2f15820/23_kje2_5.zip"
+            ],
+            "zipSize": 3951167,
+            "zipMd5": "7b2380e44a0efd5afa2f8dda919af51e",
+            "localPath": "/packageResources/common/"
+        }
+    ]
+}

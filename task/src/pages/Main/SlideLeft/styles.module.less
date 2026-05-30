@@ -1,0 +1,44 @@
+
+@import '@/variables.less';
+
+.course-list {
+  
+  height: 100%;
+    :global {
+      .ant-list-item {
+        border-block-end: none !important;
+      }
+    }
+    .list-item {
+      display: flex;
+
+      :global {
+        .left-text {
+          width: 26px;
+          text-align: right;
+          &.active {
+            color: @activeColor;
+            font-weight: bold;
+          }
+        }
+        .thumbnail {
+          position: relative;
+          border-radius: @border-radius-base;
+          overflow: hidden;
+          box-sizing: border-box;
+          background-color: @white;
+          .preview-canvas {
+            pointer-events: none;
+          }
+          &.active {
+            outline: 2px solid @activeColor;
+            font-weight: bold;
+          }
+        }
+      }
+      .right {
+        padding-left: 4px;
+      }
+     
+    }
+  }

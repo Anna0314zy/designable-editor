@@ -1,0 +1,15 @@
+{
+  "presets": [
+    ["@babel/preset-env", {
+      "loose": true,
+      "modules": false,
+      "targets": {
+        "browsers": "last 2 versions"
+      }
+    }],
+    "@babel/preset-typescript"
+  ],
+  "plugins": [
+    "@babel/plugin-proposal-optional-chaining"
+  ]
+}

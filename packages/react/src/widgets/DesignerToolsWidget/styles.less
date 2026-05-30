@@ -1,0 +1,29 @@
+@import '../../variables.less';
+
+.@{prefix-cls}-designer-tools {
+  display: flex;
+  align-items: center;
+
+  .ant-input-number {
+    font-size: 12px !important;
+    background: var(--ld-toolbar-input-bg-color) !important;
+    border-color: var(--ld-toolbar-input-border-color) !important;
+    color: var(--ld-toolbar-input-color) !important;
+
+    .ant-input-number-handler-wrap,
+    .ant-input-number-handler {
+      background: var(--ld-toolbar-input-handler-bg-color) !important;
+      border-color: var(--ld-toolbar-input-border-color) !important;
+      color: var(--ld-toolbar-input-color) !important;
+    }
+
+    .ant-input-number-handler-down-inner,
+    .ant-input-number-handler-up-inner {
+      color: var(--ld-toolbar-input-color) !important;
+    }
+
+    &:hover {
+      border-color: var(--ld-toolbar-input-hover-border-color) !important;
+    }
+  }
+}

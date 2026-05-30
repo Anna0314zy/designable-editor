@@ -1,0 +1,8 @@
+{
+    "test": {
+        "prefix": "/slide-editor"
+    },
+    "prod": {
+        "prefix": "/slide-editor"
+    }
+}

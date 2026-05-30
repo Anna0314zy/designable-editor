@@ -1,0 +1,45 @@
+.ld-collapse-item {
+  flex-wrap: wrap;
+
+  &-header {
+    display: flex;
+    align-items: center;
+    padding: 5px 20px;
+    margin: -1px -20px 0 -20px;
+    color: var(--ld-collapse-header-color);
+    border-top: 1px solid var(--ld-panel-border-color);
+    border-bottom: 1px solid var(--ld-panel-border-color);
+    background-color: var(--ld-panel-active-bg-color);
+    cursor: pointer;
+    transition: all 0.25s ease-in-out;
+    font-size: 13px;
+
+    &-expand {
+      margin-left: -13px;
+      transform: rotate(-90deg);
+      font-size: 12px;
+      transition: all 0.15s ease-in-out;
+      margin-right: 3px;
+    }
+  }
+
+  &-content {
+    display: none;
+    width: 100%;
+    padding-top: 4px;
+
+    & > div:last-child {
+      border-bottom: none !important;
+    }
+  }
+
+  &.expand {
+    .ld-collapse-item-content {
+      display: block;
+    }
+
+    .ld-collapse-item-header-expand {
+      transform: rotate(0);
+    }
+  }
+}

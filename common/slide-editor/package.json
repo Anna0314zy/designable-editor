@@ -1,0 +1,96 @@
+{
+  "name": "@ld/slide-editor",
+  "version": "1.0.0",
+  "private": false,
+  "files": [
+    "dist"
+  ],
+  "main": "src/index.tsx",
+  "dependencies": {
+    "@emotion/css": "^11.11.2",
+    "@testing-library/jest-dom": "^5.17.0",
+    "@testing-library/react": "^13.4.0",
+    "@testing-library/user-event": "^13.5.0",
+    "@slide/fonts": "workspace:^1.0.0",
+    "@types/classnames": "^2.3.1",
+    "@types/jest": "^27.5.2",
+    "@types/node": "^16.18.86",
+    "@types/react": "^18.2.61",
+    "@types/react-dom": "^18.2.19",
+    "@types/slate": "^0.47.15",
+    "@types/slate-react": "^0.50.1",
+    "bcrypt": "^5.1.1",
+    "classnames": "^2.5.1",
+    "fontfaceobserver": "^2.3.0",
+    "is-url": "^1.2.4",
+    "node-sass": "^8.0.0",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "react-scripts": "5.0.1",
+    "slate": "^0.100.0",
+    "slate-history": "^0.100.0",
+    "slate-hyperscript": "^0.100.0",
+    "slate-react": "^0.101.6",
+    "typescript": "^4.9.5",
+    "web-vitals": "^2.1.4"
+  },
+  "scripts": {
+    "start": "react-scripts start",
+    "dev": "npm run start",
+    "clean": "rimraf ./dist",
+    "build": "npm run clean && npm run build-ts && npm run build-css",
+    "build-ts": "tsc -p tsconfig.build.json",
+    "pre-publish": "node publish.js && npm run build && npm publish",
+    "test": "react-scripts test",
+    "eject": "react-scripts eject",
+    "build-css": "node-sass ./src/styles/index.scss ./dist/index.css",
+    "storybook": "start-storybook -p 6006 -s public",
+    "build-storybook": "build-storybook"
+  },
+  "eslintConfig": {
+    "extends": [
+      "react-app",
+      "react-app/jest"
+    ],
+    "overrides": [
+      {
+        "files": [
+          "**/*.stories.*"
+        ],
+        "rules": {
+          "import/no-anonymous-default-export": "off"
+        }
+      }
+    ]
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
+  },
+  "devDependencies": {
+    "@storybook/addon-actions": "^6.5.16",
+    "@storybook/addon-essentials": "^6.5.16",
+    "@storybook/addon-interactions": "^6.5.16",
+    "@storybook/addon-links": "^6.5.16",
+    "@storybook/builder-webpack5": "^6.5.16",
+    "@storybook/manager-webpack5": "^6.5.16",
+    "@storybook/node-logger": "^6.5.16",
+    "@storybook/preset-create-react-app": "^4.1.2",
+    "@storybook/preset-scss": "^1.0.3",
+    "@storybook/react": "^6.5.16",
+    "@storybook/testing-library": "^0.0.13",
+    "babel-plugin-named-exports-order": "^0.0.2",
+    "cross-env": "^7.0.3",
+    "prop-types": "^15.8.1",
+    "rimraf": "^4.4.1",
+    "webpack": "^5.90.3"
+  }
+}

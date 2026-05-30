@@ -1,0 +1,48 @@
+.rich-text{
+  line-height: normal;
+  padding-left: 2px;
+  word-break: break-word;
+}
+.rich-text p{
+  margin: 0;
+  white-space: pre-wrap;
+  white-space: break-spaces;
+}
+::highlight(range-selected) {
+  background-color: rgb(140, 181, 252);
+}
+/* 自定义选中文本的高亮颜色 */
+::selection {
+  background-color: rgb(140, 181, 252); /* 设置为你想要的颜色 */
+}
+
+/* 非标准浏览器下的选中文本的高亮颜色 */
+::-moz-selection {
+  background-color: rgb(140, 181, 252); /* 设置为你想要的颜色 */
+}
+
+.custom-cursor {
+  position: absolute;
+  height: 1.3em;
+  width: 3px; 
+  background-color: #78c3f5; 
+  animation: blink 1.5s infinite; 
+}
+.styled-span::before {
+  content: '\00a0';
+  display: inline-block;
+  width: 0;
+}
+@keyframes blink {
+  0%, 50%, 100% {
+    opacity: 1;
+  }
+  25%, 75% {
+    opacity: 0;
+  }
+}
+
+[contenteditable="true"] {
+  caret-color: red;
+  -webkit-caret-color: red; 
+}

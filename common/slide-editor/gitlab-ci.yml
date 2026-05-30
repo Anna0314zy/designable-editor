@@ -1,0 +1,75 @@
+# stages:          # List of stages for jobs, and their order of execution
+#   - build
+#   - test
+#   - build and push docker image
+#   - deploy
+
+# # 使用npm进行build
+# build-job:
+#   stage: build
+#   before_script:
+#   - source .${CI_COMMIT_REF_NAME}.env
+#   script:
+#     - echo "Compiling the code..."
+#     - echo "Compile complete."
+#     - docker system prune -a -f
+#     - npm cache clean -force
+#     - npm i
+#     - npm run $build_name
+#   artifacts:
+#     paths:
+#       - dist/
+#   only:
+#     - develop
+#     - test
+#     - release
+#     - master
+
+# # 使用sonar进行代码审查
+# unit-test-job:
+#   stage: test
+#   # 引入分支的配置文件
+#   before_script:
+#     - source .${CI_COMMIT_REF_NAME}.env
+#   script:
+#     - echo "Running unit tests... This will take about 60 seconds."
+#     - sonar-scanner -Dsonar.projectKey=$APP_NAME -Dsonar.sources=. -Dsonar.exclusions=**/public/**,**/src/components/** -Dsonar.host.url=$SONAR_URL -Dsonar.login=$SONAR_TOKEN
+#   allow_failure: true
+#   only:
+#     - test
+
+
+# # 通过docker打包并且发送到harbor上
+# docker-build:
+#   stage: build and push docker image
+#   before_script:
+#     - source .${CI_COMMIT_REF_NAME}.env
+#   script:
+#     - echo "0"
+#     - docker build -t $APP_NAME:$DOCKER_TAG .
+#     - docker tag $APP_NAME:$DOCKER_TAG $HARBOR_URL/$APP_NAME:$DOCKER_TAG
+#     - docker push $HARBOR_URL/$APP_NAME:$DOCKER_TAG
+#   only:
+#     - develop
+#     - test
+#     - release
+#     - master
+
+# # 环境部署，登录到远程服务器
+# # 1.停止上一个镜像的运行
+# # 2.清空没有在运行的镜像
+# # 3.从harbor中拉取镜像
+# # 4.使用docker run运行镜像
+# deploy-job:
+#   stage: deploy
+#   before_script:
+#     - source .${CI_COMMIT_REF_NAME}.env
+#   script:
+#     - echo "run "
+#     - ssh $AUTH_URL $SERVER_NAME@$SERVER_IP "docker stop $APP_NAME; docker system prune -a -f; docker pull $HARBOR_URL/$APP_NAME:$DOCKER_TAG; docker run --restart=always -d --name $APP_NAME -p $PORT:80 -e TZ="Asia/Shanghai" $HARBOR_URL/$APP_NAME:$DOCKER_TAG"
+#   only:
+#     - develop
+#     - test
+#     - release
+#     - master
+

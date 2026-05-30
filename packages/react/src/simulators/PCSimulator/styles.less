@@ -1,0 +1,30 @@
+@import '../../variables.less';
+
+.@{prefix-cls}-pc-simulator {
+  position: absolute;
+  box-sizing: border-box;
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: 100%;
+}
+
+.@{prefix-cls}-viewport {
+  height: 100%;
+  width: 100%;
+  position: relative;
+  overflow: overlay;
+  &-canvas-wrapper {
+    box-shadow: 0 0 15px 0 rgba(0, 0, 0, 0.1);
+    background-color: var(--ld-pc-simulator-bg-color);
+    position: absolute;
+  }
+  &-canvas-editor {
+    position: absolute;
+    top: 0;
+    left: 0;
+    min-width: 1px;
+    min-height: 1px;
+    transform-origin: 0 0;
+  }
+}

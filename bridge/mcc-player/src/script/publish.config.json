@@ -1,0 +1,16 @@
+{
+    "test": {
+        "prefix": "/packageResources/common/mccPlayer",
+        "baseUrl": "https://test-class-api-online.saasp.vdyoo.com",
+        "game_api": "https://ceshi-zxjt.saasp.vdyoo.com/api/jyy/game/203",
+        "COS_CDN_HOST": "https://slides-resources-test.ledupeiyou.com",
+        "COS_BUCKET": "class-slides-res-test-1313601664"
+    },
+    "prod": {
+        "prefix": "/packageResources/common/mccPlayer",
+        "baseUrl": "https://classroom-api-online.saasp.vdyoo.com",
+        "game_api": "https://zxjt.saasp.vdyoo.com/api/jyy/game/1348",
+        "COS_CDN_HOST": "https://slides-resources.ledupeiyou.com",
+        "COS_BUCKET": "slides-resources-prod-1313601664"
+    }
+}

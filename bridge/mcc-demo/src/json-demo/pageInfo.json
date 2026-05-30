@@ -1,0 +1,29 @@
+[
+    {
+        "id": "aaaaaaaa",
+        "pageType": 1,
+        "hosts": [
+            "https://static.ledupeiyou.com",
+            "https://static.xuepeiyou.com"
+        ],
+        "path":"/test-json/test1.json"
+    },
+    {
+        "id": "g5zi0s1mhft",
+        "pageType": 2,
+        "hosts": [
+            "https://static.ledupeiyou.com",
+            "https://static.xuepeiyou.com"
+        ],
+        "path":"/test-json/test2.json"
+    },
+    {
+        "id": "lffx0hkvq46",
+        "pageType": 3,
+        "hosts": [
+            "https://static.ledupeiyou.com",
+            "https://static.xuepeiyou.com"
+        ],
+        "path":"/test-json/test3.json"
+    }
+]

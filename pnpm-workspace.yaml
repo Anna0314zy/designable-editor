@@ -1,0 +1,7 @@
+packages:
+  - packages/*
+  - editor
+  - common/*
+  - preview
+  - task
+  - bridge/*

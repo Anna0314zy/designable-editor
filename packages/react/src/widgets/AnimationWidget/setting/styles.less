@@ -1,0 +1,105 @@
+.ani-form {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 10px;
+    > label {
+        width: 60px;
+        flex-shrink: 0;
+    }
+    .detail {
+        // flex-grow: 1;
+    }
+}
+.ani-form:last-child {
+    margin-bottom: 0;
+}
+.extend-container {
+    // width: 100px;
+    // height: 0;
+    // background-color: blue;
+    transition: height 2s;
+    overflow: hidden;
+    // transition: height 0.3s ease-out;
+}
+
+.ld-composite-panel-tabs-body {
+    .ant-collapse ,.ant-collapse-item {
+        border-radius: unset !important;
+    }
+    .ant-collapse-header {
+        padding: 5px 16px !important;
+        border-radius: unset !important;
+    }
+    .select-ani {
+        cursor: pointer;
+        color: rgba(0, 0, 0, 0.88);
+    }
+    .select-ani:hover {
+        color: #1677ff;
+    }
+    .ant-input-number {
+        margin-right: 3px;
+    }
+    .drag-container {
+        h3 {
+            margin: 0;
+            line-height: 30px;
+            text-indent: 16px;
+            color: #666666;
+            font-size: 14px;
+        }
+
+        .ani-list {
+            list-style: none;
+            padding: 0;
+            font-size: 1em;
+            margin: 0;
+            border-top: 1px solid #d9d9d9;
+            li {
+                font-size: 14px;
+                list-style: none;
+                > p {
+                    padding: 5px 16px;
+                    cursor: pointer;
+                    border-bottom: 1px solid #d9d9d9;
+                    margin: 0;
+                    .anticon-menu {
+                        margin-right: 6px;
+                    }
+                    button {
+                        float: right;
+                    }
+                }
+                > div {
+                    padding: 8px 16px;
+                    background: #fff;
+                    border-bottom: 1px solid #d9d9d9;
+                }
+            }
+        }
+    }
+}
+.sortable-container {
+    font-size: 14px;
+    list-style: none;
+    border: 1px dashed #1677ff;
+    padding: 0;
+    > p {
+        padding: 8px 16px;
+        margin: 0;
+        border-bottom: 1px solid #d9d9d9;
+    }
+    .anticon-menu {
+        margin-right: 6px;
+    }
+    > div {
+        padding: 8px 16px;
+        background: #fff;
+        border-bottom: 1px dashed #1677ff;
+    }
+    button {
+        float: right;
+        margin-top: -3px;
+    }
+}

@@ -1,0 +1,22 @@
+{
+  "name": "@slide/render-components",
+  "version": "1.0.0",
+  "description": "",
+  "type": "module",
+  "main": "src/index.ts",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "axios": "0.21.0",
+    "lodash-es": "^4.17.21",
+    "plyr": "^3.7.8",
+    "video.js": "^8.10.0"
+  },
+  "devDependencies": {
+    "@types/video.js": "^7.3.56"
+  }
+}

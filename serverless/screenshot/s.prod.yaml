@@ -1,0 +1,60 @@
+edition: 1.0.0
+name: component-test
+access: 'default'
+services:
+  cn-beijing-lele-slide-slide_sceenshot_test:
+    component: fc
+    props:
+      region: cn-beijing
+      service:
+        logConfig:
+          enableRequestMetrics: true
+          enableInstanceMetrics: true
+          logBeginRule: DefaultRegex
+          project: aliyun-fc-cn-beijing-90c7b781-0d5c-5f06-8cfe-4f5c4b479d6c
+          logstore: function-log
+        role: acs:ram::1740338437053306:role/AliyunFcDefaultRole
+        description: 乐乐课件
+        internetAccess: true
+        ossMountConfig:
+          mountPoints: []
+        name: lele-slide
+      function:
+        handler: index.handler
+        timeout: 60
+        diskSize: 512
+        layers:
+          - acs:fc:cn-beijing:official:layers/Nodejs-Puppeteer17x/versions/3
+        instanceType: e1
+        runtime: nodejs16
+        cpu: 2
+        instanceConcurrency: 2
+        memorySize: 2048
+        environmentVariables:
+          COS_SECRET_KEY: COS_SECRET_KEY_VALUE
+          COS_SECRET_ID: COS_SECRET_ID_VALUE
+          LD_LIBRARY_PATH: /opt/lib
+          COS_BUCKET: class-slides-res-test-1313601664
+          HOST: https://test-class-api-online.saasp.vdyoo.com
+          NODE_PATH: /opt/node_modules:/opt/nodejs/node_modules
+          COS_REGION: ap-beijing
+          SHOT_URL: https://slides-test.ledupeiyou.com/slide-shot/index.html
+        name: slide_screenshot_prod
+        asyncConfiguration:
+          maxAsyncEventAgeInSeconds: 3600
+          maxAsyncRetryAttempts: 3
+          statefulInvocation: false
+        codeUri: ./code
+      triggers:
+        - name: defaultTrigger
+          description: ''
+          type: http
+          qualifier: LATEST
+          config:
+            methods:
+              - GET
+              - POST
+              - PUT
+              - DELETE
+            authType: anonymous
+            disableURLInternet: false

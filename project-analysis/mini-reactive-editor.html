@@ -1,0 +1,448 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Mini Reactive Editor</title>
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: #f5f7fa;
+      color: #1f2937;
+    }
+
+    .app {
+      display: grid;
+      grid-template-columns: 220px 1fr 300px;
+      height: 100vh;
+    }
+
+    .panel {
+      padding: 16px;
+      border-right: 1px solid #d8dee9;
+      background: #fff;
+    }
+
+    .panel.right {
+      border-right: none;
+      border-left: 1px solid #d8dee9;
+    }
+
+    .stage-wrap {
+      display: grid;
+      place-items: center;
+      padding: 24px;
+      overflow: auto;
+    }
+
+    .stage {
+      position: relative;
+      width: 800px;
+      height: 450px;
+      background: #fff;
+      border: 1px solid #c9d3e1;
+      box-shadow: 0 10px 24px rgba(15, 23, 42, 0.12);
+    }
+
+    .node {
+      position: absolute;
+      cursor: pointer;
+      user-select: none;
+    }
+
+    .node.selected {
+      outline: 2px solid #2563eb;
+      outline-offset: 2px;
+    }
+
+    .text-node {
+      min-width: 80px;
+      min-height: 32px;
+      padding: 6px 8px;
+      border: 1px dashed #94a3b8;
+      background: #eff6ff;
+    }
+
+    .shape-node {
+      border: 2px solid #0f766e;
+      background: #99f6e4;
+    }
+
+    button,
+    input,
+    select {
+      width: 100%;
+      margin: 6px 0 12px;
+      padding: 8px;
+      font-size: 14px;
+    }
+
+    button {
+      cursor: pointer;
+      border: 1px solid #cbd5e1;
+      background: #f8fafc;
+    }
+
+    label {
+      display: block;
+      font-size: 12px;
+      font-weight: 700;
+      color: #475569;
+    }
+
+    pre {
+      height: 220px;
+      overflow: auto;
+      padding: 12px;
+      background: #0f172a;
+      color: #dbeafe;
+      font-size: 12px;
+      line-height: 1.5;
+    }
+
+    h3 {
+      margin: 0 0 12px;
+      font-size: 16px;
+    }
+  </style>
+</head>
+<body>
+  <div class="app">
+    <aside class="panel">
+      <h3>Materials</h3>
+      <button id="addText">Add Text</button>
+      <button id="addShape">Add Shape</button>
+      <button id="undo">Undo</button>
+      <button id="redo">Redo</button>
+      <h3>JSON Output</h3>
+      <pre id="json"></pre>
+    </aside>
+
+    <main class="stage-wrap">
+      <div id="stage" class="stage"></div>
+    </main>
+
+    <aside class="panel right">
+      <h3>Settings</h3>
+      <div id="settings">Select a node</div>
+    </aside>
+  </div>
+
+  <script>
+    /*
+     * Mini reactive system.
+     * Core idea:
+     * 1. get: collect current reaction as a dependency of target.key.
+     * 2. set: find reactions that used target.key and run them.
+     */
+    let currentReaction = null;
+    const depsMap = new WeakMap();
+    const proxyCache = new WeakMap();
+
+    function getDeps(target, key) {
+      let deps = depsMap.get(target);
+      if (!deps) {
+        deps = new Map();
+        depsMap.set(target, deps);
+      }
+      let reactions = deps.get(key);
+      if (!reactions) {
+        reactions = new Set();
+        deps.set(key, reactions);
+      }
+      return reactions;
+    }
+
+    function observable(value, options = { deep: true }) {
+      if (!value || typeof value !== 'object') return value;
+      if (proxyCache.has(value)) return proxyCache.get(value);
+
+      const proxy = new Proxy(value, {
+        get(target, key, receiver) {
+          if (currentReaction) {
+            getDeps(target, key).add(currentReaction);
+          }
+          const result = Reflect.get(target, key, receiver);
+          return options.deep ? observable(result, options) : result;
+        },
+
+        set(target, key, nextValue, receiver) {
+          const oldValue = target[key];
+          const result = Reflect.set(target, key, nextValue, receiver);
+          if (oldValue !== nextValue) {
+            getDeps(target, key).forEach((reaction) => reaction());
+          }
+          return result;
+        },
+      });
+
+      proxyCache.set(value, proxy);
+      return proxy;
+    }
+
+    function autorun(render) {
+      const reaction = () => {
+        currentReaction = reaction;
+        render();
+        currentReaction = null;
+      };
+      reaction();
+      return reaction;
+    }
+
+    /*
+     * Editor model.
+     * A real project splits these into Engine / Workspace / Operation / TreeNode.
+     * Here we keep them small so the data flow is visible.
+     */
+    let uid = 1;
+
+    function createNode(componentName, props) {
+      return observable({
+        id: `${componentName.toLowerCase()}-${uid++}`,
+        componentName,
+        props,
+        children: observable([], { deep: false }),
+      });
+    }
+
+    const root = observable({
+      id: 'root',
+      componentName: 'Root',
+      props: {},
+      children: observable([], { deep: false }),
+    });
+
+    const editor = observable({
+      selectedId: '',
+      root,
+    });
+
+    const history = {
+      stack: [],
+      current: -1,
+      locking: false,
+
+      push() {
+        if (this.locking) return;
+        this.stack = this.stack.slice(0, this.current + 1);
+        this.stack.push(JSON.stringify(serialize(editor.root)));
+        this.current = this.stack.length - 1;
+      },
+
+      undo() {
+        if (this.current <= 0) return;
+        this.current--;
+        this.restore(this.stack[this.current]);
+      },
+
+      redo() {
+        if (this.current >= this.stack.length - 1) return;
+        this.current++;
+        this.restore(this.stack[this.current]);
+      },
+
+      restore(snapshot) {
+        this.locking = true;
+        const nextRoot = JSON.parse(snapshot);
+        editor.root.children.splice(0, editor.root.children.length);
+        nextRoot.children.forEach((child) => {
+          editor.root.children.push(hydrate(child));
+        });
+        editor.selectedId = '';
+        this.locking = false;
+      },
+    };
+
+    function serialize(node) {
+      return {
+        id: node.id,
+        componentName: node.componentName,
+        props: JSON.parse(JSON.stringify(node.props)),
+        children: node.children.map(serialize),
+      };
+    }
+
+    function hydrate(raw) {
+      return observable({
+        ...raw,
+        props: observable(raw.props),
+        children: observable(raw.children.map(hydrate), { deep: false }),
+      });
+    }
+
+    function findNode(node, id) {
+      if (node.id === id) return node;
+      for (const child of node.children) {
+        const found = findNode(child, id);
+        if (found) return found;
+      }
+      return null;
+    }
+
+    function selectedNode() {
+      return findNode(editor.root, editor.selectedId);
+    }
+
+    /*
+     * View layer.
+     * In the real project this role is played by React observer components.
+     * Here autorun is enough to demonstrate local dependency tracking.
+     */
+    const stage = document.getElementById('stage');
+    const settings = document.getElementById('settings');
+    const jsonOutput = document.getElementById('json');
+
+    function renderNode(node) {
+      const el = document.createElement('div');
+      el.className = 'node';
+      stage.appendChild(el);
+
+      autorun(() => {
+        const props = node.props;
+        el.dataset.nodeId = node.id;
+        el.className = `node ${editor.selectedId === node.id ? 'selected' : ''}`;
+        el.style.left = `${props.x}px`;
+        el.style.top = `${props.y}px`;
+        el.style.width = `${props.width}px`;
+        el.style.height = `${props.height}px`;
+
+        if (node.componentName === 'Text') {
+          el.classList.add('text-node');
+          el.textContent = props.text;
+          el.style.fontSize = `${props.fontSize}px`;
+        }
+
+        if (node.componentName === 'Shape') {
+          el.classList.add('shape-node');
+          el.textContent = '';
+          el.style.background = props.fill;
+        }
+      });
+
+      el.addEventListener('click', (event) => {
+        event.stopPropagation();
+        editor.selectedId = node.id;
+      });
+    }
+
+    autorun(() => {
+      stage.innerHTML = '';
+      editor.root.children.forEach(renderNode);
+    });
+
+    autorun(() => {
+      const node = selectedNode();
+      if (!node) {
+        settings.innerHTML = 'Select a node';
+        return;
+      }
+
+      const props = node.props;
+      settings.innerHTML = `
+        <label>Type</label>
+        <input value="${node.componentName}" disabled />
+        <label>X</label>
+        <input id="setX" type="number" value="${props.x}" />
+        <label>Y</label>
+        <input id="setY" type="number" value="${props.y}" />
+        <label>Width</label>
+        <input id="setWidth" type="number" value="${props.width}" />
+        <label>Height</label>
+        <input id="setHeight" type="number" value="${props.height}" />
+        ${node.componentName === 'Text' ? `
+          <label>Text</label>
+          <input id="setText" value="${props.text}" />
+          <label>Font Size</label>
+          <input id="setFontSize" type="number" value="${props.fontSize}" />
+        ` : `
+          <label>Fill</label>
+          <input id="setFill" value="${props.fill}" />
+        `}
+      `;
+
+      bindNumber('setX', (value) => props.x = value);
+      bindNumber('setY', (value) => props.y = value);
+      bindNumber('setWidth', (value) => props.width = value);
+      bindNumber('setHeight', (value) => props.height = value);
+      bindText('setText', (value) => props.text = value);
+      bindNumber('setFontSize', (value) => props.fontSize = value);
+      bindText('setFill', (value) => props.fill = value);
+    });
+
+    autorun(() => {
+      jsonOutput.textContent = JSON.stringify(serialize(editor.root), null, 2);
+    });
+
+    function bindText(id, change) {
+      const input = document.getElementById(id);
+      if (!input) return;
+      input.addEventListener('input', () => change(input.value));
+      input.addEventListener('change', () => history.push());
+    }
+
+    function bindNumber(id, change) {
+      const input = document.getElementById(id);
+      if (!input) return;
+      input.addEventListener('input', () => change(Number(input.value)));
+      input.addEventListener('change', () => history.push());
+    }
+
+    document.getElementById('addText').addEventListener('click', () => {
+      const node = createNode('Text', observable({
+        x: 80,
+        y: 80,
+        width: 160,
+        height: 48,
+        text: 'Hello editor',
+        fontSize: 18,
+      }));
+      editor.root.children.push(node);
+      editor.selectedId = node.id;
+      history.push();
+    });
+
+    document.getElementById('addShape').addEventListener('click', () => {
+      const node = createNode('Shape', observable({
+        x: 280,
+        y: 120,
+        width: 120,
+        height: 80,
+        fill: '#99f6e4',
+      }));
+      editor.root.children.push(node);
+      editor.selectedId = node.id;
+      history.push();
+    });
+
+    stage.addEventListener('click', () => {
+      editor.selectedId = '';
+    });
+
+    document.getElementById('undo').addEventListener('click', () => history.undo());
+    document.getElementById('redo').addEventListener('click', () => history.redo());
+
+    editor.root.children.push(createNode('Text', observable({
+      x: 100,
+      y: 90,
+      width: 180,
+      height: 48,
+      text: 'Click me',
+      fontSize: 20,
+    })));
+    editor.root.children.push(createNode('Shape', observable({
+      x: 340,
+      y: 170,
+      width: 140,
+      height: 100,
+      fill: '#bfdbfe',
+    })));
+    history.push();
+  </script>
+</body>
+</html>

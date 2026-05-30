@@ -1,0 +1,20 @@
+{
+  "compilerOptions": {
+    "esModuleInterop": true,
+    "moduleResolution": "node",
+    "jsx": "react-jsx",
+    "module": "commonjs",
+    "target": "es5",
+    "lib": ["dom", "esnext"],
+    "allowJs": true,
+    "noUnusedLocals": true,
+    "preserveConstEnums": true,
+    "sourceMap": true,
+    "declaration": true,
+    "skipLibCheck": true,
+    "experimentalDecorators": true,
+    "downlevelIteration": true,
+    "allowSyntheticDefaultImports": true,
+    "resolveJsonModule": true
+  }
+}
