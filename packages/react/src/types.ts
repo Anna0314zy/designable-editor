@@ -63,6 +63,10 @@ export const pageItems: MenuProps['items'] = [
     label: '删除课件页',
     key: 'delete-slide',
   },
+  {
+    label: '复制课件页',
+    key: 'copy-slide',
+  },
   // {
   //   label: '隐藏课件页',
   //   key: 'hide-slide',
@@ -86,6 +90,10 @@ export const disabledPageItems: MenuProps['items'] = [
     label: '删除课件页',
     key: 'delete-slide',
     disabled: true,
+  },
+  {
+    label: '复制课件页',
+    key: 'copy-slide',
   },
   // {
   //   label: '隐藏课件页',
@@ -121,6 +129,10 @@ export const disabledSectionItems: MenuProps['items'] = [
 ]
 
 export const deleteSelectPages: MenuProps['items'] = [
+  {
+    label: '复制选中课件页',
+    key: 'copy-sections',
+  },
   {
     label: '删除选中课件页',
     key: 'delete-sections',

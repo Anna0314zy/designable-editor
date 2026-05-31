@@ -34,6 +34,7 @@ export interface IThumbnailPanelProps {
   setCurrentWorkspaceId: Function;
   handleCreatePageId: Function;
   deletePage: Function;
+  commandManager?: any;
   changeMenu?: (
     item: { pageType: number },
     arr: {
@@ -182,6 +183,20 @@ const reorder = (
   }
 }
 
+const clonePageTree = (pageInfo: any, pageId: string) => {
+  const cloneNode = (node: any, isRoot = false) => {
+    if (!node) return node
+    return {
+      ...node,
+      id: isRoot ? pageId : uid(),
+      props: node.props ? JSON.parse(JSON.stringify(node.props)) : node.props,
+      children: (node.children || []).map((child: any) => cloneNode(child)),
+    }
+  }
+
+  return cloneNode(JSON.parse(JSON.stringify(pageInfo)), true)
+}
+
 export const ThumbnailPanel: React.FC<IThumbnailPanelProps> = observer(
   (props) => {
     const thumbnailWrapperHeight = 135
@@ -204,6 +219,7 @@ export const ThumbnailPanel: React.FC<IThumbnailPanelProps> = observer(
       setCurrentWorkspaceId,
       handleCreatePageId,
       deletePage,
+      commandManager,
     } = props
     const viewportRatio = useGlobalData().viewportRatio
     const thumbnailHeight = thumbnailWrapperHeight - 20
@@ -306,57 +322,7 @@ export const ThumbnailPanel: React.FC<IThumbnailPanelProps> = observer(
       [workbench, thumbnailList]
     )
 
-    // 右键操作页面
-    const rightClickPageMenu = useCallback(
-      async (menuKey: any, pagesData: any, deleteIndex?: number) => {
-        const currentWorkspace = workbench.currentWorkspace
-        if (menuKey == 'add-section') {
-          const addList = thumbnailList.map((item) => {
-            if (item.id == currentWorkspace.id) {
-              if (item?.section?.length > 0) {
-                return {
-                  ...item,
-                  section: [
-                    {
-                      name: '无标题节',
-                      id: uid(),
-                      secPack: false,
-                    },
-                    ...item.section,
-                  ],
-                }
-              } else {
-                return {
-                  ...item,
-                  section: [
-                    {
-                      name: '无标题节',
-                      id: uid(),
-                      secPack: false,
-                    },
-                  ],
-                }
-              }
-            }
-            return item
-          })
-          setWorkspaceList(addList)
-        } else if (menuKey == 'add-slide') {
-          addThumbnail({ pageType: pagesData.pageType })
-        } else if (menuKey == 'delete-slide') {
-          const list = reconstructArray(pagesData).filter((o) => o)
-          setWorkspaceList(list)
-          setDeletePageType({ index: deleteIndex, type: true })
-          await deletePage({
-            pageIdList: [currentWorkspaceId],
-          })
-          workbench.removeWorkspace(currentWorkspaceId)
-        }
-      },
-      [workbench, thumbnailList, currentWorkspaceId]
-    )
-
-    const handleOk = () => {
+	    const handleOk = () => {
       setIsModalOpen(false)
       setWorkspaceList((prevWorkspaceList) =>
         prevWorkspaceList.map((item) => {
@@ -373,9 +339,9 @@ export const ThumbnailPanel: React.FC<IThumbnailPanelProps> = observer(
       )
     }
 
-    const handleCancel = () => {
-      setIsModalOpen(false)
-    }
+	    const handleCancel = () => {
+	      setIsModalOpen(false)
+	    }
 
     const handleInputChange = (e) => {
       setSectionClickData((prevData) => ({
@@ -408,8 +374,8 @@ export const ThumbnailPanel: React.FC<IThumbnailPanelProps> = observer(
       }
     }, [deletePageType])
 
-    // 获取删除节点
-    const handleDeleteWorkspace = async () => {
+	    // 获取删除节点
+	    const handleDeleteWorkspace = async () => {
       const pageDivHTML = document.querySelector('[data-rbd-droppable-id="list"]')
       const pageListHTML = pageDivHTML.childNodes
       const pageListHTMLFilter = []
@@ -437,8 +403,8 @@ export const ThumbnailPanel: React.FC<IThumbnailPanelProps> = observer(
     }
 
 
-    // 新增课件页
-    const addThumbnail = useCallback(
+	    // 新增课件页
+	    const addThumbnail = useCallback(
       async (newItem: any) => {
         const { page, pageId } = await handleCreatePageId(newItem)
         const data = { ...page.pageInfo, pageType: page.pageType }
@@ -453,10 +419,104 @@ export const ThumbnailPanel: React.FC<IThumbnailPanelProps> = observer(
         })
         setCurrentWorkspaceId(pageId)
       },
-      [workbench, thumbnailList, currentWorkspaceId]
-    )
+	      [workbench, thumbnailList, currentWorkspaceId]
+	    )
 
-    const flattenArray = () => {
+	    const copyPages = useCallback(
+	      async (pages: any[]) => {
+	        const copyList = pages.filter((item) => item && !item.type)
+	        if (!copyList.length) return
+
+	        const sourceIds = copyList.map((item) => item.id)
+	        const insertIndex = Math.max(
+	          ...sourceIds.map((id) =>
+	            thumbnailList.findIndex((item) => item.id === id)
+	          )
+	        )
+	        const copiedPages = []
+
+	        for (const item of copyList) {
+	          const sourceWorkspace = workbench.findWorkspaceById(item.id)
+	          const sourcePageInfo =
+	            sourceWorkspace?.serialize?.().pageInfo || item.pageInfo || item
+	          const { pageId } = await handleCreatePageId({
+	            pageType: item.pageType,
+	          })
+	          const pageInfo = clonePageTree(sourcePageInfo, pageId)
+	          const data = {
+	            ...pageInfo,
+	            pageType: item.pageType,
+	            section: [],
+	            nextSection: [],
+	          }
+	          const newWorkspace = workbench.ensureWorkspace(data)
+	          newWorkspace.engine.setCurrentTree(data)
+	          copiedPages.push(data)
+	        }
+
+	        setWorkspaceList((prevList) => {
+	          const nextList = [...prevList]
+	          nextList.splice(insertIndex + 1, 0, ...copiedPages)
+	          return nextList
+	        })
+	        setCurrentWorkspaceId(copiedPages[copiedPages.length - 1].id)
+	      },
+	      [workbench, thumbnailList, handleCreatePageId, setWorkspaceList, setCurrentWorkspaceId]
+	    )
+
+	    // 右键操作页面
+	    const rightClickPageMenu = useCallback(
+	      async (menuKey: any, pagesData: any, deleteIndex?: number) => {
+	        const currentWorkspace = workbench.currentWorkspace
+	        if (menuKey == 'add-section') {
+	          const addList = thumbnailList.map((item) => {
+	            if (item.id == currentWorkspace.id) {
+	              if (item?.section?.length > 0) {
+	                return {
+	                  ...item,
+	                  section: [
+	                    {
+	                      name: '无标题节',
+	                      id: uid(),
+	                      secPack: false,
+	                    },
+	                    ...item.section,
+	                  ],
+	                }
+	              } else {
+	                return {
+	                  ...item,
+	                  section: [
+	                    {
+	                      name: '无标题节',
+	                      id: uid(),
+	                      secPack: false,
+	                    },
+	                  ],
+	                }
+	              }
+	            }
+	            return item
+	          })
+	          setWorkspaceList(addList)
+	        } else if (menuKey == 'add-slide') {
+	          addThumbnail({ pageType: pagesData.pageType })
+	        } else if (menuKey == 'copy-slide') {
+	          copyPages([pagesData])
+	        } else if (menuKey == 'delete-slide') {
+	          const list = reconstructArray(pagesData).filter((o) => o)
+	          setWorkspaceList(list)
+	          setDeletePageType({ index: deleteIndex, type: true })
+	          await deletePage({
+	            pageIdList: [currentWorkspaceId],
+	          })
+	          workbench.removeWorkspace(currentWorkspaceId)
+	        }
+	      },
+	      [workbench, thumbnailList, currentWorkspaceId, addThumbnail, copyPages]
+	    )
+
+	    const flattenArray = () => {
       const newArrayList = []
       const thumbnailLists = JSON.parse(JSON.stringify(thumbnailList))
       thumbnailLists.forEach((item) => {
@@ -629,11 +689,13 @@ export const ThumbnailPanel: React.FC<IThumbnailPanelProps> = observer(
       }
     }
 
-    const multiplePages = (e) => {
-      if (e.key == 'delete-sections') {
-        if (selectDataSource?.length == dataSource?.length) {
-          message.warning('至少保留一个课件页')
-        } else {
+	    const multiplePages = (e) => {
+	      if (e.key == 'copy-sections') {
+	        copyPages(selectDataSource)
+	      } else if (e.key == 'delete-sections') {
+	        if (selectDataSource?.length == dataSource?.length) {
+	          message.warning('至少保留一个课件页')
+	        } else {
           const filterData = dataSource.filter(
             (item) => selectDataSource.indexOf(item) == -1
           )
@@ -643,13 +705,149 @@ export const ThumbnailPanel: React.FC<IThumbnailPanelProps> = observer(
         console.log(e)
       }
     }
+
+    useEffect(() => {
+      if (!commandManager) return
+
+      const commandIds = [
+	        'page.addSection',
+	        'page.addSlide',
+	        'page.copy',
+	        'page.delete',
+	        'section.delete',
+	        'section.rename',
+	        'pages.copySelected',
+	        'pages.deleteSelected',
+	      ]
+
+      commandManager.register({
+        id: 'page.addSection',
+        label: '新增节',
+        menuTypes: ['page'],
+        execute: ({ payload }) => {
+          rightClickPageMenu('add-section', payload?.item)
+        },
+      })
+
+      commandManager.register({
+        id: 'page.addSlide',
+        label: '新增课件页',
+        menuTypes: ['page'],
+        execute: ({ payload }) => {
+          rightClickPageMenu('add-slide', payload?.item)
+        },
+      })
+
+	      commandManager.register({
+	        id: 'page.copy',
+	        label: '复制课件页',
+	        menuTypes: ['page'],
+	        execute: ({ payload }) => {
+	          copyPages([payload?.item])
+	        },
+	      })
+	
+	      commandManager.register({
+	        id: 'page.delete',
+	        label: '删除课件页',
+        menuTypes: ['page'],
+        enabled: ({ payload }) => payload?.thumbnailList?.length > 1,
+        execute: ({ payload }) => {
+          const newDataSource = payload?.dataSource?.filter((item: any) => {
+            return item.id !== payload?.item.id
+          })
+          const deleteIndex = payload?.dataSource
+            ?.filter((item: any) => !item?.type)
+            .indexOf(payload?.item)
+          rightClickPageMenu('delete-slide', newDataSource, deleteIndex)
+        },
+      })
+
+      commandManager.register({
+        id: 'section.delete',
+        label: '删除节点',
+        menuTypes: ['section'],
+        execute: ({ payload }) => {
+          rightClickSectionMenu('delete-section', payload?.item)
+        },
+      })
+
+      commandManager.register({
+        id: 'section.rename',
+        label: '重命名节点',
+        menuTypes: ['section'],
+        execute: ({ payload }) => {
+          rightClickSectionMenu('ren-slide', payload?.item)
+        },
+      })
+
+	      commandManager.register({
+	        id: 'pages.copySelected',
+	        label: '复制选中课件页',
+	        menuTypes: ['pages'],
+	        enabled: ({ payload }) => payload?.selectDataSource?.length > 0,
+	        execute: ({ payload }) => {
+	          copyPages(payload?.selectDataSource || [])
+	        },
+	      })
+	
+	      commandManager.register({
+	        id: 'pages.deleteSelected',
+	        label: '删除选中课件页',
+        menuTypes: ['pages'],
+        enabled: ({ payload }) => payload?.selectedDivs?.length > 0,
+        execute: () => {
+          multiplePages({ key: 'delete-sections' })
+        },
+      })
+
+      return () => {
+        commandIds.forEach((id) => commandManager.unregister(id))
+      }
+    }, [
+      commandManager,
+      dataSource,
+      selectedDivs,
+      selectDataSource,
+      thumbnailList,
+      rightClickPageMenu,
+      rightClickSectionMenu,
+    ])
+
+    const getCommandMenuItems = (menuType: string, payload: any) => {
+      if (!commandManager) return null
+      return commandManager.getCommands(menuType, undefined, payload).map((command) => ({
+        label: command.label,
+        key: command.id,
+        disabled: !commandManager.canExecute(command.id, undefined, payload),
+      }))
+    }
+
+    const handleCommandMenuClick = (e: any, payload: any) => {
+      commandManager?.execute(e.key, undefined, payload)
+    }
+
     return (
       <div className={cls(prefix, { visible })}>
         <div className={prefix + '-layout'}>
           <Dropdown
             menu={{
-              items: selectedDivs?.length > 0 ? deleteSelectPages : [],
-              onClick: (e) => multiplePages(e),
+              items: selectedDivs?.length > 0
+                ? commandManager
+                  ? getCommandMenuItems('pages', {
+                    selectedDivs,
+                    selectDataSource,
+                    dataSource,
+                  })
+                  : deleteSelectPages
+                : [],
+              onClick: (e) => commandManager
+                ? handleCommandMenuClick(e, {
+                  selectedDivs,
+                  selectDataSource,
+                  dataSource,
+                })
+                : multiplePages(e),
             }}
             trigger={['contextMenu']}
           >
@@ -686,9 +884,19 @@ export const ThumbnailPanel: React.FC<IThumbnailPanelProps> = observer(
                                   {item?.type == 'section' && (
                                     <Dropdown
                                       menu={{
-                                        items: sectionMenuItems(item, index),
+                                        items: commandManager
+                                          ? getCommandMenuItems('section', {
+                                            item,
+                                            index,
+                                          })
+                                          : sectionMenuItems(item, index),
                                         onClick: (e) =>
-                                          handleSectionMenuClick(e, item),
+                                          commandManager
+                                            ? handleCommandMenuClick(e, {
+                                              item,
+                                              index,
+                                            })
+                                            : handleSectionMenuClick(e, item),
                                       }}
                                       trigger={['contextMenu']}
                                       key={item.id}
@@ -705,12 +913,22 @@ export const ThumbnailPanel: React.FC<IThumbnailPanelProps> = observer(
                                   {item?.type == 'nextSection' && (
                                     <Dropdown
                                       menu={{
-                                        items: nextSectionMenuItems(
-                                          item,
-                                          index
-                                        ),
+                                        items: commandManager
+                                          ? getCommandMenuItems('section', {
+                                            item,
+                                            index,
+                                          })
+                                          : nextSectionMenuItems(
+                                            item,
+                                            index
+                                          ),
                                         onClick: (e) =>
-                                          handleSectionMenuClick(e, item),
+                                          commandManager
+                                            ? handleCommandMenuClick(e, {
+                                              item,
+                                              index,
+                                            })
+                                            : handleSectionMenuClick(e, item),
                                       }}
                                       trigger={['contextMenu']}
                                       key={item.id}
@@ -784,15 +1002,26 @@ export const ThumbnailPanel: React.FC<IThumbnailPanelProps> = observer(
                                             menu={
                                               currentWorkspaceId === item.id
                                                 ? {
-                                                  items:
-                                                    thumbnailList?.length > 1
+                                                  items: commandManager
+                                                    ? getCommandMenuItems('page', {
+                                                      item,
+                                                      dataSource,
+                                                      thumbnailList,
+                                                    })
+                                                    : thumbnailList?.length > 1
                                                       ? changeMenu(item, pageItems)
                                                       : changeMenu(item, disabledPageItems),
                                                   onClick: (e) =>
-                                                    handlePageMenuClick(
-                                                      e,
-                                                      item
-                                                    ),
+                                                    commandManager
+                                                      ? handleCommandMenuClick(e, {
+                                                        item,
+                                                        dataSource,
+                                                        thumbnailList,
+                                                      })
+                                                      : handlePageMenuClick(
+                                                        e,
+                                                        item
+                                                      ),
                                                 }
                                                 : { items: [] }
                                             }

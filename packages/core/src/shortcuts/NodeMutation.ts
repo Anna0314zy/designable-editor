@@ -43,7 +43,13 @@ export const PasteNodes = new Shortcut({
   handler(context) {
     const operation = context?.workspace.operation
     if (operation) {
-      TreeNode.clone(Clipboard.nodes)
+      TreeNode.clone(Clipboard.nodes, {
+        offset: {
+          x: 10,
+          y: 10,
+        },
+        selectCloned: true,
+      })
     }
   },
 })

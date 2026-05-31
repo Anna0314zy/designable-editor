@@ -37,6 +37,14 @@ export interface INodeFinder {
   (node: TreeNode): boolean
 }
 
+export interface ICloneNodesOptions {
+  offset?: {
+    x?: number
+    y?: number
+  }
+  selectCloned?: boolean
+}
+
 const TreeNodes = new Map<string, TreeNode>()
 
 const CommonDesignerPropsMap = new Map<string, IDesignerControllerProps>()
@@ -88,6 +96,23 @@ const resetNodesParent = (nodes: TreeNode[], parent: TreeNode) => {
     }
     return node
   })
+}
+
+const translateRegExp =
+  /translate\(\s*(-?\d+(?:\.\d+)?)px\s*,\s*(-?\d+(?:\.\d+)?)px\s*\)/
+
+const offsetNodeTransform = (node: TreeNode, x = 0, y = 0) => {
+  if (!x && !y) return
+  const style = node.props?.style
+  if (!style) return
+  const transform = style.transform || 'translate(0px, 0px) rotate(0deg)'
+  if (translateRegExp.test(transform)) {
+    style.transform = transform.replace(translateRegExp, (_, left, top) => {
+      return `translate(${Number(left) + x}px, ${Number(top) + y}px)`
+    })
+  } else {
+    style.transform = `translate(${x}px, ${y}px) ${transform}`.trim()
+  }
 }
 
 const resetParent = (node: TreeNode, parent: TreeNode) => {
@@ -793,9 +818,10 @@ export class TreeNode {
     })
   }
 
-  static clone(nodes: TreeNode[] = []) {
+  static clone(nodes: TreeNode[] = [], options: ICloneNodesOptions = {}) {
     const groups: { [parentId: string]: TreeNode[] } = {}
     const lastGroupNode: { [parentId: string]: TreeNode } = {}
+    const clonedNodes: TreeNode[] = []
     const filterNestedNode = TreeNode.sort(nodes).filter((node) => {
       return !nodes.some((parent) => {
         return node.isMyParents(parent)
@@ -822,12 +848,14 @@ export class TreeNode {
       each(nodes, (node) => {
         const cloned = node.clone()
         if (!cloned) return
+        offsetNodeTransform(cloned, options.offset?.x, options.offset?.y)
         if (
           node.operation?.selection.has(node) &&
           insertPoint.parent.allowAppend([cloned])
         ) {
           insertPoint.insertAfter(cloned)
           insertPoint = insertPoint.next
+          clonedNodes.push(cloned)
         } else if (node.operation.selection.length === 1) {
           const targetNode = node.operation?.tree.findById(
             node.operation.selection.first
@@ -839,6 +867,7 @@ export class TreeNode {
           }
           if (targetNode && targetNode.allowAppend([cloned])) {
             cloneNodes.push(cloned)
+            clonedNodes.push(cloned)
           }
         }
       })
@@ -847,6 +876,10 @@ export class TreeNode {
       if (!nodes.length) return
       target.append(...nodes)
     })
+    if (options.selectCloned && clonedNodes.length) {
+      clonedNodes[0].operation?.selection.batchSafeSelect(clonedNodes)
+    }
+    return clonedNodes
   }
 
   static filterResizable(nodes: TreeNode[] = []) {
