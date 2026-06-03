@@ -14,6 +14,19 @@ const getVersion = async () => {
       'Content-Type': 'application/json',
       'Token': import.meta.env.VITE_ADMIN_TOKEN
     };
+    const getVersionFromPath = () => {
+      const match = location.pathname.match(/\/slide-editor\/([^/]+)\/slide\.html/)
+      return match?.[1]
+    }
+    const redirectToSlide = (version?: string | null) => {
+      if (!version) {
+        alert('版本获取错误')
+        console.error('Current slide editor version is empty')
+        return
+      }
+      localStorage.setItem('EditorVersion', version)
+      location.replace(`${location.origin}/slide-editor/${version}/slide.html${location.search}`)
+    }
 
     fetch(url, {
       method: 'GET',
@@ -28,8 +41,12 @@ const getVersion = async () => {
     .then(res => {
       const {code, data} = res
       if (code === 200) {
-        localStorage.setItem('EditorVersion', data.currentVersion)
-        location.replace(`${location.origin}/slide-editor/${data.currentVersion}/slide.html${location.search}`)
+        const version =
+          data?.currentVersion ||
+          data?.version ||
+          localStorage.getItem('EditorVersion') ||
+          getVersionFromPath()
+        redirectToSlide(version)
       }
     })
     .catch(error => {

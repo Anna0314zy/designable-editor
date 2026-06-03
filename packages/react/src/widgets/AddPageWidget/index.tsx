@@ -36,6 +36,7 @@ export const items: MenuProps["items"] = [
 
 export const AddPage: React.FC<IAddPageProps> = ({ onClick }) => {
 	const handleButtonClick = (e: React.MouseEvent<HTMLButtonElement>) => {
+		console.log('AddPage---')
 		onClick(PageType.normalPage);
 	};
 

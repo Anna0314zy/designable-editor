@@ -24,13 +24,14 @@ import settingComponents from './settingComponents'
 import Preview from './components/Preview'
 // import {COSUpload} from './settingComponents/COSUpload'
 
-import { Space, Button } from 'antd'
+import { Space, Button, message } from 'antd'
 import { TreeContent, ViewContentComponent } from './components/TreeContent'
 import { ContextMenu } from './components/ContextMenu'
 import { GenMenuList } from './ToolbarData'
 import { PageType } from '@editor/react/src/widgets/AddPageWidget'
 import { deletePage as deletePageApi } from './api/page'
-import { getUrlParameter, changeMenu } from './utils/common'
+import { getUrlParameter, changeMenu, clearToken } from './utils/common'
+import { logout as logoutApi } from './api/auth'
 import { Moveable as MoveableContainer } from './components/Moveable'
 import { ShortcutProvider } from './components/ShortcutProvider'
 import { CommandProvider } from './commands/CommandProvider'
@@ -58,7 +59,7 @@ const engine = createDesigner()
 * @return {JSX.Element} 渲染后的组件。
 */
 const App: React.FC<Iprops> = ({ setLoading, setNoPermission }) => {
-  const slideId = getUrlParameter('id')
+  const slideId = getUrlParameter('id') || "06564451-2fb7-4e3d-80f5-3292825ff038"
   const slideTitle = getUrlParameter('title') || '课件标题'
   const productId = getUrlParameter('productId')
   const [workspaceList, setWorkspaceList] = useState([])
@@ -66,19 +67,30 @@ const App: React.FC<Iprops> = ({ setLoading, setNoPermission }) => {
   const lastWorkspaceId = useRef('')
   const workbench = engine.workbench
   const [saveText, setSaveText] = useState('')
+  const [logoutLoading, setLogoutLoading] = useState(false)
   const [globalResource, setGlobalResource] = useState([])
   const intervalMS = 60 * 60 * 1000
   // 属性设置面板title
   const [settingTitle, setSettingTitle] = useState('panels.PropertySettings')
   // 默认视口16:9
   const VIEW_PORT_RATIO = 0.75 //4:3 16:9的是0.5625
-  const [globalData, setGlobalData] = useState({
+  const [globalData, setGlobalData] = useState<Record<string, any>>({
     viewportRatio: VIEW_PORT_RATIO,
     viewportSize: [1280, 960]
   })
   const previewRef = useRef(null)
   const gameModalRef = useRef(null)
-  const resourceHost = import.meta.env.VITE_CDN_SERVER
+  const resourceHost = globalData.cdnPathList?.[0] || globalData.cdnPath || ''
+  const redirectToLogin = useCallback(() => {
+    const regex = /(\d+\.\d+\.\d+)/
+    const taskVersion = localStorage.getItem('TaskVersion')
+    const homeUrl = import.meta.env.VITE_HOME_SERVER.replace(
+      regex,
+      taskVersion || '1.0.0'
+    )
+    const redirect = encodeURIComponent(window.location.href)
+    location.replace(`${homeUrl}#/login?redirect=${redirect}`)
+  }, [])
   const effectProps = {
     slideId,
     setLoading,
@@ -109,19 +121,32 @@ const App: React.FC<Iprops> = ({ setLoading, setNoPermission }) => {
   // await saveCurrentPage(false, false)
   previewRef.current.open()   
  }
+  const handleLogout = async () => {
+    setLogoutLoading(true)
+    try {
+      await logoutApi()
+    } catch {
+      message.warning('退出登录接口异常，已清理本地登录态')
+    } finally {
+      clearToken()
+      redirectToLogin()
+    }
+  }
   // 课件行为按钮组件
   const Actions = observer(() => {
     return (
       <Space style={{ marginRight: 10 }}>
         <Button onClick={handlePreview}>预览</Button>
         <Button onClick={() => saveCurrentPage(false, true)}>保存</Button>
+        {/* <Button danger loading={logoutLoading} onClick={handleLogout}>退出登录</Button> */}
       </Space>
     )
   })
 
   // Logo组件
   const Logo: React.FC = () => (
-    <IconWidget infer="Logo" style={{ margin: 10, height: 24, width: 24 }} />
+    // <IconWidget infer="Logo" style={{ margin: 10, height: 24, width: 24 }} />
+    <></>
   )
   const showGameModel = (node) => {
     gameModalRef.current.open(node)
@@ -130,9 +155,6 @@ const App: React.FC<Iprops> = ({ setLoading, setNoPermission }) => {
     gameModalRef.current.cancel()
   },[])
   const handleDeletePage = useCallback((params) => {
-    if (import.meta.env.MODE === 'dev') {
-      return Promise.resolve(params)
-    }
     return deletePageApi(params)
   }, [])
   if (!currentWorkspaceId || workspaceList.length === 0) return null

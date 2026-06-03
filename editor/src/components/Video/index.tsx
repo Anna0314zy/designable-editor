@@ -7,7 +7,7 @@
 import React from "react";
 import { createResource, createBehavior } from "@editor/core";
 import { useConnect, useReport, useEventStore } from "@play/render";
-import { useResourceData } from "@editor/react";
+import { useGlobalData, useResourceData } from "@editor/react";
 
 import { schemaVideo_info, videoLocale_info } from "../_config/schema-video";
 
@@ -76,14 +76,15 @@ export const VideoResource = createResource({
 		},
 	],
 });
-const globalConfig = {
-	resourceData: {
-		remote: {
-			cdnPathList: [`${import.meta.env.VITE_CDN_SERVER}`],
-		},
-	},
-};
 export const Video = (props) => {
+	const globalData = useGlobalData();
+	const globalConfig = {
+		resourceData: {
+			remote: {
+				cdnPathList: globalData.cdnPathList || [],
+			},
+		},
+	};
 	const globalProps = {
 		fileList: useResourceData(),
 	};

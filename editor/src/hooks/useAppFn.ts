@@ -12,36 +12,10 @@ import { PageType, items } from '@editor/react/src/widgets/AddPageWidget'
 
 let localPageIndex = 1
 
-export const createLocalMockPage = (pageType = PageType.normalPage) => {
-  const pageInfo = items.filter(item => item.key === pageType)
-  const pageId = `local-page-${localPageIndex++}`
-
-  return {
-    id: pageId,
-    pageType,
-    pageInfo: {
-      children: [],
-      componentName: 'Root',
-      hidden: false,
-      id: pageId,
-      props: {
-        info: {
-          name: pageInfo[0]?.label || '课件页',
-          type: pageInfo[0]?.label || '课件页'
-        },
-        style: {},
-        animates: []
-      },
-      sourceName: ''
-    }
-  }
-}
-
 const useAppFn = (props) => {
   const {lastWorkspaceId, workspaceList, setSaveText, slideId, setWorkspaceList, currentWorkspaceId, workbench}  = props
   // 保存课件
   const syncOriginSort = () => {
-    if (import.meta.env.MODE === 'dev') return
     const slideData = workspaceList.map((page, index) => ({
       id: page.id,
       pageType: page.pageType,
@@ -55,10 +29,7 @@ const useAppFn = (props) => {
   // 创建首页课件页
 	const handleCreatePageId = async (node?) => {
     const pageType = node ? Number(node.pageType) : PageType.normalPage
-    if (import.meta.env.MODE === 'dev') {
-      const page = createLocalMockPage(pageType)
-      return { pageId: page.id, page }
-    }
+    console.log('createPageId----')
     const res = await createPageId({
       slideId,
       pageType
@@ -110,16 +81,6 @@ const useAppFn = (props) => {
   }
   const saveCurrentPage = useCallback(async (autoSave?: boolean, showMessage = false) => {
     try {
-      if (import.meta.env.MODE === 'dev') {
-        if (showMessage) message.success("本地 mock 模式：已跳过接口保存")
-        if (autoSave === true) {
-          setSaveText('本地 mock 模式：已跳过自动保存')
-          setTimeout(() => {
-            setSaveText('')
-          }, 3000)
-        }
-        return Promise.resolve()
-      }
       const isNotDelete = workbench.workspaces.length === workspaceList.length
       console.log(workbench.workspaces, lastWorkspaceId.current, autoSave, 'ppppp')
       if (autoSave === true || (isNotDelete && lastWorkspaceId.current)) { // 自动保存 || 手动保存 || 切页保存

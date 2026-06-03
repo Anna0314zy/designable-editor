@@ -58,7 +58,7 @@ const GameModal = (props, ref) => {
 				bottom: 0,
 				paddingBottom: 0,
 			}}
-			destroyOnClose={true}
+			destroyOnHidden={true}
 			afterClose={handleClose}
 		>
 			<iframe

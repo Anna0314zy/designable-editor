@@ -54,7 +54,8 @@ export const canEdit = (params: any): Promise<any> => {
 // 课件解锁
 export const exitEdit = (params: any): Promise<any> => {
   return api.post(
-    `${host}/classroom-slides/slides/${params.slideId}/exit-edit`
+    `${host}/classroom-slides/slides/${params.slideId}/exit-edit`,
+    { lockToken: params.lockToken }
   );
 };
 

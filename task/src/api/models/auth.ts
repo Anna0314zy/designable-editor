@@ -5,18 +5,37 @@
  * @FilePath: /slides-engine/task/src/api/models/auth.ts
  */
 import api from '../index'
+import { AuthSession, AuthUser } from '@/utils/auth'
 const http = import.meta.env.VITE_API_SERVER
-export interface LoginResponse {
-    systemToken: string
-}
-// 登录
-export const login = (params: { systemToken:string }):Promise<LoginResponse> => {
-    return api.post(`${http}/classroom-slides/auth/login`, params)
+
+export interface AuthCredentials {
+    username: string
+    password: string
 }
 
-// 更新
-export const checkLogin = (params: { systemToken:string }):Promise<LoginResponse> => {
-    return api.post(`${http}/classroom-slides/auth/check`,params)
+// 注册
+export const register = (params: AuthCredentials): Promise<AuthSession> => {
+    return api.post(`${http}/classroom-slides/auth/register`, params, { headers: { skipAuthRefresh: true } })
+}
+
+// 登录
+export const login = (params: AuthCredentials): Promise<AuthSession> => {
+    return api.post(`${http}/classroom-slides/auth/login`, params, { headers: { skipAuthRefresh: true } })
+}
+
+// 刷新登录态
+export const refreshToken = (): Promise<AuthSession> => {
+    return api.post(`${http}/classroom-slides/auth/refresh`, {}, { headers: { skipAuthRefresh: true } })
+}
+
+// 退出登录
+export const logout = (): Promise<{ success: boolean }> => {
+    return api.post(`${http}/classroom-slides/auth/logout`)
+}
+
+// 当前用户
+export const getCurrentUser = (): Promise<AuthUser> => {
+    return api.get(`${http}/classroom-slides/auth/me`)
 }
 
 // 获取版本号

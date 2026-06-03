@@ -31,9 +31,6 @@ export const useSavePage = () => {
     const currentWorkspace = workbench.activeWorkspace;
 	const currentWorkspaceId = currentWorkspace?.id;
      const saveCurrentPage = () => {
-    if (import.meta.env.MODE === 'dev') {
-      return Promise.resolve()
-    }
 		const result = currentWorkspace.serialize()
 		const children = result.pageInfo.children
 		const fileMd5List = generateMd5List(children, [])

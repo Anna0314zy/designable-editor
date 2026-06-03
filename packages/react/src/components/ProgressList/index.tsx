@@ -11,9 +11,11 @@ const ProgressList = ({ parentRef }) => {
 	const { uploadList = [] } = useGlobalData();
 	return (
 		<Popover
-			overlayInnerStyle={{
-				maxHeight: "calc(100vh - 150px)",
-				overflowY: "auto",
+			styles={{
+				body: {
+					maxHeight: "calc(100vh - 150px)",
+					overflowY: "auto",
+				},
 			}}
 			getPopupContainer={() => parentRef.current}
 			content={

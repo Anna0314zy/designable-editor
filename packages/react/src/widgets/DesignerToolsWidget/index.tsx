@@ -15,6 +15,12 @@ import './styles.less'
 
 type DesignerToolsType = 'HISTORY' | 'CURSOR' | 'SCREEN_TYPE'
 
+const DEFAULT_DESIGNER_TOOLS: DesignerToolsType[] = [
+  'HISTORY',
+  'CURSOR',
+  'SCREEN_TYPE',
+]
+
 export type IDesignerToolsWidgetProps = {
   className?: string
   style?: React.CSSProperties
@@ -22,7 +28,7 @@ export type IDesignerToolsWidgetProps = {
 }
 
 export const DesignerToolsWidget: React.FC<IDesignerToolsWidgetProps> =
-  observer((props) => {
+  observer(({ use = DEFAULT_DESIGNER_TOOLS, style, className }) => {
     const screen = useScreen()
     const cursor = useCursor()
     const workbench = useWorkbench()
@@ -30,7 +36,7 @@ export const DesignerToolsWidget: React.FC<IDesignerToolsWidgetProps> =
     const sizeRef = useRef<{ width?: any; height?: any }>({})
     const prefix = usePrefix('designer-tools')
     const renderHistoryController = () => {
-      if (!props.use.includes('HISTORY')) return null
+      if (!use.includes('HISTORY')) return null
       return (
         <Button.Group size="small">
           <Button
@@ -56,12 +62,8 @@ export const DesignerToolsWidget: React.FC<IDesignerToolsWidgetProps> =
     }
 
     return (
-      <div style={props.style} className={cls(prefix, props.className)}>
+      <div style={style} className={cls(prefix, className)}>
         {renderHistoryController()}
       </div>
     )
   })
-
-DesignerToolsWidget.defaultProps = {
-  use: ['HISTORY', 'CURSOR', 'SCREEN_TYPE'],
-}

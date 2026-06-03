@@ -209,6 +209,8 @@ export const COSUpload: React.FC<COSUploadProps> = observer((({
 					}
 					await uploadFn({
 						CdnHost: globalData.cdnPathList?.[0] || "",
+						Bucket: globalData.bucket,
+						Region: globalData.region,
 						type,
 						pathConfigList: globalData.pathConfigList || [],
 						file,

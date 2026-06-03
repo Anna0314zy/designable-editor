@@ -17,7 +17,7 @@ export const CameraComponent = ({
 			title={`当前页面最多放${max}个`}
 			placement="right"
 			color={"#fff"}
-			overlayInnerStyle={{ color: "#000" }}
+			styles={{ body: { color: "#000" } }}
 		>
 			<div
 				className="camera-content"

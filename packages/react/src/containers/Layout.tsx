@@ -10,7 +10,12 @@ import cls from 'classnames'
  * @param {IDesignerLayoutProps} props - 布局组件的属性。
  * @return {React.ReactElement} 渲染的布局组件。
  */
-export const Layout: React.FC<IDesignerLayoutProps> = (props) => {
+export const Layout: React.FC<IDesignerLayoutProps> = ({
+  theme = 'light',
+  prefixCls = 'ld-',
+  position = 'fixed',
+  ...props
+}) => {
   const layout = useContext(DesignerLayoutContext)
   const ref = useRef<HTMLDivElement>()
 
@@ -29,25 +34,19 @@ export const Layout: React.FC<IDesignerLayoutProps> = (props) => {
     <div
       ref={ref}
       className={cls({
-        [`${props.prefixCls}app`]: true,
-        [`${props.prefixCls}${props.theme}`]: props.theme,
+        [`${prefixCls}app`]: true,
+        [`${prefixCls}${theme}`]: theme,
       })}
     >
       <DesignerLayoutContext.Provider
         value={{
-          theme: props.theme,
-          prefixCls: props.prefixCls,
-          position: props.position,
+          theme,
+          prefixCls,
+          position,
         }}
       >
         {props.children}
       </DesignerLayoutContext.Provider>
     </div>
   )
-}
-
-Layout.defaultProps = {
-  theme: 'light',
-  prefixCls: 'ld-',
-  position: 'fixed',
 }

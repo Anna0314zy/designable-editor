@@ -1,24 +1,46 @@
 import axios, { AxiosResponse, AxiosRequestConfig } from 'axios'
 import { message } from 'antd'
-import { LoginUrl } from '@/utils'
-import { getToken } from '@/utils/auth'
+import { clearAuthSession, getToken, LoginUrl, setAuthSession } from '@/utils/auth'
 const request = axios.create({
   timeout: 60000,
+  withCredentials: true,
   headers: {
     'Content-Type': 'application/json',
   },
 })
+
+const apiBaseUrl = import.meta.env.VITE_API_SERVER
+let refreshPromise: Promise<string | null> | null = null
+
+const redirectToLogin = () => {
+  clearAuthSession()
+  if (!window.location.hash.startsWith('#/login')) {
+    const redirect = encodeURIComponent(window.location.href)
+    window.location.hash = `${LoginUrl}?redirect=${redirect}`
+  }
+}
+
+const refreshAccessToken = async () => {
+  if (!refreshPromise) {
+    refreshPromise = request
+      .post(`${apiBaseUrl}/classroom-slides/auth/refresh`, {}, { headers: { skipAuthRefresh: true } })
+      .then((session) => {
+        setAuthSession(session as any)
+        return (session as any).accessToken as string
+      })
+      .catch(() => null)
+      .finally(() => {
+        refreshPromise = null
+      })
+  }
+  return refreshPromise
+}
+
 request.interceptors.request.use(
   config => {
-    if(config.url?.includes('login')) {
-      if(config.headers['systemToken']) {
-        config.headers.delete('systemToken')
-      }
-    } else {
-      const systemToken = config.headers['Token'] ? config.headers['Token'] : getToken()
-      if(systemToken) {
-        config.headers['Token'] = `${systemToken}`
-      }
+    const token = getToken()
+    if(token && !config.headers?.skipAuthRefresh) {
+      config.headers.Authorization = `Bearer ${token}`
     }
     return config
   },
@@ -36,14 +58,14 @@ export interface ResponseData<T = any> {
 request.interceptors.response.use(
   (res: AxiosResponse<ResponseData>) => {
     try {
-      if (res.status === 200 ) {
+      if (res.status >= 200 && res.status < 300) {
         const { data, message: msg, code } = res.data
+
         if (code === 200) {
           return data
-        } else if(Number(code) === 1001001) {
+        } else if(Number(code) === 1001001 || Number(code) === 401) {
           message.error('登录过期，请重新登录')
-          localStorage.removeItem('systemToken')
-          window.location.href = LoginUrl
+          redirectToLogin()
         } else {
           console.log('%c msg', 'color: #00b33c;', msg)
           if (msg) message.error(msg)
@@ -60,7 +82,18 @@ request.interceptors.response.use(
  
     }
   },
-  err => {
+  async err => {
+    const originalConfig = err?.config
+    if (err?.response?.status === 401 && originalConfig && !originalConfig._retry && !originalConfig.headers?.skipAuthRefresh) {
+      originalConfig._retry = true
+      const nextToken = await refreshAccessToken()
+      if (nextToken) {
+        originalConfig.headers.Authorization = `Bearer ${nextToken}`
+        return request(originalConfig)
+      }
+      message.error('登录过期，请重新登录')
+      redirectToLogin()
+    }
     message.error(err?.message)
     return Promise.reject(err?.response?.data || err)
   },

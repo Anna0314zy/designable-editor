@@ -49,7 +49,8 @@ export const AudioBehavior = createBehavior({
           // const id = workbench ? workbench.activeWorkspace.id : ''
           // const recourseList = list[id]
           if (list && list.length && md5) {
-            const host = import.meta.env.VITE_CDN_SERVER
+            const uploadConfig = (window as any).__SLIDES_UPLOAD_CONFIG__
+            const host = uploadConfig?.cdnPathList?.[0] || uploadConfig?.cdnPath || ''
             const index = list.findIndex((resource) => resource.fileMd5 === md5)
             return index >= 0 ? host + list[index]['cosFullPath'] : null
           }

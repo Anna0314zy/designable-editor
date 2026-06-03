@@ -1,26 +1,21 @@
-/*
- * @Date: 2024-01-18 16:38:11
- * @LastEditors: wangpeng
- * @LastEditTime: 2024-03-14 18:14:39
- * @FilePath: /slides-engine/editor/vite.config.ts
- */
 import { defineConfig } from 'vite'
 import { viteCommonjs } from "@originjs/vite-plugin-commonjs";
 import react from '@vitejs/plugin-react'
 import { VitePWA } from "vite-plugin-pwa";
 import packageJson from './package.json';
 import { resolve } from 'path';
+import basicSsl from '@vitejs/plugin-basic-ssl'
 
 // https://vitejs.dev/config/
 export default defineConfig({
   base: './',
   server: {
     strictPort: true,
-    port: 9090,
+    port: 5175,
     proxy: {
       // 当请求匹配这个路径前缀时，将请求转发到目标服务器
       '/api': {
-        target: "https://test-class-api-online.saasp.vdyoo.com",
+        target: "http://localhost:5177",
         changeOrigin: true,
         rewrite: (path) => path.replace(/^\/api/, '')
       }
@@ -68,6 +63,7 @@ export default defineConfig({
       },
     }),
     viteCommonjs({}),
+    basicSsl(),
     react()
   ]
 })

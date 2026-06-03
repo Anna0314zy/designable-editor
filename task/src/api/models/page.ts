@@ -30,6 +30,15 @@ export const getSlideList = ({ slideId }: { slideId: string }) => {
   return api.get<SlideResponse>(`${http}/classroom-slides/slides/${slideId}?containedAllResourcesFlag=true`)
 }
 
+export const getCosConfig = (): Promise<{
+  cdnPath?: string
+  cdnPathList?: string[]
+  bucket?: string
+  region?: string
+}> => {
+  return api.get(`${http}/classroom-slides/resources/cos/config`)
+}
+
 // 发布课件
 export const publishSlides = ({ slideId }: { slideId: string }) => {
   return api.post(`${http}/classroom-slides/slides/${slideId}/publish`);

@@ -1,9 +1,3 @@
-/*
- * @Date: 2023-12-22 14:17:44
- * @LastEditors: wangpeng
- * @LastEditTime: 2023-12-22 14:18:15
- * @FilePath: /slides-engine/play/src/utils/common.ts
- */
 import { PageType } from '@editor/react/src/widgets/AddPageWidget'
 export const getUrlParameter = (name) => {
     // 获取当前页面的 URL
@@ -58,6 +52,14 @@ export const getImgWH =  ({ width, height }: { width; height }) => {
 		};
 	}
 };
-export const getToken = () => {
-  return import.meta.env.MODE === 'dev' ? "f47ac10b-58cc-4372-a567-0e02b2c3d479":localStorage.getItem('systemToken')
+let accessToken: string | null = null
+
+export const getToken = () => accessToken
+
+export const setToken = (token: string) => {
+  accessToken = token
+}
+
+export const clearToken = () => {
+  accessToken = null
 }

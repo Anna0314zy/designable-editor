@@ -8,47 +8,64 @@ import * as api from '@/api/models/auth'
 
 import { createModel } from '@rematch/core'
 import { RootModel } from '.'
+import { AuthSession, AuthUser, clearAuthSession, getAuthUser, getToken, setAuthSession } from '@/utils/auth'
 
 export interface AuthState {
-  sysToken: string
+  accessToken: string
+  user: AuthUser | null
 }
 
 export default createModel<RootModel>()({
   state: {
-    sysToken: ''
+    accessToken: getToken() || '',
+    user: getAuthUser(),
   } as AuthState,
   reducers: {
-    setSysToken(state, sysToken: string) {
+    setSession(state, session: AuthSession) {
       return {
         ...state,
-        sysToken,
+        accessToken: session.accessToken,
+        user: session.user,
       }
     },
-    updateSysToken(state, sysToken: string) {
-        return {
-            ...state,
-            sysToken,
-        }
-    }
+    setUser(state, user: AuthUser) {
+      return {
+        ...state,
+        user,
+      }
+    },
+    clearSession(state) {
+      return {
+        ...state,
+        accessToken: '',
+        user: null,
+      }
+    },
   },
   effects: (dispatch) => ({
-    async login() {
-      const systemToken = localStorage.getItem('systemToken')
-      if(systemToken) {
-        await dispatch.auth.setSysToken(systemToken)
-        await api.login({systemToken})
-      }
+    async login(payload: api.AuthCredentials) {
+      const session = await api.login(payload)
+      console.log('session',session)
+      setAuthSession(session)
+      dispatch.auth.setSession(session)
+      // 登录成功  需要跳转到
+      return session
     },
-    async checkLogin() {
-      const systemToken = localStorage.getItem('systemToken')
-      if(systemToken) {
-        await dispatch.auth.setSysToken(systemToken)
-        const res = await api.checkLogin({systemToken})
-        if(res.systemToken) {
-            await dispatch.auth.updateSysToken(res.systemToken)
-            localStorage.setItem('systemToken', res.systemToken)
-        }
-      }
-    }
+    async register(payload: api.AuthCredentials) {
+      const session = await api.register(payload)
+      setAuthSession(session)
+      dispatch.auth.setSession(session)
+      return session
+    },
+    async fetchCurrentUser() {
+      const user = await api.getCurrentUser()
+      dispatch.auth.setUser(user)
+      return user
+    },
+    async logout() {
+      await api.logout().catch(() => undefined)
+      clearAuthSession()
+      dispatch.auth.clearSession()
+    },
   }),
 })

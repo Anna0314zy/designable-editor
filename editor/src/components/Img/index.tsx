@@ -2,7 +2,7 @@ import React from "react";
 import { createBehavior, createResource } from "@editor/core";
 import { useConnect, useReport } from "@play/render";
 
-import { useResourceData } from "@editor/react";
+import { useGlobalData, useResourceData } from "@editor/react";
 import { genPropsSchema, setDefaultName } from "../_config/genBehaviorTmpl";
 import {
 	schemaBase_info,
@@ -86,10 +86,11 @@ export const ImgResource = createResource({
 });
 
 export const Img = observer((props: any) => {
+	const globalData = useGlobalData();
 	const globalConfig = {
 		resourceData: {
 			remote: {
-				cdnPathList: [`${import.meta.env.VITE_CDN_SERVER}`],
+				cdnPathList: globalData.cdnPathList || [],
 			},
 		},
 	};

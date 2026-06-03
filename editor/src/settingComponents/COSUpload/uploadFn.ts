@@ -13,6 +13,8 @@ interface IUploadOptions{
 }
 export interface IUploadProps {
 	CdnHost: string;
+	Bucket?: string;
+	Region?: string;
 	file: RcFile;
 	type: keyof typeof uploadAccept;
 	pathConfigList: Array<{
@@ -31,6 +33,8 @@ export interface IUploadProps {
 }
 export const uploadFn = async ({
 	CdnHost,
+	Bucket,
+	Region,
 	type,
 	pathConfigList,
 	file,
@@ -41,11 +45,15 @@ export const uploadFn = async ({
 }: IUploadProps) => {
 	try{
 		const credentialData = await getCosCredential();
-	const Bucket = import.meta.env.VITE_EDITOR_BUCKET;
-	const Region = import.meta.env.VITE_EDITOR_REGION;
+	const bucket = credentialData?.bucket || Bucket;
+	const region = credentialData?.region || Region;
+	if (!bucket || !region) {
+		message.error("缺少 COS 上传配置");
+		return Promise.reject(new Error("缺少 COS 上传配置"));
+	}
 	const cosInfo: ICOSInfo = {
-		Bucket,
-		Region,
+		Bucket: bucket,
+		Region: region,
 		Folder: uploadpath(pathConfigList, type) || "",
 		Secure: true, // 开启https
 		CdnHost,

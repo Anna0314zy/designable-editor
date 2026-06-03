@@ -79,7 +79,7 @@ export const getCosConfig = async (): Promise<any> => {
 // 获取cos临时访问token
 export const getCosCredential = async (): Promise<any> => {
   return api.get(
-    `${host}/classroom-slides/resources/cos/credential?bucketName=${import.meta.env.VITE_EDITOR_BUCKET}`
+    `${host}/classroom-slides/resources/cos/credential`
   );
 };
 // 保存课件与资源映射关系

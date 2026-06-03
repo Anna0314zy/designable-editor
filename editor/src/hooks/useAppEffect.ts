@@ -4,9 +4,8 @@
  * @LastEditTime: 2024-03-11 19:54:01
  * @FilePath: /slides-engine/editor/src/hooks/useAppEffect.ts
  */
-import { useEffect,useCallback } from "react"
+import { useEffect, useCallback, useRef } from "react"
 import useAppFn from './useAppFn'
-import { updateSysToken } from '../api/auth'
 import { getSlides, canEdit } from '../api/slides'
 import {host} from '../api'
 import {message} from 'antd'
@@ -14,7 +13,6 @@ import { getToken } from '../utils/common'
 import {
 	getCosConfig,
 } from "../api/upload";
-import { createLocalMockPage } from './useAppFn'
 
 const useAppEffect = (props) => {
 	const {slideId, setLoading, setGlobalResource, setCurrentWorkspaceId, setWorkspaceList, currentWorkspaceId, workspaceList, lastWorkspaceId, workbench, setNoPermission,setGlobalData} = props
@@ -26,21 +24,15 @@ const useAppEffect = (props) => {
     TaskVersion || "1.0.0"
   );
   let somebodyEdit = false
+  const lockTokenRef = useRef('')
   useEffect(() => {
     workspaceList.length && syncOriginSort()
   }, [workspaceList])
   //  获取资源列表存储路径
 	const getFileFolder = useCallback(async () => {
-    if (import.meta.env.MODE === 'dev') {
-      setGlobalData((preData) => {
-        return {
-          ...preData,
-          fileFolder: 'local-mock',
-        };
-      });
-      return
-    }
+  
 		const data = await getCosConfig();
+		;(window as any).__SLIDES_UPLOAD_CONFIG__ = data
 		setGlobalData((preData) => {
 			return {
 				...preData,
@@ -54,31 +46,32 @@ const useAppEffect = (props) => {
 	}, []);
   // 页面初始化数据
 	useEffect(() => {
-    if (import.meta.env.MODE === 'dev') {
-      const page = createLocalMockPage()
-      const currentWorkspace = workbench.ensureWorkspace({
-        ...page.pageInfo,
-        pageType: page.pageType,
-      })
-      currentWorkspace.engine.setCurrentTree({
-        ...page.pageInfo,
-        pageType: page.pageType,
-      })
-      setGlobalResource([])
-      setCurrentWorkspaceId(page.id)
-      setWorkspaceList([{
-        ...page.pageInfo,
-        pageType: page.pageType,
-      }])
-      setLoading(false)
-      return
-    }
+    // if (import.meta.env.MODE === 'dev') {
+    //   const page = createLocalMockPage()
+    //   const currentWorkspace = workbench.ensureWorkspace({
+    //     ...page.pageInfo,
+    //     pageType: page.pageType,
+    //   })
+    //   currentWorkspace.engine.setCurrentTree({
+    //     ...page.pageInfo,
+    //     pageType: page.pageType,
+    //   })
+    //   setGlobalResource([])
+    //   setCurrentWorkspaceId(page.id)
+    //   setWorkspaceList([{
+    //     ...page.pageInfo,
+    //     pageType: page.pageType,
+    //   }])
+    //   setLoading(false)
+    //   return
+    // }
     if (!slideId) {
       message.error('请输入正确的课件id')
       return
     }
     const init = async () => {
       const res = await getSlides({ slideId, containedAllResourcesFlag: true })
+      console.log('res.slideStructure',res.slideStructure)
       setLoading(false)
       let initData = []
       if (res.slideStructure) { // 已有课件挂载
@@ -113,38 +106,32 @@ const useAppEffect = (props) => {
         setNoPermission(res.currentLockEmpName)
         return
       }
+      lockTokenRef.current = res.lockToken || ''
       init()
     })
   }, [])
   useEffect(() => {
-    const setToken = async () => {
-      if (import.meta.env.MODE === 'dev') return
-      const systemToken: string = getToken()
-      if (!systemToken) {
-        location.replace(homeUrl)
-        return
-      } else {
-        const res = await updateSysToken({ systemToken }).catch(() => {
-          location.replace(homeUrl)
-        })
-        if (res?.systemToken) {
-          localStorage.setItem('systemToken', res.systemToken)
-        }
-      }
+    if (import.meta.env.MODE !== 'dev' && !getToken()) {
+      location.replace(homeUrl)
+      return
     }
     const handleBeforeUnload = (event) => {
       // 删除锁定
-      !somebodyEdit && navigator.sendBeacon(`${host}/classroom-slides/slides/${slideId}/exit-edit`);
+      if (!somebodyEdit && lockTokenRef.current) {
+        const body = JSON.stringify({ lockToken: lockTokenRef.current })
+        navigator.sendBeacon(
+          `${host}/classroom-slides/slides/${slideId}/exit-edit`,
+          new Blob([body], { type: 'application/json' }),
+        )
+      }
       const confirmationMessage = '';
       event.returnValue = confirmationMessage;
       return confirmationMessage;
     };
     window.addEventListener('beforeunload', handleBeforeUnload);
-    const autoSave = setInterval(() => saveCurrentPage(true), 60000)
-    const updateToken = setInterval(setToken, 30 * 60000)
+    // const autoSave = setInterval(() => saveCurrentPage(true), 60000)
     return () => {
-      clearInterval(autoSave)
-      clearInterval(updateToken)
+      // clearInterval(autoSave)
       window.removeEventListener('beforeunload', handleBeforeUnload);
     }
   }, [])

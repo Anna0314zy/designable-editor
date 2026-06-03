@@ -62,7 +62,7 @@ const SlideLeft = ({ data, handleClick,mode }: SlideLeftProps) => {
               <div className={Style['title']}>{item?.props?.info?.name}</div>
               <div className={cls('thumbnail', { active: item.id === currentPage.id })}>
                 <PageTypeLabelWidget rootProps={item.props} />
-                <Tooltip title='缺少游戏相关任务' color="#fff" overlayInnerStyle={{color:'#000'}}>
+                <Tooltip title='缺少游戏相关任务' color="#fff" styles={{ body: { color: '#000' } }}>
                   <span style={{ position: 'relative', left: 0, top: 0, background: '#fff', color: 'red' }}>
                     {showError(item)}
                   </span>

@@ -53,7 +53,7 @@ const Operations = () => {
       </div>
       <Popover
         placement='top'
-        overlayInnerStyle={{maxHeight:'calc(100vh - 150px)',overflowY:'auto',backgroundColor:'#eee'}}
+        styles={{ body: { maxHeight:'calc(100vh - 150px)',overflowY:'auto',backgroundColor:'#eee' } }}
         title={''}
         open={hovered}
         onOpenChange={handleHoverChange}

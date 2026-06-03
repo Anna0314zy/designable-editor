@@ -6,7 +6,6 @@ import { useSelector } from 'react-redux'
 import { RootState } from '@/store'
 import  {AnimationWidgetWithErrorBoundary}  from './Animation'
 import { CameraComponent } from '@ld/slide-editor'
-export const CDN = import.meta.env.VITE_CDN_SERVER
 interface PageInfo {
   id: string
   props: {
@@ -17,7 +16,7 @@ interface PageInfo {
 }
 function PageThumbnail({ data }: { data: Page }) {
   // 全局数据
-  const { globalProps = {},currentPage } = useSelector((state: RootState) => state.page)
+  const { globalProps = {},currentPage, globalConfig } = useSelector((state: RootState) => state.page)
   const [pageInfo, setSchema] = useState<PageInfo>({ props: { style: {}, animates: [] }, id: '' })
   const [load,setLoad] = useState(false)
   useEffect(() => {
@@ -41,13 +40,7 @@ function PageThumbnail({ data }: { data: Page }) {
         }}
         methods={{}}
         globalProps={globalProps || {}}
-        globalConfig={{
-          resourceData: {
-            remote: {
-              cdnPathList: [`${CDN}`],
-            },
-          },
-        }}
+        globalConfig={globalConfig}
       >
         {load && <AnimationWidgetWithErrorBoundary pageInfo={currentPage} />}
       </RenderRoot>

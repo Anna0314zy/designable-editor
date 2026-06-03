@@ -15,42 +15,49 @@ GlobalRegistry.registerDesignerIcons(icons)
  * @param {IDesignerProps} props - Designer 组件的 props。
  * @return {ReactElement} 渲染的 Designer 组件。
  */
-export const Designer: React.FC<IDesignerProps> = (props) => {
+export const Designer: React.FC<IDesignerProps> = ({
+  prefixCls = 'ld-',
+  theme = 'light',
+  engine: propsEngine,
+  ...props
+}) => {
   const engine = useDesigner()
   const ref = useRef<Engine>()
   useEffect(() => {
-    if (props.engine) {
-      if (props.engine && ref.current) {
-        if (props.engine !== ref.current) {
+    if (propsEngine) {
+      if (propsEngine && ref.current) {
+        if (propsEngine !== ref.current) {
           ref.current.unmount()
         }
       }
-      props.engine.mount()
-      ref.current = props.engine
+      propsEngine.mount()
+      ref.current = propsEngine
     }
     return () => {
-      if (props.engine) {
-        props.engine.unmount()
+      if (propsEngine) {
+        propsEngine.unmount()
       }
     }
-  }, [props.engine])
+  }, [propsEngine])
 
   if (engine)
     throw new Error(
       'There can only be one Designable Engine Context in the React Tree'
     )
 
+  const designerProps = {
+    ...props,
+    prefixCls,
+    theme,
+    engine: propsEngine,
+  }
+
   return (
-    <Layout {...props}>
-      <DesignerEngineContext.Provider value={props.engine}>
+    <Layout {...designerProps}>
+      <DesignerEngineContext.Provider value={propsEngine}>
         {props.children}
         <GhostWidget />
       </DesignerEngineContext.Provider>
     </Layout>
   )
-}
-
-Designer.defaultProps = {
-  prefixCls: 'ld-',
-  theme: 'light',
 }

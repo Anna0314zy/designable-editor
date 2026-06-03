@@ -51,7 +51,7 @@ const AddModal = ({ data, getSlideData }: { data: Slide; getSlideData: () => voi
       onCancel={handleCancel}
       onOk={handleOk}
       confirmLoading={confirmLoading}
-      destroyOnClose
+      destroyOnHidden
     >
       <Form form={form} name='basic' style={{ padding: '20px 20px 0 20px' }} autoComplete='off'>
         <Form.Item<FieldType>

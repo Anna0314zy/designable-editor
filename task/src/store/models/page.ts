@@ -84,7 +84,7 @@ export default createModel<RootModel>()({
     globalConfig: {
       resourceData: {
         remote: {
-          cdnPathList: [`${import.meta.env.VITE_CDN_SERVER}`],  
+          cdnPathList: [],  
         }
       }
     },
@@ -109,7 +109,10 @@ export default createModel<RootModel>()({
     },
     // 获取课件信息
     async getSlideList(payload: { slideId: string,pageId?:string }) {
-      const res = await api.getSlideList({ slideId: payload.slideId })
+      const [res, cosConfig] = await Promise.all([
+        api.getSlideList({ slideId: payload.slideId }),
+        api.getCosConfig(),
+      ])
       // res.slideStructure 是课件的顺序
       // res.pageContentDtoList 是课件的内容
       // cur.mainContentStructure
@@ -137,6 +140,13 @@ export default createModel<RootModel>()({
               pageList: pages,
             },
             currentPage: currentPage,
+            globalConfig: {
+              resourceData: {
+                remote: {
+                  cdnPathList: cosConfig.cdnPathList || (cosConfig.cdnPath ? [cosConfig.cdnPath] : []),
+                }
+              }
+            },
             globalProps:{
               fileList
             }

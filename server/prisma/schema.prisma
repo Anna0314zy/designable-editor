@@ -1,0 +1,168 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum SlideStatus {
+  editing
+  published
+  packed
+}
+
+enum UserRole {
+  admin
+  editor
+  viewer
+}
+
+model User {
+  id           String    @id @default(uuid()) @db.Uuid
+  username     String    @unique
+  passwordHash String
+  roles        UserRole[] @default([viewer])
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime  @updatedAt
+  deletedAt    DateTime?
+
+  @@index([deletedAt])
+}
+
+model SystemVersion {
+  id         String    @id @default(uuid()) @db.Uuid
+  systemName String    @unique
+  version    String
+  createdAt  DateTime  @default(now())
+  updatedAt  DateTime  @updatedAt
+  deletedAt  DateTime?
+}
+
+model Slide {
+  id                        String       @id @default(uuid()) @db.Uuid
+  title                     String?
+  slideStructure            Json?
+  status                    SlideStatus  @default(editing)
+  currentLockEmpName        String?
+  currentLockToken          String?
+  lastPublishedAt           DateTime?
+  createdAt                 DateTime     @default(now())
+  updatedAt                 DateTime     @updatedAt
+  deletedAt                 DateTime?
+  pages                     Page[]
+  lessonBindings            LessonBinding[]
+  tasks                     CourseTask[]
+
+  @@index([status, deletedAt])
+  @@index([updatedAt])
+}
+
+model Page {
+  id                   String    @id @default(uuid()) @db.Uuid
+  slideId              String    @db.Uuid
+  pageType             Int
+  sortIndex            Int       @default(0)
+  mainContentStructure Json
+  gameId               String?
+  gameTemplateId       String?
+  createdAt            DateTime  @default(now())
+  updatedAt            DateTime  @updatedAt
+  deletedAt            DateTime?
+  slide                Slide     @relation(fields: [slideId], references: [id])
+  resourceRelations    PageResourceRelation[]
+  tasks                CourseTask[]
+
+  @@index([slideId, sortIndex])
+  @@index([deletedAt])
+}
+
+model Resource {
+  id             String    @id @default(uuid()) @db.Uuid
+  fileMd5        String    @unique
+  cosFullPath    String
+  fileName       String
+  fileSize       Int
+  resourceType   String
+  resourceFormat String?
+  fileType       String?
+  width          Int?
+  height         Int?
+  createdAt      DateTime  @default(now())
+  updatedAt      DateTime  @updatedAt
+  deletedAt      DateTime?
+  pageRelations  PageResourceRelation[]
+
+  @@index([resourceType, deletedAt])
+}
+
+model PageResourceRelation {
+  id         String    @id @default(uuid()) @db.Uuid
+  pageId     String    @db.Uuid
+  resourceId String    @db.Uuid
+  createdAt  DateTime  @default(now())
+  deletedAt  DateTime?
+  page       Page      @relation(fields: [pageId], references: [id])
+  resource   Resource  @relation(fields: [resourceId], references: [id])
+
+  @@unique([pageId, resourceId])
+  @@index([pageId])
+  @@index([resourceId])
+}
+
+model Course {
+  id              String    @id
+  name            String
+  cityName        String?
+  year            String?
+  seasonName      String?
+  gradeName       String?
+  subjectName     String?
+  bookVersionName String?
+  productTypeName String?
+  createdAt       DateTime  @default(now())
+  updatedAt       DateTime  @updatedAt
+  deletedAt       DateTime?
+  lessons         LessonBinding[]
+
+  @@index([name])
+  @@index([year, gradeName, subjectName])
+}
+
+model LessonBinding {
+  id                String    @id @default(uuid()) @db.Uuid
+  mainId            String
+  serialNumber      String
+  title             String?
+  lessonInformation String?
+  slideId           String?   @db.Uuid
+  createdAt         DateTime  @default(now())
+  updatedAt         DateTime  @updatedAt
+  deletedAt         DateTime?
+  course            Course    @relation(fields: [mainId], references: [id])
+  slide             Slide?    @relation(fields: [slideId], references: [id])
+
+  @@unique([mainId, serialNumber])
+  @@index([slideId])
+}
+
+model CourseTask {
+  id          String    @id @default(uuid()) @db.Uuid
+  slideId     String    @db.Uuid
+  pageId      String    @db.Uuid
+  elementId   String
+  taskType    String?
+  sortIndex   Int       @default(0)
+  taskExt     Json?
+  payload     Json
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+  deletedAt   DateTime?
+  slide       Slide     @relation(fields: [slideId], references: [id])
+  page        Page      @relation(fields: [pageId], references: [id])
+
+  @@index([slideId, taskType])
+  @@index([pageId, elementId])
+  @@index([deletedAt])
+}

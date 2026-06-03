@@ -5,8 +5,10 @@ import GamePreview from '../GamePreview'
 import { CameraComponent } from '@ld/slide-editor'
 // import {VideoPreview}  from "@slide/render-components";
 import { VideoComponent } from '@slide/render-components'
-export const CDN = import.meta.env.VITE_CDN_SERVER
+import { useSelector } from 'react-redux'
+import { RootState } from '@/store'
 function PageThumbnail({ data, globalProps,mode }: { data: Page; globalProps: any,mode?:'edit' }) {
+  const { globalConfig } = useSelector((state: RootState) => state.page)
   const [pageInfo, setSchema] = useState({ props: { style: {} } })
   useEffect(() => {
     if (Object.keys(data).length > 0) {
@@ -26,13 +28,7 @@ function PageThumbnail({ data, globalProps,mode }: { data: Page; globalProps: an
           }}
           methods={{}}
           globalProps={globalProps}
-          globalConfig={{
-            resourceData: {
-              remote: {
-                cdnPathList: [`${CDN}`],
-              },
-            },
-          }}
+          globalConfig={globalConfig}
         ></RenderRoot>
       </div>
     )

@@ -13,7 +13,7 @@ export const ResourceListWidget: React.FC<{parentRef:any,currentPageId:string}> 
   return (
 
       <Popover
-      overlayInnerStyle={{maxHeight:'calc(100vh - 150px)',overflowY:'auto'}}
+      styles={{ body: { maxHeight:'calc(100vh - 150px)',overflowY:'auto' } }}
         getPopupContainer={() => parentRef.current}
         content={
           <div style={{ width: 600 }}>

@@ -75,7 +75,7 @@ export const ToolbarPanel: React.FC<IToolbarPanelProps> = observer(({
       <div className={prefix + '-menu-container'}>
         <div className={prefix + '-left'}>
           <div className={prefix + '-logo'}>{logo}</div>
-          <Tooltip title={title} color='#1890ff' overlayStyle={{'maxWidth': '100%'}}>
+          <Tooltip title={title} color='#1890ff' styles={{ root: { maxWidth: '100%' } }}>
             <div className={prefix + '-title'}>{title}</div>
           </Tooltip>
         </div>

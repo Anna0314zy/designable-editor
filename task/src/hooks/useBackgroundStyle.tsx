@@ -1,8 +1,11 @@
 import { nodeSchemaToSchema } from '@play/render'
 import { useEffect, useState } from 'react'
 import { Page } from '@/store/models/page'
-import { CDN } from '../components/pagePreview'
+import { useSelector } from 'react-redux'
+import { RootState } from '@/store'
 const useBackgroundStyle = ({ data, fileList }: { data: Page; fileList: { [key: string]: any }[] }) => {
+  const { globalConfig } = useSelector((state: RootState) => state.page)
+  const cdnPath = globalConfig?.resourceData?.remote?.cdnPathList?.[0] || ''
   const [backgroundObj, setBackgroundObj] = useState<{
     backgroundSize?: string
     backgroundRepeat?: string
@@ -27,7 +30,7 @@ const useBackgroundStyle = ({ data, fileList }: { data: Page; fileList: { [key: 
           setBackgroundObj(prev => ({
             ...prev,
             backgroundSize: schema.props.style.backgroundSize || 'cover',
-            backgroundImage: `url(${CDN}${url})`,
+            backgroundImage: `url(${cdnPath}${url})`,
             backgroundColor:''
           }))
         }else {
@@ -37,7 +40,7 @@ const useBackgroundStyle = ({ data, fileList }: { data: Page; fileList: { [key: 
         setBackgroundObj(prev => ({ ...prev, backgroundColor:'#fff',backgroundImage:''}))
       }
     }
-  }, [data, fileList])
+  }, [cdnPath, data, fileList])
   return [backgroundObj]
 }
 export default useBackgroundStyle

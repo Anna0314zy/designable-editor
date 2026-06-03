@@ -34,11 +34,13 @@ export type AnchorButtonProps = {
     Omit<AnchorHTMLAttributes<HTMLAnchorElement | HTMLButtonElement>, 'type' | 'onClick'>;
 export type ButtonProps = Partial<NativeButtonProps & AnchorButtonProps>
 
-const Button: FC<ButtonProps> = (props) => {
+const Button: FC<ButtonProps> = ({
+    btnType = 'default',
+    disabled = false,
+    ...props
+}) => {
     const {
-        btnType,
         className,
-        disabled,
         size,
         children,
         href,
@@ -76,11 +78,6 @@ const Button: FC<ButtonProps> = (props) => {
             {children}
         </button>
     )
-}
-
-Button.defaultProps = {
-    btnType: 'default',
-    disabled: false,
 }
 
 export default Button;

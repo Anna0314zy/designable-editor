@@ -105,7 +105,7 @@ const PreviewModal = observer(
 				position: "fixed",
 				paddingBottom: "10px",
 			}}
-			destroyOnClose={true}
+			destroyOnHidden={true}
 			afterClose={() => setPreviewUrl("")}
 			wrapClassName={style["preview-modal"]}
 		>
