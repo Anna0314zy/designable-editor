@@ -171,6 +171,18 @@ jobs:
           destination_dir: test
           keep_files: true
 
+      - name: Print test URLs
+        run: |
+          BASE_URL="https://${{ github.repository_owner }}.github.io/${{ github.event.repository.name }}/test"
+          {
+            echo "## Test deployment"
+            echo ""
+            echo "- slide-shot: ${BASE_URL}/slide-shot/"
+            echo "- slide-shot index: ${BASE_URL}/slide-shot/index.html"
+            echo "- editor: ${BASE_URL}/editor/"
+            echo "- task: ${BASE_URL}/task/"
+          } >> "$GITHUB_STEP_SUMMARY"
+
   deploy-production:
     runs-on: ubuntu-latest
     needs: build
@@ -192,3 +204,15 @@ jobs:
           publish_dir: pages-dist
           destination_dir: prod
           keep_files: true
+
+      - name: Print production URLs
+        run: |
+          BASE_URL="https://${{ github.repository_owner }}.github.io/${{ github.event.repository.name }}/prod"
+          {
+            echo "## Production deployment"
+            echo ""
+            echo "- slide-shot: ${BASE_URL}/slide-shot/"
+            echo "- slide-shot index: ${BASE_URL}/slide-shot/index.html"
+            echo "- editor: ${BASE_URL}/editor/"
+            echo "- task: ${BASE_URL}/task/"
+          } >> "$GITHUB_STEP_SUMMARY"
