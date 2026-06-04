@@ -5,7 +5,7 @@
                 "name": "slide",
                 "version": "1.0.0",
                 "hosts": [
-                    "https://static.ledupeiyou.com",
+                    "",
                     "https://static.xuepeiyou.com"
                 ],
                 "path": "common/slide/1.0.0"
@@ -14,7 +14,7 @@
                 "name": "player",
                 "version": "1.0.1",
                 "hosts": [
-                    "https://static.ledupeiyou.com",
+                    "",
                     "https://static.xuepeiyou.com"
                 ],
                 "path": "common/slide/1.0.0"
@@ -25,7 +25,7 @@
             "name": "bootstrap",
             "version": "1.0.0",
             "hosts": [
-                "https://static.ledupeiyou.com",
+                "",
                 "https://static.xuepeiyou.com"
             ],
             "path": "/test-json/pageInfo.json?123"
@@ -52,7 +52,7 @@
 				"name": "课件目录信息",
 				"path": "/slides/slide/{slideId}/{slideVersion}"
 			}],
-			"cdnPathList": ["https://slides-resources-test.ledupeiyou.com"]
+			"cdnPathList": [""]
 		}
     },
     "local": {

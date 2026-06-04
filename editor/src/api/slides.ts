@@ -1,6 +1,6 @@
 /*
  * @Date: 2022-11-08 15:30:22
- * @LastEditors: zouyu p_zouyu@ledupeiyou.com
+ * @LastEditors: zouyu 
  * @LastEditTime: 2024-01-02 18:06:14
  * @FilePath: /slides-engine/play/src/api/slides.ts
  */

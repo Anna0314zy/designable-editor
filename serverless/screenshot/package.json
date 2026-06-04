@@ -7,9 +7,9 @@
     "local": "node ./code/local-server.js",
     "deploy-fz": "s deploy -t ./s.fz.yaml",
     "deploy-prod": "s deploy -t ./s.prod.yaml ",
-    "deploy-tencent-layer": "cd tencent-layer && scf deploy",
-    "deploy-tencent-code": "cd tencent-code && scf deploy",
-    "deploy-tencent": "bash ./scripts/deploy-tencent-code.sh"
+    "deploy-tencent": "npm run push-tencent-image && npm run deploy-tencent-image",
+    "deploy-tencent-image": "bash ./scripts/deploy-tencent-image.sh",
+    "push-tencent-image": "bash ./scripts/push-tencent-image.sh"
   },
   "keywords": [],
   "author": "",

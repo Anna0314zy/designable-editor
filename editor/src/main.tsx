@@ -16,11 +16,11 @@ import { setToken } from './utils/common'
 import { refreshToken } from './api/auth'
 
 // Sentry.init({
-//   dsn: "https://c19239d42f384f778e46481442d795b0@sentry.ledupeiyou.com/34",
+//   dsn: "https://c19239d42f384f778e46481442d795b0@sentry.example.com/34",
 //   integrations: [
 //     new Sentry.BrowserTracing({
 //       // Set `tracePropagationTargets` to control for which URLs distributed tracing should be enabled
-//       tracePropagationTargets: ["sentry.ledupeiyou.com"],
+//       tracePropagationTargets: ["sentry.example.com"],
 //     }),
 //   ],
 //   tracesSampleRate: 1.0,

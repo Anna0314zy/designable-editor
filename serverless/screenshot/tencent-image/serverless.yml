@@ -2,7 +2,7 @@ component: scf
 name: slide-screenshot
 
 inputs:
-  name: slide_screenshot
+  name: slide_screenshot_web
   namespace: default
   region: ap-beijing
   type: web

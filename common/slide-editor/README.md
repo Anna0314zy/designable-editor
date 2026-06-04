@@ -15,14 +15,14 @@ Already a pro? Just edit this README.md and make it your own. Want to make it ea
 
 ```
 cd existing_repo
-git remote add origin https://git.xuepeiyou.com/ledu_production_fe/ugc/slides/slide-editor.git
+git remote add origin https://git.xuepeiyou.com/production_fe/ugc/slides/slide-editor.git
 git branch -M main
 git push -uf origin main
 ```
 
 ## Integrate with your tools
 
-- [ ] [Set up project integrations](https://git.xuepeiyou.com/ledu_production_fe/ugc/slides/slide-editor/-/settings/integrations)
+- [ ] [Set up project integrations](https://git.xuepeiyou.com/production_fe/ugc/slides/slide-editor/-/settings/integrations)
 
 ## Collaborate with your team
 

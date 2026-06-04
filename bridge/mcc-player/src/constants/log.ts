@@ -2,7 +2,7 @@
 export const ALI_SLS_ENDPOINT = 'cn-beijing.log.aliyuncs.com';
 
 /** 阿里云日志仓库项目名 */
-export const ALI_SLS_PROJECT = 'ledu-saas-lele';
+export const ALI_SLS_PROJECT = 'saas-lele';
 
 /** 阿里云日志仓库库名 */
 export const ALI_SLS_LOGSTORE = 'player';

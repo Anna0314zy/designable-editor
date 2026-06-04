@@ -1,4 +1,5 @@
-FROM node:16.13-alpine
+ARG NODE_IMAGE=node:16.13-alpine
+FROM ${NODE_IMAGE}
 
 RUN apk add --no-cache \
   chromium \
@@ -19,3 +20,7 @@ COPY package*.json ./
 RUN npm ci --omit=dev
 
 COPY . .
+
+EXPOSE 9000
+
+CMD ["node", "local-server.js"]

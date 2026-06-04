@@ -38,7 +38,7 @@ services:
           HOST: https://test-class-api-online.saasp.vdyoo.com
           NODE_PATH: /opt/node_modules:/opt/nodejs/node_modules
           COS_REGION: ap-beijing
-          SHOT_URL: https://slides-test.ledupeiyou.com/slide-shot/index.html
+          SHOT_URL: https://anna0314zy.github.io/designable-editor/test/slide-shot/index.html
         name: slide_sceenshot_test
         asyncConfiguration:
           maxAsyncEventAgeInSeconds: 3600

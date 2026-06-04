@@ -1,17 +1,5 @@
-const Module = require("module");
 const fs = require("fs");
 const path = require("path");
-
-// Tencent SCF disallows configuring NODE_PATH as a function environment
-// variable, so add layer module paths before requiring external packages.
-process.env.NODE_PATH = [
-  "/opt/node_modules",
-  "/opt/nodejs/node_modules",
-  process.env.NODE_PATH,
-]
-  .filter(Boolean)
-  .join(path.delimiter);
-Module._initPaths();
 
 const COS = require("cos-nodejs-sdk-v5");
 const { v4: uuidV4 } = require("uuid");

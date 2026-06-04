@@ -4,21 +4,21 @@
     "remoteResourcePathDefinition": {
         "commonPathDefinition": {
             "cdnPathList": [
-                "https://slides-resources.ledupeiyou.com",
-                "https://slides-resources-test.ledupeiyou.com"
+                "",
+                ""
             ],
             "path": "/packageResources/common/{customIdentityId}/{version}"
         },
         "gameTemplatePathDefinition": {
             "cdnPathList": [
-                "https://slides-resources-test.ledupeiyou.com"
+                ""
             ],
             "path": "/packageResources/gameTemplate/{gameTemplateId}/{version}"
         },
         "gameCustomPathDefinition": {
             "cdnPathList": [
-                "https://slides-resources.ledupeiyou.com",
-                "https://slides-resources-test.ledupeiyou.com"
+                "",
+                ""
                 
             ],
             "path": "/games/{gameId}"
@@ -57,8 +57,8 @@
                 }
             ],
             "cdnPathList": [
-                "https://slides-resources.ledupeiyou.com",
-                "https://slides-resources-test.ledupeiyou.com"
+                "",
+                ""
             ]
         }
     },

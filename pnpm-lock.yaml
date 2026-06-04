@@ -3033,14 +3033,14 @@ packages:
     resolution: {integrity: sha512-dfLbk+PwWvFzSxwk3n5ySL0hfBog779o8h68wK/7/APo/7cgyWp5jcXockbxdk5kFRkbeXWm4Fbi9FrdN381sA==}
 
   '@ld/ali-logger@1.1.5':
-    resolution: {integrity: sha512-NEGJIKaz07n/G6UAnRXINTM6j1Xld2NVXi9YES5io/vykWx6ExC4YqPSDDA/6PTYZ9KB6w2cobZfH1Guj72pcA==, tarball: https://npm.ledupeiyou.com/@ld/ali-logger/-/ali-logger-1.1.5.tgz}
+    resolution: {integrity: sha512-NEGJIKaz07n/G6UAnRXINTM6j1Xld2NVXi9YES5io/vykWx6ExC4YqPSDDA/6PTYZ9KB6w2cobZfH1Guj72pcA==, tarball: https://registry.npmjs.org/@ld/ali-logger/-/ali-logger-1.1.5.tgz}
     engines: {node: '>= 18'}
 
   '@ld/file-upload@1.0.27':
-    resolution: {integrity: sha512-sr13DGu0h/QBXlHni1vfGKPj7SnwXwcBHEPf7lCg6D43E/v5WABmh1gJ+GoRuplvf/CutkLfZFM5vjmzj7VO9Q==, tarball: https://npm.ledupeiyou.com/@ld/file-upload/-/file-upload-1.0.27.tgz}
+    resolution: {integrity: sha512-sr13DGu0h/QBXlHni1vfGKPj7SnwXwcBHEPf7lCg6D43E/v5WABmh1gJ+GoRuplvf/CutkLfZFM5vjmzj7VO9Q==, tarball: https://registry.npmjs.org/@ld/file-upload/-/file-upload-1.0.27.tgz}
 
   '@ld/micro-app@0.0.1':
-    resolution: {integrity: sha512-QRy5IkKA0FmrBQeBu4C0wrqf5kPdp7X/YKBIsKRHqrpMa0VLTFjVthnPG3vltGTHmbl6qiMnQR/cPDqOQ9nZeQ==, tarball: https://npm.ledupeiyou.com/@ld/micro-app/-/micro-app-0.0.1.tgz}
+    resolution: {integrity: sha512-QRy5IkKA0FmrBQeBu4C0wrqf5kPdp7X/YKBIsKRHqrpMa0VLTFjVthnPG3vltGTHmbl6qiMnQR/cPDqOQ9nZeQ==, tarball: https://registry.npmjs.org/@ld/micro-app/-/micro-app-0.0.1.tgz}
 
   '@leichtgewicht/ip-codec@2.0.5':
     resolution: {integrity: sha512-Vo+PSpZG2/fmgmiNzYK9qWRh8h/CHrwD0mo1h1DzL4yzHNSfWYujGTYsWGreD000gcgmZ7K4Ys6Tx9TxtsKdDw==}
@@ -3762,34 +3762,34 @@ packages:
     resolution: {integrity: sha512-OAPJUAtgeINhh/TAlUID4QTs53Njm7xzddaVlEs/SXwgtiD1tW22zAB/W1wdqfrpmikgaWQ9Fw6Ws+hsiRm5Vg==}
 
   '@slides/antd@1.0.0':
-    resolution: {integrity: sha512-qJtulpmSBeXJi5J7/sEhNWuU9RkTWihA6VnIN3Uc9moW+7v+jq6x4X6TOWwBqSZRe80IfnNEMp1Sjo5MAcktRA==, tarball: https://npm.ledupeiyou.com/@slides/antd/-/antd-1.0.0.tgz}
+    resolution: {integrity: sha512-qJtulpmSBeXJi5J7/sEhNWuU9RkTWihA6VnIN3Uc9moW+7v+jq6x4X6TOWwBqSZRe80IfnNEMp1Sjo5MAcktRA==, tarball: https://registry.npmjs.org/@slides/antd/-/antd-1.0.0.tgz}
 
   '@slides/core@1.0.0':
-    resolution: {integrity: sha512-pvkwuVkgv4nkdF61/V+4NXT8bnwXLYwuByhhIWeFan9adGCfBX3juda/O1I4XoSD3SXp3AsK0Rj9ng90vOYqUQ==, tarball: https://npm.ledupeiyou.com/@slides/core/-/core-1.0.0.tgz}
+    resolution: {integrity: sha512-pvkwuVkgv4nkdF61/V+4NXT8bnwXLYwuByhhIWeFan9adGCfBX3juda/O1I4XoSD3SXp3AsK0Rj9ng90vOYqUQ==, tarball: https://registry.npmjs.org/@slides/core/-/core-1.0.0.tgz}
 
   '@slides/grid@1.0.0':
-    resolution: {integrity: sha512-Fbld/Pr3qmrJxYa7xInrl79Uh++muokbYgdAu6vC0I/IBMr24SC6rpie/U3uJPwgRnYOCIvaq2KqK0i+aB8JLA==, tarball: https://npm.ledupeiyou.com/@slides/grid/-/grid-1.0.0.tgz}
+    resolution: {integrity: sha512-Fbld/Pr3qmrJxYa7xInrl79Uh++muokbYgdAu6vC0I/IBMr24SC6rpie/U3uJPwgRnYOCIvaq2KqK0i+aB8JLA==, tarball: https://registry.npmjs.org/@slides/grid/-/grid-1.0.0.tgz}
 
   '@slides/json-schema@1.0.0':
-    resolution: {integrity: sha512-YsDbyl2/4tZpj1O9A6iA6nanZXkp37ngeB9cStnAxq8m04/xbf1Tja183157X5taatYwOsP/rvz4yh88ayGLWg==, tarball: https://npm.ledupeiyou.com/@slides/json-schema/-/json-schema-1.0.0.tgz}
+    resolution: {integrity: sha512-YsDbyl2/4tZpj1O9A6iA6nanZXkp37ngeB9cStnAxq8m04/xbf1Tja183157X5taatYwOsP/rvz4yh88ayGLWg==, tarball: https://registry.npmjs.org/@slides/json-schema/-/json-schema-1.0.0.tgz}
 
   '@slides/path@1.0.0':
-    resolution: {integrity: sha512-bC1bcc+/5+9RIRUk+4GBynhNMs7p7usv+MQK5zs62euoqFQrqLaujoOeJwyQ3hmRm6rb6LkQhndmcupLw3ZJKw==, tarball: https://npm.ledupeiyou.com/@slides/path/-/path-1.0.0.tgz}
+    resolution: {integrity: sha512-bC1bcc+/5+9RIRUk+4GBynhNMs7p7usv+MQK5zs62euoqFQrqLaujoOeJwyQ3hmRm6rb6LkQhndmcupLw3ZJKw==, tarball: https://registry.npmjs.org/@slides/path/-/path-1.0.0.tgz}
 
   '@slides/react@1.0.0':
-    resolution: {integrity: sha512-UJk0+xeN+7DqWtvJgWHLtWlhl8zY9ACUso2jLx4H3LtsHSsdU+qxjL4UuWattzRCtkt3BWqEPaPXF7YmL3zHEw==, tarball: https://npm.ledupeiyou.com/@slides/react/-/react-1.0.0.tgz}
+    resolution: {integrity: sha512-UJk0+xeN+7DqWtvJgWHLtWlhl8zY9ACUso2jLx4H3LtsHSsdU+qxjL4UuWattzRCtkt3BWqEPaPXF7YmL3zHEw==, tarball: https://registry.npmjs.org/@slides/react/-/react-1.0.0.tgz}
 
   '@slides/reactive-react@1.0.0':
-    resolution: {integrity: sha512-YYkVcaDKIYJJbVBa3swKmr82+ooP9vQY2BqIxmz0Yq6wKD+li+dj2ahg6QyI32mhUgT3Zs5pxHP/yppzYV/XRg==, tarball: https://npm.ledupeiyou.com/@slides/reactive-react/-/reactive-react-1.0.0.tgz}
+    resolution: {integrity: sha512-YYkVcaDKIYJJbVBa3swKmr82+ooP9vQY2BqIxmz0Yq6wKD+li+dj2ahg6QyI32mhUgT3Zs5pxHP/yppzYV/XRg==, tarball: https://registry.npmjs.org/@slides/reactive-react/-/reactive-react-1.0.0.tgz}
 
   '@slides/reactive@1.0.0':
-    resolution: {integrity: sha512-7Ye+SARxIBj+pM9I+o+pLi6c7WdnpkMF7n0MyWi+vKYgeDu/JjrcSslcMWFH5DHxeMuBqJV4sCDUjnTNOVBgXQ==, tarball: https://npm.ledupeiyou.com/@slides/reactive/-/reactive-1.0.0.tgz}
+    resolution: {integrity: sha512-7Ye+SARxIBj+pM9I+o+pLi6c7WdnpkMF7n0MyWi+vKYgeDu/JjrcSslcMWFH5DHxeMuBqJV4sCDUjnTNOVBgXQ==, tarball: https://registry.npmjs.org/@slides/reactive/-/reactive-1.0.0.tgz}
 
   '@slides/shared@1.0.0':
-    resolution: {integrity: sha512-K97BaZKbnaV86s3E78bfiyzFDwNhQLi9zfV4iSnX5c55M2wX4f0wPcm89OiPM7zBgchq6BRPZWZy5uGaE/Oe6g==, tarball: https://npm.ledupeiyou.com/@slides/shared/-/shared-1.0.0.tgz}
+    resolution: {integrity: sha512-K97BaZKbnaV86s3E78bfiyzFDwNhQLi9zfV4iSnX5c55M2wX4f0wPcm89OiPM7zBgchq6BRPZWZy5uGaE/Oe6g==, tarball: https://registry.npmjs.org/@slides/shared/-/shared-1.0.0.tgz}
 
   '@slides/validator@1.0.0':
-    resolution: {integrity: sha512-q2z/c5bdCEvPIE1U9AwDSpiEx5+ikIfFWani7VbluGyrTTLHUxDVjtsrV6Tvq8/mB9tG0tpSNCG8VrjPVM/R3g==, tarball: https://npm.ledupeiyou.com/@slides/validator/-/validator-1.0.0.tgz}
+    resolution: {integrity: sha512-q2z/c5bdCEvPIE1U9AwDSpiEx5+ikIfFWani7VbluGyrTTLHUxDVjtsrV6Tvq8/mB9tG0tpSNCG8VrjPVM/R3g==, tarball: https://registry.npmjs.org/@slides/validator/-/validator-1.0.0.tgz}
 
   '@storybook/addon-actions@6.5.16':
     resolution: {integrity: sha512-aADjilFmuD6TNGz2CRPSupnyiA/IGkPJHDBTqMpsDXTUr8xnuD122xkIhg6UxmCM2y1c+ncwYXy3WPK2xXK57g==}
