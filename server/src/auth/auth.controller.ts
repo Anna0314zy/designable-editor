@@ -1,6 +1,7 @@
 import { Body, Controller, Get, Post, Req, Res, UnauthorizedException, UseGuards } from '@nestjs/common'
 import { ConfigService } from '@nestjs/config'
 import { ApiBearerAuth } from '@nestjs/swagger'
+import { Throttle } from '@nestjs/throttler'
 import { Request, Response } from 'express'
 import { AuthService } from './auth.service'
 import { LoginDto, RegisterDto } from './dto/login.dto'
@@ -14,6 +15,7 @@ export class AuthController {
     private readonly config: ConfigService,
   ) {}
 
+  @Throttle({ default: { limit: 5, ttl: 60_000 } })
   @Post('register')
   async register(@Body() dto: RegisterDto, @Res({ passthrough: true }) response: Response) {
     const session = await this.authService.register(dto)
@@ -21,6 +23,7 @@ export class AuthController {
     return this.toClientSession(session)
   }
 
+  @Throttle({ default: { limit: 5, ttl: 60_000 } })
   @Post('login')
   async login(@Body() dto: LoginDto, @Res({ passthrough: true }) response: Response) {
     const session = await this.authService.login(dto)
@@ -28,6 +31,7 @@ export class AuthController {
     return this.toClientSession(session)
   }
 
+  @Throttle({ default: { limit: 10, ttl: 60_000 } })
   @Post('refresh')
   async refresh(@Req() request: Request, @Res({ passthrough: true }) response: Response) {
     const refreshToken = this.getCookie(request, 'refreshToken')
@@ -56,7 +60,7 @@ export class AuthController {
       httpOnly: true,
       secure: isProduction,
       sameSite: isProduction ? 'none' : 'lax',
-      path: '/',
+      path: '/classroom-slides/auth/refresh',
       maxAge: this.durationToMs(this.config.get<string>('JWT_REFRESH_EXPIRES_IN', '7d')),
     })
   }
@@ -67,7 +71,7 @@ export class AuthController {
       httpOnly: true,
       secure: isProduction,
       sameSite: isProduction ? 'none' : 'lax',
-      path: '/',
+      path: '/classroom-slides/auth/refresh',
     })
   }
 

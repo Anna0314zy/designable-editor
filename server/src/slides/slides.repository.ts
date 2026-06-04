@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common'
-import { Prisma, SlideStatus } from '@prisma/client'
+import { Prisma, PublishStatus, SlideStatus } from '@prisma/client'
 import { PrismaService } from '../prisma/prisma.service'
 
 @Injectable()
@@ -42,6 +42,164 @@ export class SlidesRepository {
         status,
         lastPublishedAt: status === SlideStatus.published ? new Date() : undefined,
       },
+    })
+  }
+
+  async getNextPublishVersion(slideId: string) {
+    const lastRecord = await this.prisma.slidePublishRecord.findFirst({
+      where: { slideId },
+      orderBy: { version: 'desc' },
+      select: { version: true },
+    })
+    return (lastRecord?.version ?? 0) + 1
+  }
+
+  createPublishRecord(params: {
+    slideId: string
+    version: number
+    slideSnapshot: Prisma.InputJsonValue
+    pages: Array<{
+      pageId: string
+      pageType: number
+      sortIndex: number
+      pageSnapshot: Prisma.InputJsonValue
+      resources: Prisma.InputJsonValue
+    }>
+  }) {
+    return this.prisma.$transaction(async tx => {
+      const record = await tx.slidePublishRecord.create({
+        data: {
+          slideId: params.slideId,
+          version: params.version,
+          status: PublishStatus.publishing,
+          slideSnapshot: params.slideSnapshot,
+          pages: {
+            create: params.pages.map(page => ({
+              pageId: page.pageId,
+              pageType: page.pageType,
+              sortIndex: page.sortIndex,
+              pageSnapshot: page.pageSnapshot,
+              resources: page.resources,
+            })),
+          },
+        },
+        include: {
+          pages: {
+            orderBy: { sortIndex: 'asc' },
+          },
+        },
+      })
+//       这里的 include 是为了让 createPublishRecord 创建完发布记录后，把刚创建出来的页面快照也一起返回。
+
+// 因为后面的发布流程马上要用这些 PagePublishSnapshot：
+      await tx.slide.update({
+        where: { id: params.slideId },
+        data: { status: SlideStatus.publishing },
+      })
+      return record
+    })
+  }
+
+  updatePagePublishScreenshot(pageSnapshotId: string, screenshotOssPath: string) {
+    return this.prisma.pagePublishSnapshot.update({
+      where: { id: pageSnapshotId },
+      data: { screenshotOssPath },
+    })
+  }
+
+  markPublishSuccess(params: {
+    slideId: string
+    publishRecordId: string
+    manifest: Prisma.InputJsonValue
+    manifestOssPath: string
+    packageOssPath?: string
+  }) {
+    return this.prisma.$transaction([
+      this.prisma.slidePublishRecord.update({
+        where: { id: params.publishRecordId },
+        data: {
+          status: PublishStatus.success,
+          manifest: params.manifest,
+          manifestOssPath: params.manifestOssPath,
+          packageOssPath: params.packageOssPath,
+          errorMessage: null,
+        },
+      }),
+      this.prisma.slide.update({
+        where: { id: params.slideId },
+        data: {
+          status: SlideStatus.published,
+          currentPublishId: params.publishRecordId,
+          lastPublishedAt: new Date(),
+        },
+      }),
+    ])
+  }
+
+  markPublishFailed(params: { slideId: string; publishRecordId: string; errorMessage: string }) {
+    return this.prisma.$transaction([
+      this.prisma.slidePublishRecord.update({
+        where: { id: params.publishRecordId },
+        data: {
+          status: PublishStatus.failed,
+          errorMessage: params.errorMessage,
+        },
+      }),
+      this.prisma.slide.update({
+        where: { id: params.slideId },
+        data: { status: SlideStatus.publish_failed },
+      }),
+    ])
+  }
+
+  getPublishRecord(publishRecordId: string) {
+    return this.prisma.slidePublishRecord.findUnique({
+      where: { id: publishRecordId },
+      include: {
+        pages: { orderBy: { sortIndex: 'asc' } },
+      },
+    })
+  }
+
+  getPublishRecords(slideId: string) {
+    return this.prisma.slidePublishRecord.findMany({
+      where: { slideId },
+      orderBy: { version: 'desc' },
+      include: {
+        pages: { orderBy: { sortIndex: 'asc' } },
+      },
+    })
+  }
+
+  getCurrentPublishRecord(slideId: string) {
+    // currentPublish 是挂在 Slide 上的“一条当前发布记录指针”，pages 又是这条发布记录下面的页面快照。
+    return this.prisma.slide.findFirst({
+      where: { id: slideId, deletedAt: null },
+      include: {
+        currentPublish: {
+          include: {
+            pages: { orderBy: { sortIndex: 'asc' } },
+          },
+        },
+      },
+    })
+  }
+
+  rollbackPublish(slideId: string, publishRecordId: string) {
+    return this.prisma.$transaction(async tx => {
+      const record = await tx.slidePublishRecord.findFirst({
+        where: { id: publishRecordId, slideId, status: PublishStatus.success },
+      })
+      if (!record) return null
+      await tx.slide.update({
+        where: { id: slideId },
+        data: {
+          status: SlideStatus.published,
+          currentPublishId: publishRecordId,
+          lastPublishedAt: new Date(),
+        },
+      })
+      return record
     })
   }
 

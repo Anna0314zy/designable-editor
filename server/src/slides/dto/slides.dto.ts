@@ -67,3 +67,9 @@ export class ExitEditDto {
   @IsString()
   lockToken: string
 }
+
+export class RollbackPublishDto {
+  @ApiProperty({ example: 'publish-record-id' })
+  @IsString()
+  publishRecordId: string
+}

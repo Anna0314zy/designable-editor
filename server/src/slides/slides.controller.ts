@@ -4,7 +4,7 @@ import { UserRole } from '@prisma/client'
 import { Roles } from '../common/decorators/roles.decorator'
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard'
 import { RolesGuard } from '../auth/guards/roles.guard'
-import { CreatePageDto, DeletePageDto, ExitEditDto, SavePageDto, SaveSlideDto, SaveTasksDto } from './dto/slides.dto'
+import { CreatePageDto, DeletePageDto, ExitEditDto, RollbackPublishDto, SavePageDto, SaveSlideDto, SaveTasksDto } from './dto/slides.dto'
 import { SlidesService } from './slides.service'
 
 @ApiBearerAuth()
@@ -108,6 +108,27 @@ export class SlidesController {
   @Post(':slideId/publish')
   publish(@Param('slideId') slideId: string) {
     return this.slidesService.publish(slideId)
+  }
+
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles(UserRole.viewer, UserRole.editor, UserRole.admin)
+  @Get(':slideId/publish-records')
+  getPublishRecords(@Param('slideId') slideId: string) {
+    return this.slidesService.getPublishRecords(slideId)
+  }
+
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles(UserRole.viewer, UserRole.editor, UserRole.admin)
+  @Get(':slideId/last-success-publish-record')
+  getLastSuccessPublishRecord(@Param('slideId') slideId: string) {
+    return this.slidesService.getLastSuccessPublishRecord(slideId)
+  }
+
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles(UserRole.admin)
+  @Post(':slideId/rollback')
+  rollback(@Param('slideId') slideId: string, @Body() dto: RollbackPublishDto) {
+    return this.slidesService.rollback(slideId, dto.publishRecordId)
   }
 
   @UseGuards(JwtAuthGuard, RolesGuard)

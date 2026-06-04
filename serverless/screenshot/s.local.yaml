@@ -1,0 +1,26 @@
+edition: 1.0.0
+name: screenshot-local
+
+services:
+  screenshot:
+    component: fc
+    props:
+      region: cn-beijing
+      service:
+        name: lele-slide-local
+      function:
+        name: slide_screenshot_local
+        handler: index.handler
+        runtime: nodejs16
+        timeout: 60
+        memorySize: 2048
+        codeUri: ./code
+        environmentVariables:
+          SHOT_URL: http://127.0.0.1:5173
+      triggers:
+        - name: httpTrigger
+          type: http
+          config:
+            methods:
+              - POST
+            authType: anonymous

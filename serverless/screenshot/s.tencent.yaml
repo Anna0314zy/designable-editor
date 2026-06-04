@@ -1,0 +1,38 @@
+component: scf
+name: slide-screenshot
+
+inputs:
+  name: slide_screenshot
+  namespace: default
+  region: ap-beijing
+  type: event
+  runtime: CustomRuntime
+  handler: index.main_handler
+  memorySize: 2048
+  timeout: 60
+  image:
+    imageUrl: replace-with-your-tcr-image-url
+  environment:
+    variables:
+      COS_SECRET_KEY: COS_SECRET_KEY_VALUE
+      COS_SECRET_ID: COS_SECRET_ID_VALUE
+      COS_BUCKET: class-slides-res-test-1313601664
+      COS_REGION: ap-beijing
+      HOST: https://test-class-api-online.saasp.vdyoo.com
+      SHOT_URL: https://slides-test.ledupeiyou.com/slide-shot/index.html
+      PUPPETEER_EXECUTABLE_PATH: /usr/bin/chromium-browser
+      XDG_CONFIG_HOME: /var/user
+      SCREENSHOT_RENDER_TIMEOUT_MS: "55000"
+  triggers:
+    - name: httpTrigger
+      type: apigw
+      parameters:
+        protocols:
+          - http
+          - https
+        serviceName: slide-screenshot
+        description: slide screenshot http trigger
+        environment: release
+        endpoints:
+          - path: /
+            method: POST

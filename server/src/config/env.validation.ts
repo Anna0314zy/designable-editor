@@ -16,6 +16,8 @@ interface EnvConfig {
   COS_ALLOW_ACTIONS?: string
   COS_DURATION_SECONDS?: number
   COS_RESOURCE_PATH?: string
+  SCREENSHOT_SERVICE_URL?: string
+  SCREENSHOT_TIMEOUT_MS?: number
 }
 
 export function validateEnv(config: Record<string, unknown>): EnvConfig {
@@ -42,5 +44,7 @@ export function validateEnv(config: Record<string, unknown>): EnvConfig {
     COS_ALLOW_ACTIONS: config.COS_ALLOW_ACTIONS ? String(config.COS_ALLOW_ACTIONS) : undefined,
     COS_DURATION_SECONDS: config.COS_DURATION_SECONDS ? Number(config.COS_DURATION_SECONDS) : undefined,
     COS_RESOURCE_PATH: config.COS_RESOURCE_PATH ? String(config.COS_RESOURCE_PATH) : undefined,
+    SCREENSHOT_SERVICE_URL: config.SCREENSHOT_SERVICE_URL ? String(config.SCREENSHOT_SERVICE_URL) : undefined,
+    SCREENSHOT_TIMEOUT_MS: config.SCREENSHOT_TIMEOUT_MS ? Number(config.SCREENSHOT_TIMEOUT_MS) : undefined,
   }
 }

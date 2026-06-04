@@ -9,7 +9,9 @@ datasource db {
 
 enum SlideStatus {
   editing
+  publishing
   published
+  publish_failed
   packed
 }
 
@@ -17,6 +19,12 @@ enum UserRole {
   admin
   editor
   viewer
+}
+
+enum PublishStatus {
+  publishing
+  success
+  failed
 }
 
 model User {
@@ -48,14 +56,18 @@ model Slide {
   currentLockEmpName        String?
   currentLockToken          String?
   lastPublishedAt           DateTime?
+  currentPublishId          String?      @db.Uuid
   createdAt                 DateTime     @default(now())
   updatedAt                 DateTime     @updatedAt
   deletedAt                 DateTime?
   pages                     Page[]
   lessonBindings            LessonBinding[]
   tasks                     CourseTask[]
+  currentPublish            SlidePublishRecord? @relation("CurrentSlidePublish", fields: [currentPublishId], references: [id])
+  publishRecords            SlidePublishRecord[] @relation("SlidePublishRecords")
 
   @@index([status, deletedAt])
+  @@index([currentPublishId])
   @@index([updatedAt])
 }
 
@@ -165,4 +177,43 @@ model CourseTask {
   @@index([slideId, taskType])
   @@index([pageId, elementId])
   @@index([deletedAt])
+}
+
+model SlidePublishRecord {
+  id              String       @id @default(uuid()) @db.Uuid
+  slideId          String       @db.Uuid
+  version          Int
+  status           PublishStatus
+  slideSnapshot    Json
+  manifest         Json?
+  manifestOssPath  String?
+  packageOssPath   String?
+  errorMessage     String?
+  createdAt        DateTime     @default(now())
+  updatedAt        DateTime     @updatedAt
+  slide            Slide        @relation("SlidePublishRecords", fields: [slideId], references: [id])
+  currentForSlides Slide[]      @relation("CurrentSlidePublish")
+  pages            PagePublishSnapshot[]
+
+  @@unique([slideId, version])
+  @@index([slideId, status])
+  @@index([createdAt])
+}
+
+model PagePublishSnapshot {
+  id                String             @id @default(uuid()) @db.Uuid
+  publishRecordId   String             @db.Uuid
+  pageId            String             @db.Uuid
+  pageType          Int
+  sortIndex         Int
+  pageSnapshot      Json
+  resources         Json?
+  screenshotOssPath String?
+  createdAt         DateTime           @default(now())
+  updatedAt         DateTime           @updatedAt
+  publishRecord     SlidePublishRecord @relation(fields: [publishRecordId], references: [id])
+
+  @@unique([publishRecordId, pageId])
+  @@index([publishRecordId, sortIndex])
+  @@index([pageId])
 }

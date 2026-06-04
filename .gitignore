@@ -38,3 +38,4 @@ temp
 
 **/public/fonts
 *.zsh
+*.tmp

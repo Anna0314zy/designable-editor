@@ -1,0 +1,120 @@
+{
+  "id": 1,
+  "pageSnapshotId": "local-test-001",
+  "mainContentStructure": {
+    "id": "f1d13ff3-0d11-4b97-a6ca-ca19b62be34c",
+    "pageInfo": {
+      "id": "f1d13ff3-0d11-4b97-a6ca-ca19b62be34c",
+      "props": {
+        "info": {
+          "type": "课件页"
+        },
+        "style": {
+          "backgroundSize": "cover",
+          "backgroundImage": "9fc4eaeb14dbadb4e0546f06756f7716"
+        },
+        "animates": []
+      },
+      "hidden": false,
+      "children": [
+        {
+          "id": "5lyd5r9vmc3",
+          "props": {
+            "info": {
+              "name": "形状4"
+            },
+            "style": {
+              "fill": "rgba(24,144,255,1)",
+              "width": "100px",
+              "height": "100px",
+              "transform": "translate(469px, 332px) rotate(0deg)",
+              "borderColor": "rgba(0,0,255,1)",
+              "borderStyle": "solid",
+              "borderWidth": "4px"
+            },
+            "title": "形状",
+            "shapeKey": "bullet",
+            "x-component": "Shape"
+          },
+          "hidden": false,
+          "children": [],
+          "sourceName": "",
+          "componentName": "Shape"
+        },
+        {
+          "id": "0ew88140r3r",
+          "props": {
+            "src": "9fc4eaeb14dbadb4e0546f06756f7716",
+            "info": {
+              "name": "图片1",
+              "isBackground": true
+            },
+            "style": {
+              "width": "456px",
+              "height": "281px",
+              "transform": " translate(0px, 151px) rotate(0deg)"
+            },
+            "title": "图片",
+            "x-component": "Img",
+            "x-decorator": "FormItem"
+          },
+          "hidden": false,
+          "children": [],
+          "sourceName": "",
+          "componentName": "Img"
+        },
+        {
+          "id": "aco4at9yyvd",
+          "props": {
+            "src": "897f12f59c6db11ae7e6aa311b258174",
+            "info": {
+              "name": "图片2",
+              "isBackground": false
+            },
+            "style": {
+              "width": "440px",
+              "height": "226px",
+              "transform": " translate(695px, 459px) rotate(0deg)"
+            },
+            "title": "图片",
+            "x-component": "Img",
+            "x-decorator": "FormItem"
+          },
+          "hidden": false,
+          "children": [],
+          "sourceName": "",
+          "componentName": "Img"
+        }
+      ],
+      "sourceName": "",
+      "componentName": "Root"
+    },
+    "pageType": 1
+  },
+  "fileResourceDtoList": [
+    {
+      "width": 456,
+      "height": 281,
+      "fileMd5": "9fc4eaeb14dbadb4e0546f06756f7716",
+      "fileName": "20260603090847.jpg",
+      "fileSize": 30633,
+      "fileType": "image/jpeg",
+      "resourceId": "38dc3512-27f9-4868-b9ed-6f268c8eb640",
+      "cosFullPath": "image/9fc4eaeb14dbadb4e0546f06756f7716.jpg",
+      "resourceType": "pic",
+      "resourceFormat": "image/jpeg"
+    },
+    {
+      "width": 440,
+      "height": 226,
+      "fileMd5": "897f12f59c6db11ae7e6aa311b258174",
+      "fileName": "20260603090912.jpg",
+      "fileSize": 22263,
+      "fileType": "image/jpeg",
+      "resourceId": "dd5f5749-df22-4e4d-b386-9e6cea4124fb",
+      "cosFullPath": "image/897f12f59c6db11ae7e6aa311b258174.jpg",
+      "resourceType": "pic",
+      "resourceFormat": "image/jpeg"
+    }
+  ]
+}
