@@ -15,3 +15,11 @@
 - [ ] 画布元素支持拖拽
 
 # designable-editor
+
+https://anna0314zy.github.io/designable-editor/test/slide-shot/index.html
+
+editor -> task:
+https://anna0314zy.github.io/designable-editor/test/task/index.html
+
+task -> editor:
+https://anna0314zy.github.io/designable-editor/test/editor/index.html

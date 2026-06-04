@@ -1,0 +1,146 @@
+name: Deploy slide-shot to GitHub Pages
+
+on:
+  push:
+    branches:
+      - test
+    paths:
+      - common/slide-shot/**
+      - common/render-*/**
+      - common/slide-*/**
+      - packages/**
+      - package.json
+      - pnpm-lock.yaml
+      - pnpm-workspace.yaml
+      - .github/workflows/deploy-slide-shot-pages.yml
+  workflow_dispatch:
+    inputs:
+      target_environment:
+        description: Deploy target
+        required: true
+        default: test
+        type: choice
+        options:
+          - test
+          - production
+
+permissions:
+  contents: write
+
+concurrency:
+  group: pages-deploy
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    outputs:
+      target_environment: ${{ steps.target.outputs.target_environment }}
+      destination_dir: ${{ steps.target.outputs.destination_dir }}
+      vite_mode: ${{ steps.target.outputs.vite_mode }}
+    env:
+      HUSKY: 0
+    steps:
+      - name: Resolve target
+        id: target
+        run: |
+          if [ "${{ github.event_name }}" = "workflow_dispatch" ] && [ "${{ inputs.target_environment }}" = "production" ]; then
+            echo "target_environment=production" >> "$GITHUB_OUTPUT"
+            echo "destination_dir=prod" >> "$GITHUB_OUTPUT"
+            echo "vite_mode=production" >> "$GITHUB_OUTPUT"
+          elif [ "${{ github.ref_name }}" = "test" ] || [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
+            echo "target_environment=test" >> "$GITHUB_OUTPUT"
+            echo "destination_dir=test" >> "$GITHUB_OUTPUT"
+            echo "vite_mode=test" >> "$GITHUB_OUTPUT"
+          else
+            echo "Only the test branch can auto-deploy to test. Use workflow_dispatch for production." >&2
+            exit 1
+          fi
+
+      - name: Checkout
+        uses: actions/checkout@v5
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 9
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: pnpm
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Build slide-shot
+        run: pnpm --dir common/slide-shot exec vite build --mode ${{ steps.target.outputs.vite_mode }}
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: slide-shot-pages-dist
+          path: common/slide-shot/dist
+
+  deploy-test:
+    runs-on: ubuntu-latest
+    needs: build
+    if: needs.build.outputs.target_environment == 'test'
+    steps:
+      - name: Download artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: slide-shot-pages-dist
+          path: pages-dist
+
+      - name: Deploy test slide-shot to gh-pages
+        uses: peaceiris/actions-gh-pages@v4
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_branch: gh-pages
+          publish_dir: pages-dist
+          destination_dir: test/slide-shot
+          keep_files: true
+
+      - name: Print test URLs
+        run: |
+          BASE_URL="https://${{ github.repository_owner }}.github.io/${{ github.event.repository.name }}/test/slide-shot"
+          {
+            echo "## Test slide-shot deployment"
+            echo ""
+            echo "- slide-shot: ${BASE_URL}/"
+            echo "- slide-shot index: ${BASE_URL}/index.html"
+          } >> "$GITHUB_STEP_SUMMARY"
+
+  deploy-production:
+    runs-on: ubuntu-latest
+    needs: build
+    if: needs.build.outputs.target_environment == 'production'
+    environment:
+      name: production
+    steps:
+      - name: Download artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: slide-shot-pages-dist
+          path: pages-dist
+
+      - name: Deploy production slide-shot to gh-pages
+        uses: peaceiris/actions-gh-pages@v4
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_branch: gh-pages
+          publish_dir: pages-dist
+          destination_dir: prod/slide-shot
+          keep_files: true
+
+      - name: Print production URLs
+        run: |
+          BASE_URL="https://${{ github.repository_owner }}.github.io/${{ github.event.repository.name }}/prod/slide-shot"
+          {
+            echo "## Production slide-shot deployment"
+            echo ""
+            echo "- slide-shot: ${BASE_URL}/"
+            echo "- slide-shot index: ${BASE_URL}/index.html"
+          } >> "$GITHUB_STEP_SUMMARY"

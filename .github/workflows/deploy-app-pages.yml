@@ -1,9 +1,18 @@
-name: Deploy frontends to GitHub Pages
+name: Deploy app frontends to GitHub Pages
 
 on:
   push:
     branches:
       - test
+    paths:
+      - editor/**
+      - task/**
+      - common/**
+      - packages/**
+      - package.json
+      - pnpm-lock.yaml
+      - pnpm-workspace.yaml
+      - .github/workflows/deploy-app-pages.yml
   workflow_dispatch:
     inputs:
       target_environment:
@@ -19,7 +28,7 @@ permissions:
   contents: write
 
 concurrency:
-  group: pages-${{ github.event_name == 'workflow_dispatch' && inputs.target_environment || 'test' }}
+  group: pages-deploy
   cancel-in-progress: false
 
 jobs:
@@ -65,91 +74,32 @@ jobs:
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
 
-      - name: Build slide-shot
-        run: pnpm --dir common/slide-shot run build-${{ steps.target.outputs.vite_mode }}
-
       - name: Build editor
         run: pnpm --dir editor exec vite build --mode ${{ steps.target.outputs.vite_mode }}
 
       - name: Build task
         run: pnpm --dir task exec vite build --mode ${{ steps.target.outputs.vite_mode }}
 
-      - name: Collect Pages artifact
+      - name: Collect app artifact
         run: |
           EDITOR_VERSION="$(node -p "require('./editor/package.json').version")"
           TASK_VERSION="$(node -p "require('./task/package.json').version")"
 
-          mkdir -p pages-dist/slide-shot pages-dist/editor pages-dist/task
-          cp -R common/slide-shot/dist/. pages-dist/slide-shot/
-          cp -R "editor/dist/${EDITOR_VERSION}/." pages-dist/editor/
-          cp -R "task/dist/${TASK_VERSION}/." pages-dist/task/
+          mkdir -p editor-dist task-dist
+          cp -R "editor/dist/${EDITOR_VERSION}/." editor-dist/
+          cp -R "task/dist/${TASK_VERSION}/." task-dist/
 
-          cat > pages-dist/index.html <<'HTML'
-          <!doctype html>
-          <html lang="zh-CN">
-            <head>
-              <meta charset="UTF-8" />
-              <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-              <title>Slides Engine</title>
-              <style>
-                body {
-                  margin: 0;
-                  min-height: 100vh;
-                  display: grid;
-                  place-items: center;
-                  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-                  background: #f6f7f9;
-                  color: #1f2937;
-                }
-
-                main {
-                  width: min(520px, calc(100vw - 48px));
-                }
-
-                h1 {
-                  margin: 0 0 20px;
-                  font-size: 28px;
-                  font-weight: 650;
-                }
-
-                nav {
-                  display: grid;
-                  gap: 12px;
-                }
-
-                a {
-                  display: block;
-                  padding: 14px 16px;
-                  border: 1px solid #d8dee8;
-                  border-radius: 8px;
-                  background: #fff;
-                  color: inherit;
-                  text-decoration: none;
-                }
-
-                a:hover {
-                  border-color: #7c8da5;
-                }
-              </style>
-            </head>
-            <body>
-              <main>
-                <h1>Slides Engine</h1>
-                <nav>
-                  <a href="./slide-shot/">slide-shot</a>
-                  <a href="./editor/">editor</a>
-                  <a href="./task/">task</a>
-                </nav>
-              </main>
-            </body>
-          </html>
-          HTML
-
-      - name: Upload artifact
+      - name: Upload editor artifact
         uses: actions/upload-artifact@v4
         with:
-          name: pages-dist
-          path: pages-dist
+          name: editor-pages-dist
+          path: editor-dist
+
+      - name: Upload task artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: task-pages-dist
+          path: task-dist
 
   deploy-test:
     runs-on: ubuntu-latest
@@ -159,26 +109,39 @@ jobs:
       - name: Download artifact
         uses: actions/download-artifact@v4
         with:
-          name: pages-dist
-          path: pages-dist
+          name: editor-pages-dist
+          path: editor-dist
 
-      - name: Deploy test to gh-pages
+      - name: Download task artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: task-pages-dist
+          path: task-dist
+
+      - name: Deploy test editor to gh-pages
         uses: peaceiris/actions-gh-pages@v4
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_branch: gh-pages
-          publish_dir: pages-dist
-          destination_dir: test
+          publish_dir: editor-dist
+          destination_dir: test/editor
+          keep_files: true
+
+      - name: Deploy test task to gh-pages
+        uses: peaceiris/actions-gh-pages@v4
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_branch: gh-pages
+          publish_dir: task-dist
+          destination_dir: test/task
           keep_files: true
 
       - name: Print test URLs
         run: |
           BASE_URL="https://${{ github.repository_owner }}.github.io/${{ github.event.repository.name }}/test"
           {
-            echo "## Test deployment"
+            echo "## Test app deployment"
             echo ""
-            echo "- slide-shot: ${BASE_URL}/slide-shot/"
-            echo "- slide-shot index: ${BASE_URL}/slide-shot/index.html"
             echo "- editor: ${BASE_URL}/editor/"
             echo "- task: ${BASE_URL}/task/"
           } >> "$GITHUB_STEP_SUMMARY"
@@ -193,26 +156,39 @@ jobs:
       - name: Download artifact
         uses: actions/download-artifact@v4
         with:
-          name: pages-dist
-          path: pages-dist
+          name: editor-pages-dist
+          path: editor-dist
 
-      - name: Deploy production to gh-pages
+      - name: Download task artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: task-pages-dist
+          path: task-dist
+
+      - name: Deploy production editor to gh-pages
         uses: peaceiris/actions-gh-pages@v4
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_branch: gh-pages
-          publish_dir: pages-dist
-          destination_dir: prod
+          publish_dir: editor-dist
+          destination_dir: prod/editor
+          keep_files: true
+
+      - name: Deploy production task to gh-pages
+        uses: peaceiris/actions-gh-pages@v4
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_branch: gh-pages
+          publish_dir: task-dist
+          destination_dir: prod/task
           keep_files: true
 
       - name: Print production URLs
         run: |
           BASE_URL="https://${{ github.repository_owner }}.github.io/${{ github.event.repository.name }}/prod"
           {
-            echo "## Production deployment"
+            echo "## Production app deployment"
             echo ""
-            echo "- slide-shot: ${BASE_URL}/slide-shot/"
-            echo "- slide-shot index: ${BASE_URL}/slide-shot/index.html"
             echo "- editor: ${BASE_URL}/editor/"
             echo "- task: ${BASE_URL}/task/"
           } >> "$GITHUB_STEP_SUMMARY"
