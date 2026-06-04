@@ -3,8 +3,7 @@ name: Deploy frontends to GitHub Pages
 on:
   push:
     branches:
-      - main
-      - master
+      - test
   workflow_dispatch:
     inputs:
       target_environment:
@@ -40,10 +39,13 @@ jobs:
             echo "target_environment=production" >> "$GITHUB_OUTPUT"
             echo "destination_dir=prod" >> "$GITHUB_OUTPUT"
             echo "vite_mode=prod" >> "$GITHUB_OUTPUT"
-          else
+          elif [ "${{ github.ref_name }}" = "test" ] || [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
             echo "target_environment=test" >> "$GITHUB_OUTPUT"
             echo "destination_dir=test" >> "$GITHUB_OUTPUT"
             echo "vite_mode=test" >> "$GITHUB_OUTPUT"
+          else
+            echo "Only the test branch can auto-deploy to test. Use workflow_dispatch for production." >&2
+            exit 1
           fi
 
       - name: Checkout
