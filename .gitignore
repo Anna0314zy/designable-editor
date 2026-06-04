@@ -39,3 +39,4 @@ temp
 **/public/fonts
 *.zsh
 *.tmp
+serverless/screenshot/s.fz.yaml

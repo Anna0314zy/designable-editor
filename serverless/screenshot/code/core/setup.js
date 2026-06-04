@@ -1,19 +1,37 @@
 const config = require("./config");
+const fs = require("fs");
 const puppeteer = require("puppeteer");
 
 // 热实例内复用同一个 browser；冷启动或平台扩容时，每个实例会各自维护一份。
 let browser;
 let browserPromise;
 
+function resolveExecutablePath() {
+  const candidates = [
+    process.env.PUPPETEER_EXECUTABLE_PATH,
+    "/opt/chromium/chrome",
+    "/opt/bin/chromium",
+    "/opt/bin/chromium-browser",
+    "/usr/bin/chromium-browser",
+    "/usr/bin/chromium",
+  ].filter(Boolean);
+
+  return candidates.find((candidate) => fs.existsSync(candidate));
+}
+
 function createLaunchOptions(options) {
   if (options) return options;
 
-  return {
+  const launchOptions = {
     headless: true,
-    executablePath: process.env.PUPPETEER_EXECUTABLE_PATH,
     args: config.launchOptionForFC,
     dumpio: !!exports.DEBUG,
   };
+  const executablePath = resolveExecutablePath();
+  if (executablePath) {
+    launchOptions.executablePath = executablePath;
+  }
+  return launchOptions;
 }
 
 exports.getBrowser = async (options) => {

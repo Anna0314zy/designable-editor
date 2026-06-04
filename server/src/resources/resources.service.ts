@@ -81,13 +81,6 @@ export class ResourcesService {
         },
       ],
     }
-    console.log('canshu ',{
-      secretId,
-      secretKey,
-      region,
-      durationSeconds,
-      policy,
-    })
     const tempKeys = await this.getStsCredential({
       secretId,
       secretKey,

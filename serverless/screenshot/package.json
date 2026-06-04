@@ -3,19 +3,12 @@
   "version": "1.0.0",
   "description": "",
   "scripts": {
-    "dev": "s local start --server-port 8000",
+    "dev": "s local start -t ./s.fz.yaml --server-port 8000",
     "local": "node ./code/local-server.js",
-    "deploy-fz": "s deploy -t ./s.fz.yaml",
-    "deploy-prod": "s deploy -t ./s.prod.yaml ",
-    "deploy-tencent": "npm run push-tencent-image && npm run deploy-tencent-image",
-    "deploy-tencent-image": "bash ./scripts/deploy-tencent-image.sh",
-    "push-tencent-image": "bash ./scripts/push-tencent-image.sh"
+    "deploy": "bash ./scripts/deploy.sh",
+    "deploy-fz": "bash ./scripts/deploy.sh"
   },
   "keywords": [],
   "author": "",
-  "license": "ISC",
-  "dependencies": {
-    "lodash.random": "^3.2.0",
-    "serverless-cloud-framework": "^1.3.2"
-  }
+  "license": "ISC"
 }

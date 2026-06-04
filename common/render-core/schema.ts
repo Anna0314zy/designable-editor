@@ -113,7 +113,7 @@ export const animationSchema = {
                 "width": "300px",
                 "height": "300px"
             },
-            "src": "https://class-slides-res-test-1313601664.cos.ap-beijing.myqcloud.com/image/a2bf9b1a-8a11-4681-86e8-e253d07fb80a.png",
+            "src": "",
         },
         "hidden": false,
         "children": []

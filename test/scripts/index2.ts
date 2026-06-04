@@ -11,7 +11,7 @@ const loadTask = async () => {
   await createOrDeleteFolder(zipDir, false);
   await createOrDeleteFolder(zipDir);
   const res = await Axios.get(
-    "https://test-class-api-online.saasp.vdyoo.com/classroom-slides/slides/package-result/offline-structure?slideId=5325251d698944a4bfa05975d982a615&slideVersion=22"
+    ""
   );
   const resources = res.data.data;
   const {

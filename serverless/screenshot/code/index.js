@@ -34,6 +34,64 @@ const cosInstance = canUploadToCos
     })
   : null;
 
+function parsePositiveInteger(value, fallback) {
+  const parsed = Number(value);
+  return Number.isInteger(parsed) && parsed > 0 ? parsed : fallback;
+}
+
+const screenshotConcurrency = parsePositiveInteger(
+  process.env.SCREENSHOT_CONCURRENCY,
+  2
+);
+let activeScreenshotCount = 0;
+const screenshotQueue = [];
+
+function acquireScreenshotSlot() {
+  return new Promise((resolve) => {
+    const acquire = () => {
+      activeScreenshotCount++;
+      console.log("获取截图并发槽", {
+        active: activeScreenshotCount,
+        concurrency: screenshotConcurrency,
+        queued: screenshotQueue.length,
+      });
+      resolve(() => {
+        activeScreenshotCount--;
+        const next = screenshotQueue.shift();
+        console.log("释放截图并发槽", {
+          active: activeScreenshotCount,
+          concurrency: screenshotConcurrency,
+          queued: screenshotQueue.length,
+        });
+        if (next) {
+          next();
+        }
+      });
+    };
+
+    if (activeScreenshotCount < screenshotConcurrency) {
+      acquire();
+      return;
+    }
+
+    screenshotQueue.push(acquire);
+    console.log("截图请求进入队列", {
+      active: activeScreenshotCount,
+      concurrency: screenshotConcurrency,
+      queued: screenshotQueue.length,
+    });
+  });
+}
+
+async function runWithScreenshotSlot(task) {
+  const release = await acquireScreenshotSlot();
+  try {
+    return await task();
+  } finally {
+    release();
+  }
+}
+
 module.exports.initializer = async (context, callback) => {
   console.log("initializer");
   // 云函数冷启动时预热浏览器，减少第一张截图的等待时间。
@@ -132,48 +190,13 @@ function getHeader(headers = {}, key) {
   return matchedKey ? headers[matchedKey] : undefined;
 }
 
-function parseTencentEventBody(event = {}) {
-  // 腾讯云事件函数通过 event.body 传入 HTTP 请求体；base64 场景要先解码再 JSON.parse。
-  const rawBody = event.isBase64Encoded
-    ? Buffer.from(event.body || "", "base64").toString("utf-8")
-    : event.body || "{}";
-  return typeof rawBody === "string" ? JSON.parse(rawBody) : rawBody;
-}
-
-function createTencentResponse() {
-  let done;
-  const headers = {};
-  const result = {
-    isBase64Encoded: false,
-    statusCode: 200,
-    headers,
-    body: "",
-  };
-  const promise = new Promise((resolve) => {
-    done = resolve;
-  });
-
-  return {
-    // 复用 screenshot 内部的 response 写法，把阿里云 response API 适配成腾讯云返回对象。
-    response: {
-      setStatusCode(statusCode) {
-        result.statusCode = statusCode;
-      },
-      setHeader(key, value) {
-        headers[key] = value;
-      },
-      send(body) {
-        result.body = body;
-        done(result);
-      },
-    },
-    promise,
-  };
-}
-
 async function screenshot(response, body, pageSnapshotId) {
   let page;
   let completed = false;
+  let resolveDone;
+  const done = new Promise((resolve) => {
+    resolveDone = resolve;
+  });
 
   // 所有成功、失败都从这里返回，completed 防止截图回调重复响应。
   const sendJson = (statusCode, payload) => {
@@ -182,6 +205,7 @@ async function screenshot(response, body, pageSnapshotId) {
     response.setStatusCode(statusCode);
     response.setHeader("content-type", "application/json");
     response.send(JSON.stringify(payload));
+    resolveDone();
   };
 
   try {
@@ -290,16 +314,36 @@ async function screenshot(response, body, pageSnapshotId) {
       message: err.message,
     });
   }
+  return done;
 }
 
 module.exports.handler = async function (request, response, context) {
   console.log("request", request.headers);
   // pageSnapshotId 用来把截图结果和发布快照中的具体页面关联起来。
-  const pageSnapshotId = request.headers.pagesnapshotid;
+  if (request.method === "OPTIONS") {
+    response.setStatusCode(204);
+    response.setHeader("access-control-allow-origin", "*");
+    response.setHeader("access-control-allow-methods", "POST,OPTIONS");
+    response.setHeader("access-control-allow-headers", "Content-Type,pagesnapshotid");
+    response.send("");
+    return;
+  }
+
+  if (request.method && request.method !== "POST") {
+    response.setStatusCode(405);
+    response.setHeader("content-type", "application/json");
+    response.send(JSON.stringify({
+      success: false,
+      message: "Only POST is supported",
+    }));
+    return;
+  }
+
+  const pageSnapshotId = getHeader(request.headers, "pagesnapshotid");
   try {
     const data = await readRequestBody(request);
     const body = JSON.parse(data);
-    await screenshot(response, body, pageSnapshotId);
+    await runWithScreenshotSlot(() => screenshot(response, body, pageSnapshotId));
   } catch (err) {
     console.log("err2", err);
     response.setStatusCode(500);
@@ -308,31 +352,5 @@ module.exports.handler = async function (request, response, context) {
       success: false,
       message: err.message,
     }));
-  }
-};
-
-module.exports.main_handler = async function (event, context) {
-  console.log("tencent event headers", event.headers);
-  const { response, promise } = createTencentResponse();
-
-  try {
-    const body = parseTencentEventBody(event);
-    // 腾讯云事件函数的 HTTP 头可能保留原始大小写，这里做大小写不敏感读取。
-    const pageSnapshotId = getHeader(event.headers, "pagesnapshotid");
-    await screenshot(response, body, pageSnapshotId);
-    return await promise;
-  } catch (err) {
-    console.log("tencent handler error", err);
-    return {
-      isBase64Encoded: false,
-      statusCode: 500,
-      headers: {
-        "content-type": "application/json",
-      },
-      body: JSON.stringify({
-        success: false,
-        message: err.message,
-      }),
-    };
   }
 };

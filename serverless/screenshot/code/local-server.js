@@ -2,7 +2,7 @@ const http = require("http");
 const { handler } = require("./index");
 
 const port = Number(process.env.PORT || 9000);
-const host = process.env.HOSTNAME || "0.0.0.0";
+const host = process.env.SERVER_HOST || "0.0.0.0";
 
 if (!process.env.SHOT_URL) {
   process.env.SHOT_URL = "http://127.0.0.1:5173";

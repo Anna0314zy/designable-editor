@@ -1,57 +1,46 @@
-<!-- SHOT_URL=http://127.0.0.1:5173 -->
-<!-- 启动本地 -->
-pnpm run local
+## 阿里云 FC 截图函数
 
-<!-- 调本地服务 -->
-
-curl -X POST 'http://127.0.0.1:8000' \
-  -H 'Content-Type: application/json' \
-  -H 'pagesnapshotid: local-test-001' \
-  --data @local-shot-body.json
-
-## 腾讯云 SCF Puppeteer 配置
-
-`s.yaml` / `s.prod.yaml` / `s.fz.yaml` 仍是阿里云 FC 配置，里面的
-`acs:fc:...Nodejs-Puppeteer17x` layer 不能在腾讯云 SCF 直接使用。
-
-腾讯云部署使用自定义镜像：
-
-- `code/Dockerfile` 安装 Chromium、Puppeteer 运行依赖和 CJK 字体。
-- `PUPPETEER_EXECUTABLE_PATH=/usr/bin/chromium-browser` 指定 Chromium 路径。
-- `XDG_CONFIG_HOME=/var/user` 让 Chromium 读取 `code/fontconfig/fonts.conf`。
-- 镜像通过 Dockerfile 的 `CMD ["node", "local-server.js"]` 启动，监听 `0.0.0.0:9000`。
-- `code/fonts/` 可以放文泉驿正黑体或业务自定义字体；不放时镜像内置
-  `font-noto-cjk` 负责中文渲染。
-- 腾讯云函数类型使用 `type: web`，镜像端口使用 `imagePort: 9000`。
-- 腾讯云 `scf` CLI 会读取 `tencent-image/serverless.yml`。
-- 当前镜像地址是 `ccr.ccs.tencentyun.com/zy11/slide-screenshot:latest`。
-- `npm run push-tencent-image` 推送后会写入 `tencent-image.digest.env`，
-  部署时优先使用 `ccr.ccs.tencentyun.com/zy11/slide-screenshot:latest@sha256:...`。
-
-构建并推送镜像：
+当前发布入口只保留阿里云函数计算：
 
 ```bash
 cd serverless/screenshot
-npm run push-tencent-image
+npm run deploy
 ```
 
-部署腾讯云函数：
+部署时传入 COS 或回调地址：
 
 ```bash
-npm run deploy-tencent
+COS_SECRET_ID=xxx \
+COS_SECRET_KEY=xxx \
+COS_BUCKET=xxx \
+COS_REGION=ap-beijing \
+HOST=https://example.com \
+npm run deploy
 ```
 
-本地镜像和部署环境配置在 `tencent-image.env`，需要填写：
+`s.fz.yaml` 会创建/更新：
 
-- `COS_SECRET_KEY`
-- `COS_SECRET_ID`
+- 服务：`slide-screenshot`
+- 函数：`slide_screenshot`
+- 入口：`code/index.js` 的 `handler`
+- 运行时：`nodejs16`
+- 触发器：HTTP 匿名触发
+- Puppeteer 层：`Nodejs-Puppeteer17x`
 
-腾讯云 API 网关触发器已不支持新建，镜像配置不会自动创建 `apigw` 触发器。
-函数部署完成后，在腾讯云控制台进入 `slide_screenshot_web` 函数详情，选择
-“函数 URL”并新建 URL。基础 HTTP 调用建议选择公网访问、授权类型按业务
-需要选择“开放”或“CAM 鉴权”。
+本地调试：
 
-curl -X POST 'https://1329132138-i4sojuk93k.ap-beijing.tencentscf.com' \
+```bash
+npm run local
+```
+
+调用示例：
+
+```bash
+curl -X POST 'http://127.0.0.1:9000' \
   -H 'Content-Type: application/json' \
-  -H 'pagesnapshotid: test-page-001' \
+  -H 'pagesnapshotid: local-test-001' \
   --data @local-shot-body.json
+```
+
+`COS_SECRET_ID`、`COS_SECRET_KEY`、`COS_BUCKET` 和 `HOST` 不要写入仓库。
+部署脚本会读取当前 shell 环境变量并生成临时 yaml，部署结束后自动删除。

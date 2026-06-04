@@ -19,8 +19,7 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "@ld/ali-logger": "^1.0.11",
-    "@ld/micro-app": "^0.0.1",
+    "@ld/micro-app": "npm:@micro-zoe/micro-app@^1.0.0-rc.2",
     "axios": "^0.21.0",
     "events": "^3.3.0",
     "whatwg-fetch": "^3.6.20"

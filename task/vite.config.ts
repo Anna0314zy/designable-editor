@@ -22,12 +22,12 @@ export default defineConfig({
     port: 5176,
     proxy: {
       "/api": {
-        target: "http://localhost:5177",
+        target: "http://8.141.7.113:5177",
         changeOrigin: true,
         rewrite: (path) => path.replace(/^\/api/, ""),
       },
       "/test": {
-        target: "http://master-course-beta-inner.saasp.vdyoo.com",
+        target: "",
         changeOrigin: true,
         rewrite: (path) => path.replace(/^\/test/, ""),
       },

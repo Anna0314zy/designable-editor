@@ -14,8 +14,8 @@ async function promptForVersion(inquirer,currentVersion) {
 	return answers.version;
 }
 const updateVersionApi = async (newVersion) => {
-    let host = 'https://test-class-api-online.saasp.vdyoo.com'
-    //   if(env === 'prod') host = 'https://classroom-api-online.saasp.vdyoo.com'
+    let host = ''
+    //   if(env === 'prod') host = ''
       try{
         await axios.post(
             `${host}/classroom-slides/manage/system/version/save-or-update`,{

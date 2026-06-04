@@ -1,13 +1,13 @@
 {
     "test": {
         "prefix": "/packageResources/common/slidePreview",
-        "baseUrl": "https://test-class-api-online.saasp.vdyoo.com",
+        "baseUrl": "",
         "COS_CDN_HOST": "",
-        "COS_BUCKET": "class-slides-res-test-1313601664"
+        "COS_BUCKET": ""
     },
     "prod": {
         "prefix": "/packageResources/common/slidePreview",
-        "baseUrl": "https://classroom-api-online.saasp.vdyoo.com",
+        "baseUrl": "",
         "COS_CDN_HOST": "",
         "COS_BUCKET": "slides-resources-prod-1313601664"
     }

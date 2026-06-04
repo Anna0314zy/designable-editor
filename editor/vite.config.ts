@@ -16,6 +16,7 @@ export default defineConfig({
       // 当请求匹配这个路径前缀时，将请求转发到目标服务器
       '/api': {
         target: "http://localhost:5177",
+        // target: "http://8.141.7.113:5177",
         changeOrigin: true,
         rewrite: (path) => path.replace(/^\/api/, '')
       }

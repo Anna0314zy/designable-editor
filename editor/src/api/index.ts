@@ -37,7 +37,7 @@ const config: AxiosConfig = {
   },
 };
 // const hostMap = {
-//   test: 'https://test-class-api-online.saasp.vdyoo.com'
+//   test: ''
 // }
 
 const axios = Axios.create(config);
@@ -58,7 +58,10 @@ const redirectToHome = () => {
 const refreshAccessToken = async () => {
   if (!refreshPromise) {
     refreshPromise = axios
-      .post(`${apiBaseUrl}/classroom-slides/auth/refresh`, {}, { headers: { skipAuthRefresh: true } })
+      .post(`${apiBaseUrl}/classroom-slides/auth/refresh`, {}, {
+        headers: { skipAuthRefresh: true },
+        withCredentials: true,
+      })
       .then((session) => {
         const accessToken = (session as unknown as AuthSession)?.accessToken
         if (accessToken) setToken(accessToken)
@@ -134,7 +137,7 @@ axios.interceptors.response.use(
       }
       message.error("登录过期，请重新登录");
       redirectToHome()
-    } else if (err?.response?.status === 401) {
+    } else if (err?.response?.status === 401 && !skipAuthRefresh) {
       message.error("登录过期，请重新登录");
       redirectToHome()
     } else {

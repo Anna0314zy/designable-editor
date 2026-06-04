@@ -1,5 +1,5 @@
 import { getCosCredential, IUploadFile } from "../../api/upload";
-import FileUpload, { IAuthInfo, ICOSInfo, IUploadInput } from "../../../node_modules/@ld/file-upload/dist";
+import COS from "cos-js-sdk-v5";
 import { uploadpath,imageWH,uploadAccept } from "../../components/Img/type";
 import { md5Hash } from "../../utils/md5";
 import { TreeNode, Workspace } from "@editor/core/src/models";
@@ -10,6 +10,34 @@ interface IUploadOptions{
 	node:TreeNode,
 	currentWorkspace:Workspace
 	fileData:IUploadFile
+}
+interface ICOSInfo {
+	Bucket: string;
+	Region: string;
+	Folder: string;
+	Secure: boolean;
+	CdnHost: string;
+}
+interface IAuthInfo {
+	TmpSecretId: string;
+	TmpSecretKey: string;
+	SecurityToken: string;
+	StartTime: number;
+	ExpiredTime: number;
+}
+interface IUploadCallbackPayload<TFile, TOptions> {
+	file?: TFile;
+	err?: Error;
+	data?: unknown;
+	progress?: {
+		percent: number;
+	};
+	uploadOptions: TOptions;
+}
+interface IUploadInput<TFile, TOptions> {
+	onProgress?: (payload: IUploadCallbackPayload<TFile, TOptions>) => void;
+	onFinish?: (payload: IUploadCallbackPayload<TFile, TOptions>) => void;
+	onError?: (payload: IUploadCallbackPayload<TFile, TOptions>) => void;
 }
 export interface IUploadProps {
 	CdnHost: string;
@@ -44,7 +72,7 @@ export const uploadFn = async ({
 	options,
 }: IUploadProps) => {
 	try{
-		const credentialData = await getCosCredential();
+	const credentialData = await getCosCredential();
 	const bucket = credentialData?.bucket || Bucket;
 	const region = credentialData?.region || Region;
 	if (!bucket || !region) {
@@ -55,7 +83,7 @@ export const uploadFn = async ({
 		Bucket: bucket,
 		Region: region,
 		Folder: uploadpath(pathConfigList, type) || "",
-		Secure: true, // 开启https
+		Secure: true,
 		CdnHost,
 	};
 	const authInfo: IAuthInfo = {
@@ -65,29 +93,60 @@ export const uploadFn = async ({
 		StartTime: credentialData?.startTime || 0,
 		ExpiredTime: credentialData?.expiredTime || 0,
 	};
-	// 实例化cos
-	const cos = new FileUpload(authInfo, cosInfo);
+	const cos = new COS({
+		getAuthorization: (_options, callback) => {
+			callback({
+				TmpSecretId: authInfo.TmpSecretId,
+				TmpSecretKey: authInfo.TmpSecretKey,
+				SecurityToken: authInfo.SecurityToken,
+				StartTime: authInfo.StartTime,
+				ExpiredTime: authInfo.ExpiredTime,
+			});
+		},
+	});
 	const suffix = file.name.split(".").pop().toLocaleLowerCase()
 	const {md5:Md5,base64Hash} = await md5Hash(file);
-	//上传
 	const fileData = {
 		...options.fileData,
 		fileMd5: Md5,
 		fileName: file.name,
 		cosFullPath: cosInfo.Folder + "/" + Md5 + "." + suffix,
 	}
-	cos.upload<File,IUploadOptions>({
-		file: file,
-		onProgress,
-		onFinish,
-		onError,
-		Md5:Md5,
-		base64Hash,
-		cosFullPath:fileData.cosFullPath,
-		uploadOptions:{
-			...options,
-			fileData
+	const uploadOptions = {
+		...options,
+		fileData
+	};
+	cos.uploadFile({
+		Bucket: cosInfo.Bucket,
+		Region: cosInfo.Region,
+		Key: fileData.cosFullPath,
+		Body: file,
+		Headers: {
+			"Content-MD5": base64Hash,
+		},
+		onProgress: (progress) => {
+			onProgress?.({
+				file,
+				progress: {
+					percent: progress.percent || 0,
+				},
+				uploadOptions,
+			});
+		},
+	}, (err, data) => {
+		if (err) {
+			onError?.({
+				file,
+				err: new Error(err.message || "上传失败"),
+				uploadOptions,
+			});
+			return;
 		}
+		onFinish?.({
+			file,
+			data,
+			uploadOptions,
+		});
 	});
 	}catch(e){
 		return Promise.reject(e)

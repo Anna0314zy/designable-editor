@@ -9,7 +9,7 @@ const pomelo = new Pomelo();
 const role = getUrlParams(location.href, 'role')
 const env = getUrlParams(location.href, 'env')
 console.log(env, ' env')
-const host = env === 'prod' ? 'https://classroom-api-online.saasp.vdyoo.com/classroom-slides' : 'https://test-class-api-online.saasp.vdyoo.com/classroom-slides'
+const host = env === 'prod' ? '' : ''
 const cdnHost = env === 'prod' ? '' : ''
 let slideConfig = `${host}/dev/slides/aa1516c49b724ff38efd76d3b28e8b52/last-success-publish-record`
 let catalogueList = [] as unknown

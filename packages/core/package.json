@@ -12,9 +12,9 @@
   "dependencies": {
     "@editor/shared": "workspace:^1.0.0",
     "@juggle/resize-observer": "^3.4.0",
-    "@slides/json-schema": "^1.0.0",
-    "@slides/path": "^1.0.0",
-    "@slides/reactive": "^1.0.0",
+    "@slides/json-schema": "npm:@formily/json-schema@^2.3.4",
+    "@slides/path": "npm:@formily/path@^2.3.4",
+    "@slides/reactive": "npm:@formily/reactive@^2.3.4",
     "@slides/animate": "workspace:^1.0.0"
   },
   "devDependencies": {

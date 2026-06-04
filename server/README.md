@@ -15,7 +15,8 @@ Production-oriented NestJS service for the classroom slides editor.
 
 ```bash
 cp .env.example .env
-docker compose up -d postgres
+# 启用本地服务器
+docker compose up -d postgres 
 npm install
 npm run prisma:generate
 npm run prisma:migrate
@@ -66,3 +67,10 @@ For automated checks, add Jest/Supertest specs under `src/**/*.spec.ts` and run:
 npm run test
 ```
 npx prisma studio
+
+
+cd /opt/slides-engine/server
+
+git pull
+
+docker compose up -d --build
