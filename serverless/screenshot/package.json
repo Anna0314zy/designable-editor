@@ -6,12 +6,16 @@
     "dev": "s local start --server-port 8000",
     "local": "node ./code/local-server.js",
     "deploy-fz": "s deploy -t ./s.fz.yaml",
-    "deploy-prod": "s deploy -t ./s.prod.yaml "
+    "deploy-prod": "s deploy -t ./s.prod.yaml ",
+    "deploy-tencent-layer": "cd tencent-layer && scf deploy",
+    "deploy-tencent-code": "cd tencent-code && scf deploy",
+    "deploy-tencent": "bash ./scripts/deploy-tencent-code.sh"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "lodash.random": "^3.2.0"
+    "lodash.random": "^3.2.0",
+    "serverless-cloud-framework": "^1.3.2"
   }
 }

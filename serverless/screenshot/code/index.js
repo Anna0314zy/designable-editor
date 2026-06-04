@@ -1,5 +1,18 @@
+const Module = require("module");
 const fs = require("fs");
 const path = require("path");
+
+// Tencent SCF disallows configuring NODE_PATH as a function environment
+// variable, so add layer module paths before requiring external packages.
+process.env.NODE_PATH = [
+  "/opt/node_modules",
+  "/opt/nodejs/node_modules",
+  process.env.NODE_PATH,
+]
+  .filter(Boolean)
+  .join(path.delimiter);
+Module._initPaths();
+
 const COS = require("cos-nodejs-sdk-v5");
 const { v4: uuidV4 } = require("uuid");
 const axios = require("axios");
@@ -139,24 +152,6 @@ function parseTencentEventBody(event = {}) {
   return typeof rawBody === "string" ? JSON.parse(rawBody) : rawBody;
 }
 
-function parsePositiveNumber(value) {
-  if (value === undefined || value === null || value === "") return undefined;
-  const parsed = Number(value);
-  return Number.isFinite(parsed) && parsed > 0 ? parsed : undefined;
-}
-
-function getScreenshotTimeoutMs(body = {}) {
-  const defaultTimeoutMs = Number(process.env.SCREENSHOT_RENDER_TIMEOUT_MS || 55_000);
-  const minTimeoutMs = Number(process.env.SCREENSHOT_MIN_RENDER_TIMEOUT_MS || 5_000);
-  const maxTimeoutMs = Number(process.env.SCREENSHOT_MAX_RENDER_TIMEOUT_MS || 55_000);
-  const requestedTimeoutMs = parsePositiveNumber(
-    body.screenshotTimeoutMs ?? body.renderTimeoutMs ?? body.timeoutMs
-  );
-  const timeoutMs = requestedTimeoutMs || defaultTimeoutMs;
-
-  return Math.min(Math.max(timeoutMs, minTimeoutMs), maxTimeoutMs);
-}
-
 function createTencentResponse() {
   let done;
   const headers = {};
@@ -191,36 +186,17 @@ function createTencentResponse() {
 async function screenshot(response, body, pageSnapshotId) {
   let page;
   let completed = false;
-  let timeoutTimer;
 
-  // 所有成功、失败、超时都从这里返回，completed 防止超时和截图回调重复响应。
+  // 所有成功、失败都从这里返回，completed 防止截图回调重复响应。
   const sendJson = (statusCode, payload) => {
     if (completed) return;
     completed = true;
-    if (timeoutTimer) clearTimeout(timeoutTimer);
     response.setStatusCode(statusCode);
     response.setHeader("content-type", "application/json");
     response.send(JSON.stringify(payload));
   };
 
   try {
-    const renderTimeoutMs = getScreenshotTimeoutMs(body);
-    // 截图页必须主动调用 generateScreenShot；如果资源加载或渲染卡住，就用总超时兜底。
-    timeoutTimer = setTimeout(async () => {
-      console.log("截图超时，页面没有按时触发 generateScreenShot", {
-        pageSnapshotId,
-        renderTimeoutMs,
-        requestedTimeoutMs: body.screenshotTimeoutMs ?? body.renderTimeoutMs ?? body.timeoutMs,
-        shotUrl: process.env.SHOT_URL,
-      });
-      if (page) await page.close().catch(() => {});
-      sendJson(504, {
-        success: false,
-        pageSnapshotId,
-        message: `截图超时：${renderTimeoutMs}ms 内未完成渲染`,
-      });
-    }, renderTimeoutMs);
-
     body.mainContentStructure =
       typeof body.mainContentStructure === "string"
         ? JSON.parse(body.mainContentStructure)

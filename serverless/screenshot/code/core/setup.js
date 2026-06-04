@@ -1,18 +1,59 @@
 const config = require("./config");
 const puppeteer = require("puppeteer");
+const fs = require("fs");
 
 // 热实例内复用同一个 browser；冷启动或平台扩容时，每个实例会各自维护一份。
 let browser;
 let browserPromise;
 
-exports.getBrowser = async (
-  options = {
+function getLayerExecutablePath() {
+  const candidates = [
+    process.env.PUPPETEER_EXECUTABLE_PATH,
+    "/opt/bin/chromium",
+    "/opt/bin/chromium-browser",
+    "/opt/chromium/chrome",
+    "/opt/headless-chromium",
+  ].filter(Boolean);
+
+  return candidates.find((candidate) => fs.existsSync(candidate));
+}
+
+async function createLaunchOptions(options) {
+  if (options) return options;
+
+  const layerExecutablePath = getLayerExecutablePath();
+  if (layerExecutablePath) {
+    return {
+      headless: true,
+      executablePath: layerExecutablePath,
+      args: config.launchOptionForFC,
+      dumpio: !!exports.DEBUG,
+    };
+  }
+
+  try {
+    const chromium = require("@sparticuz/chromium");
+    return {
+      headless: chromium.headless,
+      executablePath: await chromium.executablePath(),
+      args: [...chromium.args, ...config.launchOptionForFC],
+      dumpio: !!exports.DEBUG,
+    };
+  } catch (error) {
+    console.log("未找到可用 Chromium Layer 或 @sparticuz/chromium", error.message);
+  }
+
+  return {
     headless: true,
-    executablePath: process.env.PUPPETEER_EXECUTABLE_PATH || undefined,
+    executablePath: process.env.PUPPETEER_EXECUTABLE_PATH,
     args: config.launchOptionForFC,
     dumpio: !!exports.DEBUG,
-  }
-) => {
+  };
+}
+
+exports.getBrowser = async (options) => {
+  const launchOptions = await createLaunchOptions(options);
+
   // 如果已经有请求在启动浏览器，直接等待同一个启动任务。
   if (browserPromise) {
     console.log("本地浏览器正在启动中,等待同一个启动任务");
@@ -44,7 +85,7 @@ exports.getBrowser = async (
   // 后续请求 await 同一个 Promise，避免启动多个浏览器实例抢内存。
   console.log("本地浏览器未启动或已断开,开始启动本地浏览器");
   browserPromise = Promise.resolve()
-    .then(() => puppeteer.launch(options))
+    .then(() => puppeteer.launch(launchOptions))
     .then(async (newBrowser) => {
       browser = newBrowser;
       console.log(`launch done: ${await browser.version()}`);
