@@ -12,7 +12,8 @@
     "preview": "vite preview",
     "hotUpdate:test": "node ./scripts/release/release.cjs --mode test",
     "release:test": "pnpm install && node ./scripts/release/setVersion.cjs && npm run build && npm run hotUpdate:test",
-    "update": "node ./scripts/release/setVersion.cjs --mode test"
+    "update": "node ./scripts/release/setVersion.cjs --mode test",
+    "deploy":"docker compose up --build -d"
   },
   "dependencies": {
     "@editor/core": "workspace:^1.0.0",
