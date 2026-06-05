@@ -6,6 +6,8 @@ import packageJson from './package.json';
 import { resolve } from 'path';
 // import basicSsl from '@vitejs/plugin-basic-ssl'
 
+const apiProxyTarget = process.env.VITE_API_PROXY_TARGET || 'http://localhost:5177';
+
 // https://vitejs.dev/config/
 export default defineConfig({
   base: './',
@@ -15,7 +17,7 @@ export default defineConfig({
     proxy: {
       // 当请求匹配这个路径前缀时，将请求转发到目标服务器
       '/api': {
-        target: "http://localhost:5177",
+        target: apiProxyTarget,
         // target: "http://8.141.7.113:5177",
         changeOrigin: true,
         rewrite: (path) => path.replace(/^\/api/, '')
