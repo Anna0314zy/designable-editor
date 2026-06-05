@@ -1,7 +1,4 @@
-ARG NODE_IMAGE=docker.m.daocloud.io/library/node:20-bookworm-slim
-ARG NGINX_IMAGE=docker.m.daocloud.io/library/nginx:stable
-
-FROM ${NODE_IMAGE} AS build
+FROM docker.m.daocloud.io/library/node:20-bookworm-slim AS build
 
 WORKDIR /app
 
@@ -13,10 +10,10 @@ COPY packages ./packages
 COPY editor ./editor
 
 RUN pnpm install --frozen-lockfile
-RUN pnpm --dir editor copyFontToPublic && pnpm --dir editor exec vite build --mode prod
+RUN cd editor && pnpm copyFontToPublic && pnpm exec vite build --mode prod
 RUN cp -R editor/dist/$(node -p "require('./editor/package.json').version") /tmp/editor-dist
 
-FROM ${NGINX_IMAGE}
+FROM docker.m.daocloud.io/library/nginx:stable
 
 ENV API_UPSTREAM=http://8.141.7.113:5177
 
