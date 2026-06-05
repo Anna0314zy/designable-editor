@@ -1,11 +1,11 @@
-ARG NODE_IMAGE=node:20-alpine
-ARG NGINX_IMAGE=nginx:1.27-alpine
+ARG NODE_IMAGE=docker.m.daocloud.io/library/node:20-bookworm-slim
+ARG NGINX_IMAGE=docker.m.daocloud.io/library/nginx:stable
 
 FROM ${NODE_IMAGE} AS build
 
 WORKDIR /app
 
-RUN corepack enable
+RUN corepack enable && corepack prepare pnpm@10.17.1 --activate
 
 COPY package.json pnpm-lock.yaml pnpm-workspace.yaml ./
 COPY common ./common
