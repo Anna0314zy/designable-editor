@@ -1,4 +1,7 @@
-FROM node:20-alpine AS build
+ARG NODE_IMAGE=node:20-alpine
+ARG NGINX_IMAGE=nginx:1.27-alpine
+
+FROM ${NODE_IMAGE} AS build
 
 WORKDIR /app
 
@@ -13,7 +16,7 @@ RUN pnpm install --frozen-lockfile
 RUN pnpm --dir editor copyFontToPublic && pnpm --dir editor exec vite build --mode prod
 RUN cp -R editor/dist/$(node -p "require('./editor/package.json').version") /tmp/editor-dist
 
-FROM nginx:1.27-alpine
+FROM ${NGINX_IMAGE}
 
 ENV API_UPSTREAM=http://8.141.7.113:5177
 
