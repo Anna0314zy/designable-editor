@@ -1,0 +1,146 @@
+.page {
+  min-height: 100vh;
+  background: #f5f7fb;
+  color: #1f2937;
+}
+
+.toolbar {
+  height: 88px;
+  padding: 16px 24px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  background: #ffffff;
+  border-bottom: 1px solid #dde3ee;
+
+  h3 {
+    margin: 0 0 4px;
+  }
+}
+
+.catalog {
+  min-height: 64px;
+  padding: 12px 24px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  background: #fbfcfe;
+  border-bottom: 1px solid #dde3ee;
+}
+
+.catalogTitle {
+  min-width: 260px;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.workspace {
+  height: calc(100vh - 152px);
+  display: grid;
+  grid-template-columns: minmax(260px, 320px) minmax(480px, 1fr) minmax(320px, 420px);
+  gap: 1px;
+  background: #dde3ee;
+  overflow: hidden;
+}
+
+.schemaPanel,
+.formPanel,
+.payloadPanel {
+  min-width: 0;
+  background: #ffffff;
+  overflow: auto;
+}
+
+.schemaPanel,
+.payloadPanel {
+  padding: 18px;
+
+  h5 {
+    margin: 0 0 12px;
+  }
+
+  pre {
+    margin: 0;
+    padding: 14px;
+    min-height: 240px;
+    border: 1px solid #d9e0ea;
+    border-radius: 6px;
+    background: #101828;
+    color: #d1e7ff;
+    font-size: 12px;
+    line-height: 1.55;
+    white-space: pre-wrap;
+    word-break: break-word;
+  }
+}
+
+.formPanel {
+  padding: 18px 20px 32px;
+}
+
+.taskList {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.taskBlock {
+  border: 1px solid #d9e0ea;
+  border-radius: 6px;
+  background: #fbfcfe;
+}
+
+.taskHeader {
+  min-height: 44px;
+  padding: 10px 14px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  border-bottom: 1px solid #e4e9f1;
+}
+
+.fieldGrid {
+  padding: 14px;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(220px, 1fr));
+  gap: 6px 16px;
+}
+
+@media (max-width: 1180px) {
+  .workspace {
+    grid-template-columns: 1fr;
+    height: auto;
+    overflow: visible;
+  }
+
+  .schemaPanel,
+  .formPanel,
+  .payloadPanel {
+    overflow: visible;
+  }
+}
+
+@media (max-width: 720px) {
+  .toolbar {
+    height: auto;
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .catalog {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .workspace {
+    height: auto;
+  }
+
+  .fieldGrid {
+    grid-template-columns: 1fr;
+  }
+}
