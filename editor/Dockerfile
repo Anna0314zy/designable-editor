@@ -10,7 +10,7 @@ COPY packages ./packages
 COPY editor ./editor
 
 RUN pnpm install --frozen-lockfile
-RUN cd editor && pnpm copyFontToPublic && pnpm exec vite build --mode prod
+RUN pnpm --dir editor run build:prod
 RUN cp -R editor/dist/$(node -p "require('./editor/package.json').version") /tmp/editor-dist
 
 FROM docker.m.daocloud.io/library/nginx:stable

@@ -1,0 +1,23 @@
+{
+  "name": "teacher-websocket-production-demo",
+  "private": true,
+  "version": "1.0.0",
+  "type": "module",
+  "scripts": {
+    "build": "vite build",
+    "typecheck": "vue-tsc --noEmit",
+    "start": "node server/index.js",
+    "demo": "pnpm run build && pnpm run start"
+  },
+  "dependencies": {
+    "vue": "^3.3.8",
+    "ws": "^8.18.0",
+    "zod": "^4.4.3"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-vue": "^4.2.3",
+    "typescript": "5.0.2",
+    "vite": "^4.4.5",
+    "vue-tsc": "1.8.5"
+  }
+}
