@@ -1,5 +1,39 @@
 # React + TypeScript + Vite
 
+## Docker Deploy
+
+服务器内存较小时不要在服务器上执行 Docker 构建。先在本地或 CI 构建并推送镜像，服务器只拉取镜像运行。
+
+本地或 CI：
+
+```bash
+cd editor
+export EDITOR_IMAGE=registry.example.com/slides-engine/editor:latest
+export EDITOR_IMAGE=crpi-ioetel8j9mmp1wu4.cn-beijing.personal.cr.aliyuncs.com/zy5149/slides-engine-editor:latest
+
+docker login --username=爱吃巧克力的小鱼儿zy crpi-ioetel8j9mmp1wu4.cn-beijing.personal.cr.aliyuncs.com
+pnpm run docker:build
+pnpm run docker:push
+```
+
+服务器：
+
+```bash
+cd editor
+export EDITOR_IMAGE=crpi-ioetel8j9mmp1wu4.cn-beijing.personal.cr.aliyuncs.com/zy5149/slides-engine-editor:latest
+docker login --username=爱吃巧克力的小鱼儿zy crpi-ioetel8j9mmp1wu4.cn-beijing.personal.cr.aliyuncs.com
+pnpm run deploy
+```
+
+如果服务器没有 pnpm，也可以直接运行：
+
+```bash
+cd editor
+export EDITOR_IMAGE=registry.example.com/slides-engine/editor:latest
+docker compose pull
+docker compose up -d
+```
+
 This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
 
 Currently, two official plugins are available:
@@ -25,5 +59,3 @@ If you are developing a production application, we recommend updating the config
 - Replace `plugin:@typescript-eslint/recommended` to `plugin:@typescript-eslint/recommended-type-checked` or `plugin:@typescript-eslint/strict-type-checked`
 - Optionally add `plugin:@typescript-eslint/stylistic-type-checked`
 - Install [eslint-plugin-react](https://github.com/jsx-eslint/eslint-plugin-react) and add `plugin:react/recommended` & `plugin:react/jsx-runtime` to the `extends` list
-
-

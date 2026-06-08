@@ -13,7 +13,9 @@
     "hotUpdate:test": "node ./scripts/release/release.cjs --mode test",
     "release:test": "pnpm install --frozen-lockfile && node ./scripts/release/setVersion.cjs && pnpm run build && pnpm run hotUpdate:test",
     "update": "node ./scripts/release/setVersion.cjs --mode test",
-    "deploy":"docker compose up --build -d"
+    "docker:build": "docker build -f Dockerfile -t ${EDITOR_IMAGE:-slides-engine-editor:latest} ..",
+    "docker:push": "docker push ${EDITOR_IMAGE:-slides-engine-editor:latest}",
+    "deploy": "docker compose pull && docker compose up -d"
   },
   "dependencies": {
     "@editor/core": "workspace:^1.0.0",
