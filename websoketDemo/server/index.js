@@ -11,6 +11,7 @@ const HOST = '127.0.0.1'
 const LIVE_ID = 'demo-live-001'
 const DIST_DIR = resolve(new URL('../dist', import.meta.url).pathname)
 const DEMO_TOKEN = 'teacher-demo-token'
+const MAIN_CHANNEL = 'main'
 const broker = new ReliableBroker()
 const classroom = new ClassroomAggregate(LIVE_ID)
 const processedCommands = new Map()
@@ -73,6 +74,7 @@ wss.on('connection', ws => {
   const session = {
     clientId: randomUUID(),
     liveId: '',
+    channel: MAIN_CHANNEL,
     alive: true
   }
   broker.register(ws, session)
@@ -110,13 +112,26 @@ function handleMessage(ws, session, message) {
       send(ws, {kind: 'error', code: 'LIVE_NOT_FOUND', message: '课堂不存在'})
       return
     }
-    broker.join(session.clientId, message.liveId)
+    broker.subscribe(session.clientId, {
+      liveId: message.liveId,
+      channel: message.channel || MAIN_CHANNEL,
+      topics: message.topics
+    })
     const recovered = broker.recover(
       session.clientId,
       message.liveId,
       Number(message.lastSeq || 0)
     )
     sendSnapshot(ws, recovered.length ? 'after-recovery' : 'initial-subscribe')
+    return
+  }
+
+  if (message.kind === 'unsubscribe') {
+    broker.unsubscribe(session.clientId, {
+      liveId: message.liveId || session.liveId,
+      channel: message.channel || session.channel || MAIN_CHANNEL,
+      topics: message.topics
+    })
     return
   }
 
@@ -132,7 +147,11 @@ function handleMessage(ws, session, message) {
 
   if (message.kind !== 'command') return
 
-  if (message.liveId !== session.liveId) {
+  if (!broker.hasSubscription(session.clientId, {
+    liveId: message.liveId,
+    channel: message.channel || MAIN_CHANNEL,
+    topics: [message.type]
+  })) {
     sendCommandAck(ws, message, false, 'LIVE_ID_MISMATCH')
     return
   }

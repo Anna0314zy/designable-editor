@@ -40,5 +40,6 @@ export interface WebSocketManagerOptions {
   heartbeatTimeout?: number
   outboxLimit?: number
   processedMessageTtl?: number
+  subscriptionTopics?: string[]
   createSocket?: (url: string) => WebSocket
 }

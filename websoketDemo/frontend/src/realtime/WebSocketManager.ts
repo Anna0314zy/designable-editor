@@ -62,6 +62,7 @@ export class WebSocketManager<TSnapshot = unknown> extends TypedEventBus<Manager
       heartbeatTimeout: 10_000,
       outboxLimit: 100,
       processedMessageTtl: 5 * 60_000,
+      subscriptionTopics: ['*'],
       ...options
     }
     this.transport = new WebSocketTransport(this.options.createSocket)
@@ -293,6 +294,7 @@ export class WebSocketManager<TSnapshot = unknown> extends TypedEventBus<Manager
       kind: 'subscribe',
       channel: this.options.channel,
       liveId: this.options.liveId,
+      topics: this.options.subscriptionTopics,
       lastSeq: this.recovery.lastSeq
     })
   }

@@ -1,5 +1,6 @@
 import {randomUUID} from 'node:crypto'
 import {WebSocket} from 'ws'
+import {SubscriptionManager} from './subscriptionManager.js'
 
 const ACK_TIMEOUT_MS = 1500
 const MAX_DELIVERY_ATTEMPTS = 3
@@ -10,6 +11,7 @@ export class ReliableBroker {
     this.clients = new Map()
     this.history = new Map()
     this.roomSeq = new Map()
+    this.subscriptions = new SubscriptionManager()
   }
 
   register(ws, session) {
@@ -27,18 +29,32 @@ export class ReliableBroker {
     for (const pending of client.pendingAcks.values()) {
       clearTimeout(pending.timer)
     }
+    this.subscriptions.removeClient(clientId)
     this.clients.delete(clientId)
   }
 
-  join(clientId, liveId) {
+  subscribe(clientId, subscription) {
     const client = this.clients.get(clientId)
-    if (client) client.session.liveId = liveId
+    if (!client) return null
+    const normalized = this.subscriptions.subscribe(clientId, subscription)
+    client.session.liveId = normalized.liveId
+    client.session.channel = normalized.channel
+    return normalized
+  }
+
+  unsubscribe(clientId, subscription) {
+    return this.subscriptions.unsubscribe(clientId, subscription)
+  }
+
+  hasSubscription(clientId, subscription) {
+    return this.subscriptions.hasSubscription(clientId, subscription)
   }
 
   publish(liveId, event, options = {}) {
+    const channel = options.channel || 'main'
     const envelope = {
       kind: 'event',
-      channel: 'main',
+      channel,
       liveId,
       seq: this.nextSeq(liveId),
       msgId: randomUUID(),
@@ -53,11 +69,16 @@ export class ReliableBroker {
     if (history.length > MAX_HISTORY) history.shift()
     this.history.set(liveId, history)
 
-    const matchingClients = [...this.clients.values()]
-      .filter(client => client.session.liveId === liveId)
+    const subscriberIds = this.subscriptions.getSubscribers({
+      liveId,
+      channel,
+      topic: event.type
+    })
 
-    for (const client of matchingClients) {
-      if (options.excludeClientId === client.session.clientId) continue
+    for (const clientId of subscriberIds) {
+      if (options.excludeClientId === clientId) continue
+      const client = this.clients.get(clientId)
+      if (!client) continue
       this.deliver(client, envelope)
     }
 
@@ -67,7 +88,14 @@ export class ReliableBroker {
   recover(clientId, liveId, lastSeq) {
     const client = this.clients.get(clientId)
     if (!client) return []
-    const missed = (this.history.get(liveId) || []).filter(message => message.seq > lastSeq)
+    const missed = (this.history.get(liveId) || []).filter(message => {
+      if (message.seq <= lastSeq) return false
+      return this.subscriptions.hasSubscription(clientId, {
+        liveId,
+        channel: message.channel || client.session.channel || 'main',
+        topics: [message.type]
+      })
+    })
     for (const message of missed) {
       this.deliver(client, {...message, recovered: true})
     }

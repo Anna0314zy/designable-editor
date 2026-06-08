@@ -31,6 +31,7 @@ websoketDemo/
 └── server/
     ├── index.js
     ├── classroom.js
+    ├── subscriptionManager.js
     └── reliableBroker.js
 ```
 
@@ -72,6 +73,7 @@ pnpm run start
 ## 可演练能力
 
 - Token 握手鉴权和课堂订阅。
+- 服务端生产级订阅管理：订阅索引、取消订阅、按频道和事件类型分发、断开清理。
 - 应用层 ping/pong 延迟检测。
 - 服务端 WebSocket ping/pong 死连接检测。
 - 指数退避加随机抖动重连。
@@ -100,6 +102,7 @@ const realtime = new WebSocketManager<ClassroomSnapshot>({
   url: 'wss://realtime.example.com/ws',
   liveId,
   tokenProvider: async () => authStore.getValidAccessToken(),
+  subscriptionTopics: ['*'],
   maxReconnectAttempts: 10
 })
 
@@ -132,6 +135,69 @@ realtime.destroy()
 ```
 
 业务组件不直接操作原生 WebSocket，也不直接调用 `sendRaw`。
+
+## 为什么要做订阅管理
+
+早期 demo 只在连接 session 上保存一个 `liveId`，发布消息时遍历所有连接并过滤。这能演示单课堂实时通信，但不适合生产环境。
+
+生产环境需要独立的订阅管理模块，原因有三类：
+
+1. **连接和业务关注点不同**：WebSocket 连接只代表“用户在线”，订阅代表“这个连接当前关心哪些课堂、频道和事件”。用户切课、打开旁路面板、只看互动答题时，连接不一定要断开，但订阅要变化。
+2. **分发成本需要可控**：如果每条消息都遍历全部连接，在线人数上来后会浪费 CPU。订阅索引可以直接找到 `liveId/channel/topic` 下的目标连接。
+3. **生命周期必须可清理**：断线、退课、切换身份后，如果没有反向索引清理订阅，服务端会继续向无关连接投递，造成脏消息、内存泄漏和权限风险。
+
+本 demo 的 `SubscriptionManager` 维护两类索引：
+
+```txt
+topicSubscribers:
+  liveId:channel:topic -> clientIds
+
+clientSubscriptions:
+  clientId -> subscriptions
+```
+
+发布事件时，`ReliableBroker` 根据 `liveId + channel + event.type` 找订阅者，同时兼容 `*` 通配 topic。连接关闭时，通过 `clientSubscriptions` 反向清理所有订阅。
+
+### 实际使用场景
+
+**场景一：大班课只订阅当前课堂主频道**
+
+老师端进入 `live-001` 后订阅：
+
+```json
+{
+  "kind": "subscribe",
+  "liveId": "live-001",
+  "channel": "main",
+  "topics": ["*"],
+  "lastSeq": 120
+}
+```
+
+服务端只把 `live-001/main` 的事件推给这个连接。老师切到另一个课堂时，先 `unsubscribe` 旧课堂，再订阅新课堂，避免旧课堂消息污染当前页面。
+
+**场景二：不同页面只关心不同事件**
+
+授课主页面需要全部事件，但“互动答题监控”浮窗可能只需要：
+
+```json
+{
+  "kind": "subscribe",
+  "liveId": "live-001",
+  "channel": "main",
+  "topics": ["INTERACTION_ANSWERED"]
+}
+```
+
+这样学生举手、课件翻页不会推给该浮窗连接，减少前端无效处理和服务端投递压力。
+
+**场景三：同一用户多个终端**
+
+老师可能同时打开 PC 授课端、移动端监看页和后台控制台。它们共享账号，但订阅不同 topic。订阅管理让每个连接拥有自己的订阅集合，而不是用用户维度粗暴广播。
+
+**场景四：权限和审计**
+
+真实后端会在 `subscribe` 时校验用户是否有权限进入该课堂。后续命令也应检查连接是否已订阅对应课堂/频道。当前 demo 已把命令校验从 `message.liveId === session.liveId` 升级为 `broker.hasSubscription(...)`，为后续接入 JWT 权限打基础。
 
 ## Outbox 是什么
 
@@ -302,4 +368,3 @@ flowchart LR
 - WSS、网关限流、消息大小限制和审计。
 - 指标监控、链路追踪、告警和日志脱敏。
 - 更严格的 schema 校验以及端到端测试。
-
