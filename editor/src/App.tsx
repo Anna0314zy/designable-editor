@@ -1,4 +1,4 @@
-import React, { useState, useRef, useCallback } from 'react'
+import React, { useState, useRef, useCallback, useEffect } from 'react'
 import {
   Designer,
   IconWidget,
@@ -30,6 +30,7 @@ import { ContextMenu } from './components/ContextMenu'
 import { GenMenuList } from './ToolbarData'
 import { PageType } from '@editor/react/src/widgets/AddPageWidget'
 import { deletePage as deletePageApi } from './api/page'
+import { createSlidesId } from './api/slides'
 import { getUrlParameter, changeMenu, clearToken } from './utils/common'
 import { logout as logoutApi } from './api/auth'
 import { Moveable as MoveableContainer } from './components/Moveable'
@@ -59,7 +60,7 @@ const engine = createDesigner()
 * @return {JSX.Element} 渲染后的组件。
 */
 const App: React.FC<Iprops> = ({ setLoading, setNoPermission }) => {
-  const slideId = getUrlParameter('id') || "06564451-2fb7-4e3d-80f5-3292825ff038"
+  const [slideId, setSlideId] = useState(() => getUrlParameter('id') || '')
   const slideTitle = getUrlParameter('title') || '课件标题'
   const productId = getUrlParameter('productId')
   const [workspaceList, setWorkspaceList] = useState([])
@@ -81,6 +82,25 @@ const App: React.FC<Iprops> = ({ setLoading, setNoPermission }) => {
   const previewRef = useRef(null)
   const gameModalRef = useRef(null)
   const resourceHost = globalData.cdnPathList?.[0] || globalData.cdnPath || ''
+  useEffect(() => {
+    if (slideId) return
+
+    const createInitialSlide = async () => {
+      try {
+        const res = await createSlidesId()
+        const nextSlideId = res.slideId
+        const url = new URL(window.location.href)
+        url.searchParams.set('id', nextSlideId)
+        window.history.replaceState(null, '', `${url.pathname}${url.search}${url.hash}`)
+        setSlideId(nextSlideId)
+      } catch {
+        setLoading(false)
+        message.error('创建课件失败，请稍后重试')
+      }
+    }
+
+    createInitialSlide()
+  }, [slideId, setLoading])
   const redirectToLogin = useCallback(() => {
     const regex = /(\d+\.\d+\.\d+)/
     const taskVersion = localStorage.getItem('TaskVersion')

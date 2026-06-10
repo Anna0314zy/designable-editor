@@ -7,12 +7,11 @@
 import React, {useEffect, useState} from 'react'
 import ReactDOM from 'react-dom/client'
 import App from './App'
-import { withProvider} from '@play/render'
+import { HoxRoot, withProvider} from '@play/render'
 // import * as Sentry from "@sentry/react";
 import { Spin, ConfigProvider } from 'antd';
 import NoPermission from './components/403';
 import EditorAuth from './components/EditorAuth';
-import { HoxRoot } from "hox";
 import { getToken, setToken } from './utils/common'
 import { AuthSession, refreshToken } from './api/auth'
 import "antd/dist/reset.css";

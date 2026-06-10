@@ -46,13 +46,13 @@ let refreshPromise: Promise<string | null> | null = null
 
 const redirectToHome = () => {
   clearToken()
-  const regex = /(\d+\.\d+\.\d+)/;
-  const TaskVersion = localStorage.getItem("TaskVersion");
-  const HomeUrl = import.meta.env.VITE_HOME_SERVER.replace(
-    regex,
-    TaskVersion || "1.0.0"
-  );
-  location.replace(`${HomeUrl}#/login?redirect=${encodeURIComponent(window.location.href)}`)
+  // const regex = /(\d+\.\d+\.\d+)/;
+  // const TaskVersion = localStorage.getItem("TaskVersion");
+  // const HomeUrl = import.meta.env.VITE_HOME_SERVER.replace(
+  //   regex,
+  //   TaskVersion || "1.0.0"
+  // );
+  location.replace(`${window.location.origin}#/login?redirect=${encodeURIComponent(window.location.href)}`)
 }
 
 const refreshAccessToken = async () => {
@@ -128,16 +128,20 @@ axios.interceptors.response.use(
     message.destroy();
     const originalConfig = err?.config as AuthRequestConfig | undefined
     const skipAuthRefresh = Boolean(originalConfig?.skipAuthRefresh || originalConfig?.headers?.skipAuthRefresh)
-    if (err?.response?.status === 401 && originalConfig && !originalConfig._retry && !skipAuthRefresh) {
+
+    if (err?.response?.status === 401 && skipAuthRefresh) {
+      return Promise.reject(err) as never;
+    }
+    if (err?.response?.status === 401 && originalConfig && !originalConfig._retry) {
       originalConfig._retry = true
       const nextToken = await refreshAccessToken()
-      if (nextToken) {
+      if (nextToken && originalConfig && originalConfig.headers) {
         originalConfig.headers.Authorization = `Bearer ${nextToken}`
         return axios(originalConfig) as never
       }
       message.error("登录过期，请重新登录");
       redirectToHome()
-    } else if (err?.response?.status === 401 && !skipAuthRefresh) {
+    } else if (err?.response?.status === 401) {
       message.error("登录过期，请重新登录");
       redirectToHome()
     } else {

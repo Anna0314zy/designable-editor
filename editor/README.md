@@ -23,15 +23,27 @@ cd editor
 export EDITOR_IMAGE=crpi-ioetel8j9mmp1wu4.cn-beijing.personal.cr.aliyuncs.com/zy5149/slides-engine-editor:latest
 docker login --username=爱吃巧克力的小鱼儿zy crpi-ioetel8j9mmp1wu4.cn-beijing.personal.cr.aliyuncs.com
 pnpm run deploy
+
 ```
 
 如果服务器没有 pnpm，也可以直接运行：
 
 ```bash
 cd editor
-export EDITOR_IMAGE=registry.example.com/slides-engine/editor:latest
-docker compose pull
-docker compose up -d
+export EDITOR_IMAGE=crpi-ioetel8j9mmp1wu4.cn-beijing.personal.cr.aliyuncs.com/zy5149/slides-engine-editor:latest
+
+docker login crpi-ioetel8j9mmp1wu4.cn-beijing.personal.cr.aliyuncs.com
+docker pull $EDITOR_IMAGE
+
+docker stop slides-engine-editor 2>/dev/null || true
+docker rm slides-engine-editor 2>/dev/null || true
+
+docker run -d \
+  --name slides-engine-editor \
+  -p 8080:80 \
+  -e API_UPSTREAM=http://8.141.7.113:5177 \
+  --restart unless-stopped \
+  $EDITOR_IMAGE
 ```
 
 This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
