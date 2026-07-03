@@ -71,11 +71,55 @@ function buildPrompt(diff) {
 - Prefer one of: feat, fix, refactor, perf, test, docs, build, chore.
 - Summary must be in English, imperative mood, <= 72 chars.
 - Add a blank line and 2-5 concise bullet points only when useful.
+- Body lines, including bullet lines, must be <= 100 characters.
+- Keep each bullet short; wrap long details onto a continuation line.
 - Mention user-facing behavior, data/schema changes, tests, or migrations when present.
 - Do not invent changes that are not shown in the diff.
 
 Diff:
 ${diff}`;
+}
+
+function wrapBodyLine(line, maxLength = 100) {
+  if (line.length <= maxLength) return [line];
+
+  const bulletMatch = line.match(/^(\s*[-*]\s+)(.*)$/);
+  const prefix = bulletMatch?.[1] || '';
+  const continuation = prefix ? ' '.repeat(prefix.length) : '';
+  const text = bulletMatch?.[2] || line;
+  const lines = [];
+  let current = prefix;
+
+  for (const word of text.split(/\s+/).filter(Boolean)) {
+    const separator = current.trim() && !current.endsWith(' ') ? ' ' : '';
+    const next = `${current}${separator}${word}`;
+
+    if (next.length <= maxLength) {
+      current = next;
+      continue;
+    }
+
+    if (current.trim()) {
+      lines.push(current);
+      current = `${continuation}${word}`;
+      continue;
+    }
+
+    lines.push(word.slice(0, maxLength));
+    current = `${continuation}${word.slice(maxLength)}`;
+  }
+
+  if (current.trim()) lines.push(current);
+  return lines;
+}
+
+function normalizeCommitMessage(message) {
+  return message
+    .trim()
+    .split('\n')
+    .flatMap((line, index) => (index === 0 ? [line.trim()] : wrapBodyLine(line.trimEnd())))
+    .join('\n')
+    .trim();
 }
 
 function buildSplitPrompt(diff, stagedFiles) {
@@ -156,10 +200,12 @@ async function callModel({ system, prompt, maxTokens = 500 }) {
 }
 
 async function generateCommitMessage(diff) {
-  return callModel({
+  const message = await callModel({
     system: 'You write precise Conventional Commit messages for this repository.',
     prompt: buildPrompt(diff),
   });
+
+  return normalizeCommitMessage(message);
 }
 
 function commitWithMessage(message) {
