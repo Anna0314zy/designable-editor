@@ -73,6 +73,7 @@ Rationale:
 
 - JSON 更容易做字段校验、错误处理和后续扩展。
 - Markdown 由脚本生成，可以稳定控制 GitHub 评论和钉钉摘要长度。
+- 完整 Markdown 用于 artifact 留痕，短摘要 Markdown 用于 workflow summary 和 PR comment，避免在 GitHub 页面刷出过长报告。
 - 如果模型输出不合法，脚本可以安全失败，避免生成看似正常但内容不可信的报告。
 
 ### Decision: 采用软阻断 merge flow
@@ -125,7 +126,7 @@ Rationale:
 - Diff 被截断可能漏掉问题 -> 报告 MUST 明确标记“基于截断 diff”或“基于有限 diff 内容”。
 - 模型可能返回非 JSON -> 脚本 MUST 尝试最小 markdown fence 清理；仍失败时 MUST 失败退出，不生成假报告。
 - AI finding 可能误报 -> 流程保持软阻断，并在 finding 中保留 `confidence`。
-- GitHub 评论可能产生噪音 -> 第一版可以每次发新摘要评论；后续再升级为更新上一条 AI Review 评论。
+- GitHub 评论可能产生噪音 -> 第一版只发布短摘要评论；后续再升级为更新上一条 AI Review 评论。
 - 钉钉发送可能失败 -> 通知失败 MUST NOT 改变已生成 review 结果，但日志需要说明失败原因。
 - Secret 有泄露风险 -> API key、webhook 和 request header MUST 来自本地环境变量或 GitHub Secrets，且 MUST NOT 打印到报告或普通日志。
 

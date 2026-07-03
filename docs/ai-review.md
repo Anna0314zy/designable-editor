@@ -20,6 +20,7 @@ pnpm run review:ai -- --scope branch --base main --head HEAD
 
 - `ai-review-report.json`
 - `ai-review-report.md`
+- `ai-review-summary.md`
 
 常用环境变量：
 
@@ -45,9 +46,9 @@ GitHub Actions 中手动运行 `AI Review` workflow：
 
 workflow 会生成：
 
-- workflow artifact：`ai-review-report`
-- workflow summary
-- PR summary comment（提供 PR number 且权限允许时）
+- workflow artifact：`ai-review-report`，包含完整 JSON、完整 Markdown 和摘要 Markdown
+- workflow summary：只写入 `ai-review-summary.md`
+- PR summary comment：只发布 `ai-review-summary.md`（提供 PR number 且权限允许时）
 - DingTalk notification（配置 webhook 时）
 
 ## GitHub Secrets

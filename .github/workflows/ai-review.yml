@@ -100,6 +100,7 @@ jobs:
             --head "${{ steps.target.outputs.head_ref }}" \
             --json-out ".ai-review/ai-review-report.json" \
             --md-out ".ai-review/ai-review-report.md" \
+            --summary-out ".ai-review/ai-review-summary.md" \
             --pr-number "${{ steps.target.outputs.pr_number }}" \
             --pr-title "${{ steps.target.outputs.pr_title }}" \
             --actor "${{ github.actor }}" \
@@ -114,17 +115,17 @@ jobs:
       - name: Write workflow summary
         if: always()
         run: |
-          if [ -f .ai-review/ai-review-report.md ]; then
-            cat .ai-review/ai-review-report.md >> "$GITHUB_STEP_SUMMARY"
+          if [ -f .ai-review/ai-review-summary.md ]; then
+            cat .ai-review/ai-review-summary.md >> "$GITHUB_STEP_SUMMARY"
           fi
 
       - name: Comment on PR
-        if: ${{ steps.target.outputs.pr_number != '' && always() && hashFiles('.ai-review/ai-review-report.md') != '' }}
+        if: ${{ steps.target.outputs.pr_number != '' && always() && hashFiles('.ai-review/ai-review-summary.md') != '' }}
         uses: actions/github-script@v7
         with:
           script: |
             const fs = require('fs');
-            const body = fs.readFileSync('.ai-review/ai-review-report.md', 'utf8');
+            const body = fs.readFileSync('.ai-review/ai-review-summary.md', 'utf8');
             const marker = '<!-- ai-review-orchestrator -->';
             await github.rest.issues.createComment({
               owner: context.repo.owner,
