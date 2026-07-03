@@ -16,6 +16,7 @@
   ],
   "scripts": {
     "commit:ai": "node scripts/ai-commit.mjs",
+    "review:ai": "node scripts/ai-review.mjs",
     "server": "cd server && npm run dev",
     "play": "cd play && vite",
     "preview": "cd preview && vite",
