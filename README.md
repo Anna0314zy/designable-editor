@@ -113,7 +113,4 @@ export PATH="$HOME/.nvm/versions/node/v20.20.2/bin:$PATH"
 
 以下链接来自早期 `designable-editor` demo，可用于追溯历史部署和联调入口：
 
-- slide-shot demo: <https://anna0314zy.github.io/designable-editor/test/slide-shot/index.html>
-- editor -> task: <https://anna0314zy.github.io/designable-editor/test/task/index.html>
-- task -> editor: <https://anna0314zy.github.io/designable-editor/test/editor/index.html>
 
