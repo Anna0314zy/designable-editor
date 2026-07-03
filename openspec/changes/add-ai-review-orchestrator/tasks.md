@@ -16,6 +16,7 @@
 - [x] 2.5 生成适合 GitHub 和手机阅读的 `ai-review-report.md`。
 - [x] 2.6 本地运行时输出简洁中文控制台摘要。
 - [x] 2.7 处理 no-diff 场景，生成 clean no-change report。
+- [x] 2.8 生成供 workflow summary 和 PR comment 使用的 `ai-review-summary.md`。
 
 ## 3. Package Script and Local Usage
 

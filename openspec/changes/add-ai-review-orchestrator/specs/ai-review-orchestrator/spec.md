@@ -53,11 +53,11 @@
 
 #### Scenario: 对 PR 触发 workflow
 - **WHEN** 用户使用 PR number 手动运行 AI review workflow
-- **THEN** workflow SHALL 使用 `--scope branch` 计算 PR 待 merge diff，运行共用 AI review 命令，并上传 JSON 和 Markdown 报告 artifacts
+- **THEN** workflow SHALL 使用 `--scope branch` 计算 PR 待 merge diff，运行共用 AI review 命令，并上传 JSON、完整 Markdown 和摘要 Markdown 报告 artifacts
 
 #### Scenario: 提供 PR number
 - **WHEN** workflow 基于提供的 PR number 完成 review
-- **THEN** workflow SHALL 在权限允许时向该 PR 发布简洁 summary comment
+- **THEN** workflow SHALL 在权限允许时向该 PR 发布基于摘要 Markdown 的简洁 summary comment
 
 ### Requirement: Soft-Blocking Review 结果
 系统 SHALL 将 AI findings 作为 advisory 信息，并保留 merge 者的最终判断权。

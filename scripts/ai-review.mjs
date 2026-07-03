@@ -14,6 +14,7 @@ const confidenceValues = new Set(['low', 'medium', 'high']);
 const defaultReport = {
   jsonOut: 'ai-review-report.json',
   mdOut: 'ai-review-report.md',
+  summaryOut: 'ai-review-summary.md',
 };
 
 function die(message) {
@@ -36,6 +37,7 @@ export function parseArgs(args) {
     head: 'HEAD',
     jsonOut: defaultReport.jsonOut,
     mdOut: defaultReport.mdOut,
+    summaryOut: defaultReport.summaryOut,
     prNumber: '',
     prTitle: '',
     actor: '',
@@ -64,6 +66,7 @@ export function parseArgs(args) {
       ['--head', 'head'],
       ['--json-out', 'jsonOut'],
       ['--md-out', 'mdOut'],
+      ['--summary-out', 'summaryOut'],
       ['--pr-number', 'prNumber'],
       ['--pr-title', 'prTitle'],
       ['--actor', 'actor'],
@@ -390,15 +393,60 @@ export function renderMarkdownReport(report) {
   return `${lines.join('\n')}\n`;
 }
 
+export function renderMarkdownSummary(report) {
+  const metadata = report.metadata || {};
+  const counts = report.counts || { P0: 0, P1: 0, P2: 0, P3: 0 };
+  const primaryFindings = report.findings
+    .filter((finding) => finding.severity === 'P0' || finding.severity === 'P1')
+    .slice(0, 5);
+  const lines = [
+    `## AI Review: ${report.highestSeverity} / ${report.recommendation}`,
+    '',
+    report.summary,
+    '',
+    `**风险统计**：P0: ${counts.P0} · P1: ${counts.P1} · P2: ${counts.P2} · P3: ${counts.P3}`,
+  ];
+
+  if (metadata.prNumber || metadata.prTitle || metadata.actor || metadata.reportUrl) {
+    lines.push('');
+    if (metadata.prNumber) lines.push(`- PR：#${metadata.prNumber}`);
+    if (metadata.prTitle) lines.push(`- 标题：${metadata.prTitle}`);
+    if (metadata.actor) lines.push(`- 触发人：${metadata.actor}`);
+    if (metadata.reportUrl) lines.push(`- 完整报告：${metadata.reportUrl}`);
+  }
+
+  if (metadata.truncated) {
+    lines.push('', '> 注意：本摘要基于有限 diff 内容生成，可能未覆盖所有变更。');
+  }
+
+  lines.push('', '### P0/P1 摘要');
+  if (primaryFindings.length > 0) {
+    lines.push(...primaryFindings.map((finding) => (
+      `- **${finding.severity} ${finding.title}**：\`${finding.file}${formatLine(finding.line)}\``
+    )));
+  } else {
+    lines.push('- 未发现 P0/P1 风险。');
+  }
+
+  if (report.testGaps.length > 0) {
+    lines.push('', '### 测试缺口');
+    lines.push(...report.testGaps.slice(0, 3).map((item) => `- ${item}`));
+  }
+
+  return `${lines.join('\n')}\n`;
+}
+
 function ensureParentDir(file) {
   mkdirSync(dirname(resolve(file)), { recursive: true });
 }
 
-function writeReportFiles({ report, jsonOut, mdOut }) {
+function writeReportFiles({ report, jsonOut, mdOut, summaryOut }) {
   ensureParentDir(jsonOut);
   ensureParentDir(mdOut);
+  ensureParentDir(summaryOut);
   writeFileSync(jsonOut, `${JSON.stringify(report, null, 2)}\n`, 'utf8');
   writeFileSync(mdOut, renderMarkdownReport(report), 'utf8');
+  writeFileSync(summaryOut, renderMarkdownSummary(report), 'utf8');
 }
 
 async function callModel(prompt) {
@@ -473,11 +521,12 @@ function withMetadata(report, metadata) {
   };
 }
 
-function printSummary(report, { jsonOut, mdOut }) {
+function printSummary(report, { jsonOut, mdOut, summaryOut }) {
   console.log(`AI review 完成：${report.highestSeverity} / ${report.recommendation}`);
   console.log(`风险统计：P0=${report.counts.P0}, P1=${report.counts.P1}, P2=${report.counts.P2}, P3=${report.counts.P3}`);
   console.log(`JSON 报告：${jsonOut}`);
   console.log(`Markdown 报告：${mdOut}`);
+  console.log(`Markdown 摘要：${summaryOut}`);
 }
 
 function buildDingTalkMarkdown(report) {
@@ -586,6 +635,7 @@ export async function runReview(options) {
     report: finalReport,
     jsonOut: options.jsonOut,
     mdOut: options.mdOut,
+    summaryOut: options.summaryOut,
   });
   printSummary(finalReport, options);
   // 如果是本地 不发送
@@ -607,6 +657,7 @@ Options:
   --head <ref>                Head ref for git diff. Default: HEAD
   --json-out <path>           JSON report path. Default: ai-review-report.json
   --md-out <path>             Markdown report path. Default: ai-review-report.md
+  --summary-out <path>        Markdown summary path. Default: ai-review-summary.md
   --pr-number <number>        PR number metadata
   --pr-title <title>          PR title metadata
   --actor <login>             Trigger actor metadata
