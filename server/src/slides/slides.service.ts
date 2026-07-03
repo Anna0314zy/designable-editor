@@ -4,7 +4,6 @@ import { Prisma, SlideStatus } from '@prisma/client'
 import { randomUUID } from 'node:crypto'
 import { CreatePageDto, SavePageDto, SaveSlideDto, SaveTasksDto } from './dto/slides.dto'
 import { SlidesRepository } from './slides.repository'
-import { Console } from 'node:console'
 
 @Injectable()
 export class SlidesService {
@@ -25,7 +24,7 @@ export class SlidesService {
   }
 
   async saveSlide(slideId: string, dto: SaveSlideDto) {
-    const parsed = this.parseJson(dto.slideStructure, [])
+    const parsed = this.parseJson(dto.slideStructure, 'slideStructure')
     await this.slidesRepository.updateSlideStructure(slideId, parsed)
     // return this.getSlide(slideId)
   }
@@ -35,10 +34,8 @@ export class SlidesService {
     if (!slide) throw new NotFoundException('课件不存在')
     if (!slide.pages.length) throw new BadRequestException('课件没有页面，不能发布')
 
-    const version = await this.slidesRepository.getNextPublishVersion(slideId)
-    const record = await this.slidesRepository.createPublishRecord({
+    const { record, job } = await this.slidesRepository.createPublishRecord({
       slideId,
-      version,
       slideSnapshot: this.toJsonValue(slide.slideStructure ?? []),
       pages: slide.pages.map(page => ({
         pageId: page.id,
@@ -49,57 +46,74 @@ export class SlidesService {
       })),
     })
 
-    
+    return {
+      slideStatus: SlideStatus.publishing,
+      lastSlidePublishRecordDto: null,
+      publishRecordId: record.id,
+      publishJobId: job.id,
+      publishJobStatus: job.status,
+      version: record.version,
+    }
+  }
 
-    try {
-      this.validatePublishResources(record.pages)
-      console.log('jiancewan ----- ',record)
+  async getPublishJob(jobId: string) {
+    const job = await this.slidesRepository.getPublishJob(jobId)
+    if (!job) throw new NotFoundException('发布任务不存在')
+    return {
+      publishJobId: job.id,
+      publishRecordId: job.publishRecordId,
+      slideId: job.slideId,
+      version: job.publishRecord.version,
+      status: job.status,
+      attempts: job.attempts,
+      maxAttempts: job.maxAttempts,
+      nextRunAt: job.nextRunAt.getTime(),
+      errorMessage: job.errorMessage,
+      createTime: job.createdAt.getTime(),
+    }
+  }
 
-      const pages = []
-      for (const page of record.pages) {
-        const screenshotOssPath = await this.capturePageScreenshot({
-          slideId,
-          version,
-          pageId: page.pageId,
-          pageSnapshotId: page.id,
-          pageSnapshot: page.pageSnapshot,
-          resources: page.resources,
-        })
-        const updated = await this.slidesRepository.updatePagePublishScreenshot(page.id, screenshotOssPath)
-        pages.push(updated)
-      }
+  async executePublishJob(job: NonNullable<Awaited<ReturnType<SlidesRepository['acquireNextPublishJob']>>>) {
+    const record = await this.slidesRepository.getPublishRecord(job.publishRecordId)
+    if (!record) throw new NotFoundException('发布记录不存在')
 
-      const manifest = this.createManifest({
-        slideId,
-        publishRecordId: record.id,
-        version,
-        slideSnapshot: record.slideSnapshot,
-        pages,
+    this.validatePublishResources(record.pages)
+
+    const pages = []
+    for (const page of record.pages) {
+      const screenshotOssPath = await this.capturePageScreenshot({
+        slideId: record.slideId,
+        version: record.version,
+        pageId: page.pageId,
+        pageSnapshotId: page.id,
+        pageSnapshot: page.pageSnapshot,
+        resources: page.resources,
       })
-      const manifestOssPath = `/slides/slide/${slideId}/${version}/manifest.json`
+      const updated = await this.slidesRepository.updatePagePublishScreenshot(page.id, screenshotOssPath)
+      pages.push(updated)
+    }
 
-      await this.slidesRepository.markPublishSuccess({
-        slideId,
-        publishRecordId: record.id,
-        manifest: this.toJsonValue(manifest),
-        manifestOssPath,
-      })
+    const manifest = this.createManifest({
+      slideId: record.slideId,
+      publishRecordId: record.id,
+      version: record.version,
+      slideSnapshot: record.slideSnapshot,
+      pages,
+    })
+    const manifestOssPath = `/slides/slide/${record.slideId}/${record.version}/manifest.json`
 
-      return {
-        slideStatus: SlideStatus.published,
-        lastSlidePublishRecordDto: { createTime: Date.now() },
-        publishRecordId: record.id,
-        version,
-        manifestOssPath,
-        manifest,
-      }
-    } catch (error) {
-      await this.slidesRepository.markPublishFailed({
-        slideId,
-        publishRecordId: record.id,
-        errorMessage: this.getErrorMessage(error),
-      })
-      throw error
+    await this.slidesRepository.markPublishSuccess({
+      slideId: record.slideId,
+      publishRecordId: record.id,
+      manifest: this.toJsonValue(manifest),
+      manifestOssPath,
+    })
+
+    return {
+      publishRecordId: record.id,
+      version: record.version,
+      manifestOssPath,
+      manifest,
     }
   }
 
@@ -141,7 +155,7 @@ export class SlidesService {
 
   async savePage(pageId: string, dto: SavePageDto) {
     await this.slidesRepository.savePage(pageId, {
-      mainContentStructure: this.parseJson(dto.mainContentStructure, {}),
+      mainContentStructure: this.parseJson(dto.mainContentStructure, 'mainContentStructure'),
       fileMd5List: dto.fileMd5List,
       gameId: dto.gameId,
       gameTemplateId: dto.gameTemplateId,
@@ -380,11 +394,11 @@ export class SlidesService {
     return error instanceof Error ? error.message : String(error)
   }
 
-  private parseJson(text: string, fallback: unknown) {
+  private parseJson(text: string, fieldName: string) {
     try {
       return JSON.parse(text)
-    } catch {
-      return fallback
+    } catch (error) {
+      throw new BadRequestException(`${fieldName} 不是合法 JSON：${this.getErrorMessage(error)}`)
     }
   }
 

@@ -1,7 +1,8 @@
 const http = require("http");
 const { handler } = require("./index");
 
-const port = Number(process.env.PORT || 8000);
+const port = Number(process.env.PORT || 9000);
+const host = process.env.SERVER_HOST || "0.0.0.0";
 
 if (!process.env.SHOT_URL) {
   process.env.SHOT_URL = "http://127.0.0.1:5173";
@@ -48,8 +49,8 @@ const server = http.createServer(async (req, res) => {
   }
 });
 
-server.listen(port, "127.0.0.1", () => {
-  console.log(`local screenshot server: http://127.0.0.1:${port}`);
+server.listen(port, host, () => {
+  console.log(`screenshot server: http://${host}:${port}`);
   console.log(`SHOT_URL: ${process.env.SHOT_URL}`);
   console.log("POST page snapshot JSON to /");
 });

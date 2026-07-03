@@ -49,7 +49,7 @@
                                 "width": "300px",
                                 "height": "auto"
                             },
-                            "src": "https://class-slides-res-test-1313601664.cos.ap-beijing.myqcloud.com/image/a2bf9b1a-8a11-4681-86e8-e253d07fb80a.png"
+                            "src": ""
                         },
                         "hidden": false,
                         "children": []
@@ -74,8 +74,8 @@
                         "title": "游戏",
                         "x-decorator": "FormItem",
                         "x-component": "Game",
-                        "gameUrl": "https://ceshi-courseware-game.saasp.vdyoo.com/81adc4f1-0418-3fce-8d7e-5861ef43d9c7/23_zcd11_01/student/index.html",
-                        "picUrl": "https://ceshi-courseware-vod-ali.saasp.vdyoo.com/81adc4f1-0418-3fce-8d7e-5861ef43d9c7/23_zcd11_01/student/cover.jpg",
+                        "gameUrl": "",
+                        "picUrl": "",
                         "gameCoursewareId": 3600
                     },
                     "hidden": false,

@@ -25,9 +25,9 @@ async function promptForVersion(inquirer, currentVersion) {
 }
 const getSysVersion = async () => {
 	const env = process.env.NODE_ENV;
-	let host = "https://test-class-api-online.saasp.vdyoo.com";
+	let host = "";
 	if (env === "prod")
-		host = "https://classroom-api-online.saasp.vdyoo.com";
+		host = "";
 		const getSysVersion = systemName => {
 			return axios.get(`${host}/classroom-slides/manage/${systemName}/current-version`,{
 			  headers:{

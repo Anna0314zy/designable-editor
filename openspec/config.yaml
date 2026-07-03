@@ -1,0 +1,76 @@
+schema: spec-driven
+
+# Project context (optional)
+# This is shown to AI when creating artifacts.
+# Add your tech stack, conventions, style guides, domain knowledge, etc.
+# Example:
+#   context: |
+#     Tech stack: TypeScript, React, Node.js
+#     We use conventional commits
+#     Domain: e-commerce platform
+context: |
+  项目：Slides Engine，一个面向课件/幻灯片编辑、预览、渲染和课堂任务场景的 monorepo。
+
+  业务领域：
+  - 系统负责可编辑的幻灯片页面、组件树、页面预览、课堂任务集成，以及 bridge/player 等宿主运行环境。
+  - 核心数据契约是序列化后的 slide/page tree JSON。editor、preview、task、bridge 等应用应该通过这层数据边界通信，不要直接共享 UI 状态。
+  - Workspace 表示“一页课件”的完整编辑上下文，包含页面树、选区、主画布交互、大纲交互和历史记录。
+
+  技术栈：
+  - TypeScript、React 18、Vite、pnpm workspaces、Less、Ant Design 5。
+  - 核心响应式和 schema 能力使用 Formily 相关包，例如通过别名引入的 @formily/reactive、@formily/json-schema。
+  - 编辑器预览和宿主通信主要使用浏览器 iframe/postMessage 模式，现有 editor/task 流程中使用 post-me。
+  - 仓库里包含一些较旧、生成产物或类似 vendor 的子目录；除非需求明确要求，不要做大范围格式化或清理。
+
+  Monorepo 结构：
+  - packages/core：编辑器引擎内核。尽量保持与 React 等 UI 框架无关。
+  - packages/react：React 绑定层，以及消费 engine API 的编辑器面板和组件。
+  - packages/shared：共享事件、订阅和工具基础设施。
+  - packages/react-settings-form：可复用的设置表单控件，其中包含与课件业务相关的 setter。
+  - common/render-core、common/render-components、common/render-context：运行时渲染和预览侧共享模块。
+  - common/animate：编辑态和预览/运行态使用的动画引擎。
+  - common/slide-shape、common/slide-fonts、common/slide-shot、common/slide-editor：形状、字体、截图、旧版或公共编辑器相关模块。
+  - editor：主幻灯片编辑器应用，包含物料和 behavior 注册。
+  - preview：独立预览应用。
+  - task：课堂/任务侧应用，消费 slide 数据。
+  - server 和 serverless：后端与截图等支持代码。
+  - bridge：宿主/player 集成 demo 和运行时桥接代码。
+
+  核心架构：
+  - Engine -> Workbench -> Workspace -> Operation 是主要编辑模型。
+  - Workspace 拥有主画布 viewport 和大纲 outline viewport。二者共享 operation 状态，但拖拽/移动插入语义可以不同。
+  - Operation 管理 TreeNode 运行时树、选区、hover、移动辅助、变换辅助、快照和动画集成。
+  - TreeNode 是序列化树数据的运行时对象形态。clone、move、delete 节点时，要保持 parent/root/operation 身份和全局查找行为一致。
+  - History 使用 serialize/from 快照模式，并通过 locking 避免 undo/redo 期间递归写入历史记录。
+  - GlobalRegistry 和 behavior 注册负责把组件 selector 绑定到 designer props、schema、locales 和物料行为。优先通过新增或扩展 behavior 处理组件能力，不要硬编码大量组件特例。
+  - 事件处理是显式的：DOM driver 创建自定义事件，Workspace 携带 IEngineContext dispatch，effects/shortcuts 消费该上下文。新增交互时要保留正确的 workspace/viewport context。
+
+  边界和设计偏好：
+  - packages/core 应尽量独立于 React UI 和应用壳细节。
+  - 网络、微前端、iframe、宿主集成等问题应放在 app/common adapter 边界处理；core engine 主要理解树 JSON 和编辑事件。
+  - 引入新架构概念前，优先使用现有抽象：Engine、Workspace、Operation、TreeNode、Viewport、History、GlobalRegistry、behavior factories。
+  - 修改 slide 组件能力时，如果同时影响编辑和预览，需要同步考虑 behavior、schema、renderer 路径。
+  - 涉及拖拽、选区、resize、transform、history、serialization、animation、iframe preview、task binding 的变更影响面较大，应在 OpenSpec design 中说明假设和风险。
+  - 除非需求明确要求，不做无关重构、大范围样式改动或 package 边界调整。
+
+  开发命令和工具：
+  - 根目录脚本会通过子包目录启动一些应用，但大部分开发工作发生在 editor、preview、task、server 等 workspace package 中。
+  - 根目录使用 pnpm-workspace.yaml 管理 workspace。
+  - 部分 package 测试覆盖较少。涉及交互或序列化风险的变更，应尽量添加聚焦测试；无法自动化时，需要记录人工验证步骤。
+
+  OpenSpec 使用约定：
+  - 这里的 project context 只放稳定项目背景。具体功能应作为 OpenSpec change 放在 openspec/changes 下。
+  - 合适的 change 边界包括：画布缩放、左侧栏重构、拖拽行为、预览协议、动画编辑、任务绑定等用户可感知能力。
+  - 当一个功能容易扩展到 editor、preview、task、server、bridge 多层时，proposal 应写清楚非目标。
+  - design 应说明影响的 package、数据结构变化、序列化兼容性，以及 editor-preview-task 的一致性。
+  - tasks 应按 package/层级拆分，并在同时影响编辑和预览/运行态时包含验证步骤。
+
+# Per-artifact rules (optional)
+# Add custom rules for specific artifacts.
+# Example:
+#   rules:
+#     proposal:
+#       - Keep proposals under 500 words
+#       - Always include a "Non-goals" section
+#     tasks:
+#       - Break tasks into chunks of max 2 hours

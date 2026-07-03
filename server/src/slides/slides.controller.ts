@@ -119,6 +119,13 @@ export class SlidesController {
 
   @UseGuards(JwtAuthGuard, RolesGuard)
   @Roles(UserRole.viewer, UserRole.editor, UserRole.admin)
+  @Get(':slideId/publish-jobs/:jobId')
+  getPublishJob(@Param('jobId') jobId: string) {
+    return this.slidesService.getPublishJob(jobId)
+  }
+
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles(UserRole.viewer, UserRole.editor, UserRole.admin)
   @Get(':slideId/last-success-publish-record')
   getLastSuccessPublishRecord(@Param('slideId') slideId: string) {
     return this.slidesService.getLastSuccessPublishRecord(slideId)

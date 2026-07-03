@@ -60,7 +60,7 @@ export class AuthController {
       httpOnly: true,
       secure: isProduction,
       sameSite: isProduction ? 'none' : 'lax',
-      path: '/classroom-slides/auth/refresh',
+      path: '/',
       maxAge: this.durationToMs(this.config.get<string>('JWT_REFRESH_EXPIRES_IN', '7d')),
     })
   }
@@ -71,7 +71,7 @@ export class AuthController {
       httpOnly: true,
       secure: isProduction,
       sameSite: isProduction ? 'none' : 'lax',
-      path: '/classroom-slides/auth/refresh',
+      path: '/',
     })
   }
 

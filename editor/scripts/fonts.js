@@ -3,7 +3,7 @@ import path from 'path';
 
 function copyFolder(src, dest) {
   if (!fs.existsSync(dest)) {
-    fs.mkdirSync(dest);
+    fs.mkdirSync(dest, { recursive: true });
   }
 
   let items = fs.readdirSync(src);
@@ -22,7 +22,7 @@ function copyFolder(src, dest) {
   });
 }
 
-let srcFolder = path.join(process.env.PWD, 'node_modules', '@slide/fonts', 'fonts');
-let destFolder = path.join(process.env.PWD, 'public', 'fonts');
+let srcFolder = path.join(process.cwd(), 'node_modules', '@slide/fonts', 'fonts');
+let destFolder = path.join(process.cwd(), 'public', 'fonts');
 
 copyFolder(srcFolder, destFolder);

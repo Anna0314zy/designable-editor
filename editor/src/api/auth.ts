@@ -19,6 +19,11 @@ export interface AuthSession {
   user: AuthUser
 }
 
+export interface AuthCredentials {
+  username: string
+  password: string
+}
+
 interface SystemVersionParams {
   systemName: string
 }
@@ -27,6 +32,16 @@ interface SystemVersion {
   systemName: string
   currentVersion?: string
   version?: string
+}
+
+// 注册
+export const register = (params: AuthCredentials): Promise<AuthSession> => {
+  return api.post(`${host}/classroom-slides/auth/register`, params, { headers: { skipAuthRefresh: true } })
+}
+
+// 登录
+export const login = (params: AuthCredentials): Promise<AuthSession> => {
+  return api.post(`${host}/classroom-slides/auth/login`, params, { headers: { skipAuthRefresh: true } })
 }
 
 // 刷新登录态

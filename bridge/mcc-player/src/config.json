@@ -4,21 +4,21 @@
     "remoteResourcePathDefinition": {
         "commonPathDefinition": {
             "cdnPathList": [
-                "https://slides-resources.ledupeiyou.com",
-                "https://slides-resources-test.ledupeiyou.com"
+                "",
+                ""
             ],
             "path": "/packageResources/common/{customIdentityId}/{version}"
         },
         "gameTemplatePathDefinition": {
             "cdnPathList": [
-                "https://slides-resources-test.ledupeiyou.com"
+                ""
             ],
             "path": "/packageResources/gameTemplate/{gameTemplateId}/{version}"
         },
         "gameCustomPathDefinition": {
             "cdnPathList": [
-                "https://slides-resources.ledupeiyou.com",
-                "https://slides-resources-test.ledupeiyou.com"
+                "",
+                ""
                 
             ],
             "path": "/games/{gameId}"
@@ -57,8 +57,8 @@
                 }
             ],
             "cdnPathList": [
-                "https://slides-resources.ledupeiyou.com",
-                "https://slides-resources-test.ledupeiyou.com"
+                "",
+                ""
             ]
         }
     },
@@ -130,7 +130,7 @@
             "gameTemplateId": 20630,
             "version": "1.0.1",
             "zipUrlList": [
-                "https://courseware-game.saasp.vdyoo.com/90c378df-8f21-3b06-913e-ae41f2f15820/23_kje2_5.zip"
+                ""
             ],
             "zipSize": 3951167,
             "zipMd5": "7b2380e44a0efd5afa2f8dda919af51e",
@@ -142,7 +142,7 @@
             "gameId": 20630,
             "gameTemplateId": 20630,
             "zipUrlList": [
-                "https://courseware-game.saasp.vdyoo.com/90c378df-8f21-3b06-913e-ae41f2f15820/23_kje2_5.zip"
+                ""
             ],
             "zipSize": 3951167,
             "zipMd5": "7b2380e44a0efd5afa2f8dda919af51e",
@@ -156,7 +156,7 @@
             "customIdentityId": "classPlayer",
             "version": "1.0.1",
             "zipUrlList": [
-                "https://courseware-game.saasp.vdyoo.com/90c378df-8f21-3b06-913e-ae41f2f15820/23_kje2_5.zip"
+                ""
             ],
             "zipSize": 3951167,
             "zipMd5": "7b2380e44a0efd5afa2f8dda919af51e",
@@ -168,7 +168,7 @@
             "customIdentityId": "gameCommonResources",
             "version": "1.0.1",
             "zipUrlList": [
-                "https://courseware-game.saasp.vdyoo.com/90c378df-8f21-3b06-913e-ae41f2f15820/23_kje2_5.zip"
+                ""
             ],
             "zipSize": 3951167,
             "zipMd5": "7b2380e44a0efd5afa2f8dda919af51e",

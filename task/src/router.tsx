@@ -7,6 +7,7 @@ const TopHeader = WithAsync(() => import(/* webpackChunkName:"EditorMain" */ './
 const Course = WithAsync(() => import(/* webpackChunkName:"EditorMain" */ './pages/Course'))
 const Preview = WithAsync(() => import(/* webpackChunkName:"EditorMain" */ './pages/Preview'))
 const AuthPage = WithAsync(() => import(/* webpackChunkName:"AuthPage" */ './pages/Auth'))
+const TaskDemo = WithAsync(() => import(/* webpackChunkName:"TaskDemo" */ './pages/TaskDemo'))
 // const EditorPreview = WithAsync(() => import(/* webpackChunkName:"EditorMain" */ './pages/EditorPreview'))
 import EditorPreview from './pages/EditorPreview'
 const EnhancedTaskMain = WithCheck(TaskMain);
@@ -72,6 +73,7 @@ export default function RoutesComponent() {
       <Routes>
         <Route path='/' element={<Navigate to='/course' />}/>
         <Route path='/login' element={<PublicOnlyRoute element={<AuthPage />} />} />
+        <Route path='/task-demo' element={<TaskDemo />} />
         <Route path='/course' element={<RequireAuth element={<PrivateRoute element={<EnhancedCourse />} />} />} />
         <Route path='/task' element={<RequireAuth element={<PrivateRoute element={<TopHeader />} />} />}>
           <Route path=':id' element={<EnhancedTaskMain/>} />

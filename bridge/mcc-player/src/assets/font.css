@@ -2,17 +2,17 @@
     font-family: 'SimFZcuyuan';
     src: 
     url('../../slideFont/0.02/fonts/simFZcuyuan.woff') format('woff'),
-    url('https://slides-resources-test.ledupeiyou.com/packageResources/common/slideFont/simFZcuyuan/simFZcuyuan.woff') format('woff');
+    url('/packageResources/common/slideFont/simFZcuyuan/simFZcuyuan.woff') format('woff');
 }
 @font-face {
     font-family: 'SimFZzhunyuan';
     src: 
     url('../../slideFont/0.02/fonts/simFZzhunyuan.woff') format('woff'),
-    url('https://slides-resources-test.ledupeiyou.com/packageResources/common/slideFont/simFZzhunyuan/simFZzhunyuan.woff') format('woff');
+    url('/packageResources/common/slideFont/simFZzhunyuan/simFZzhunyuan.woff') format('woff');
 }
 @font-face {
     font-family: 'Simsun';
     src: 
     url('../../slideFont/0.02/fonts/simsun.woff') format('woff'),
-    url('https://slides-resources-test.ledupeiyou.com/packageResources/common/slideFont/simsun/simsun.woff') format('woff');
+    url('/packageResources/common/slideFont/simsun/simsun.woff') format('woff');
 }

@@ -18,6 +18,9 @@ interface EnvConfig {
   COS_RESOURCE_PATH?: string
   SCREENSHOT_SERVICE_URL?: string
   SCREENSHOT_TIMEOUT_MS?: number
+  PUBLISH_WORKER_ENABLED?: string
+  PUBLISH_WORKER_POLL_MS?: number
+  PUBLISH_JOB_STALE_AFTER_MS?: number
 }
 
 export function validateEnv(config: Record<string, unknown>): EnvConfig {
@@ -46,5 +49,8 @@ export function validateEnv(config: Record<string, unknown>): EnvConfig {
     COS_RESOURCE_PATH: config.COS_RESOURCE_PATH ? String(config.COS_RESOURCE_PATH) : undefined,
     SCREENSHOT_SERVICE_URL: config.SCREENSHOT_SERVICE_URL ? String(config.SCREENSHOT_SERVICE_URL) : undefined,
     SCREENSHOT_TIMEOUT_MS: config.SCREENSHOT_TIMEOUT_MS ? Number(config.SCREENSHOT_TIMEOUT_MS) : undefined,
+    PUBLISH_WORKER_ENABLED: config.PUBLISH_WORKER_ENABLED ? String(config.PUBLISH_WORKER_ENABLED) : undefined,
+    PUBLISH_WORKER_POLL_MS: config.PUBLISH_WORKER_POLL_MS ? Number(config.PUBLISH_WORKER_POLL_MS) : undefined,
+    PUBLISH_JOB_STALE_AFTER_MS: config.PUBLISH_JOB_STALE_AFTER_MS ? Number(config.PUBLISH_JOB_STALE_AFTER_MS) : undefined,
   }
 }

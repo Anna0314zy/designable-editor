@@ -15,9 +15,6 @@ importers:
       '@ant-design/icons':
         specifier: 5.2.6
         version: 5.2.6(react-dom@18.2.0(react@18.2.0))(react@18.2.0)
-      '@ld/file-upload':
-        specifier: ^1.0.14
-        version: 1.0.27
       '@types/node':
         specifier: ^20.5.9
         version: 20.19.41
@@ -173,12 +170,9 @@ importers:
 
   bridge/mcc-player:
     dependencies:
-      '@ld/ali-logger':
-        specifier: ^1.0.11
-        version: 1.1.5
       '@ld/micro-app':
-        specifier: ^0.0.1
-        version: 0.0.1
+        specifier: npm:@micro-zoe/micro-app@^1.0.0-rc.2
+        version: '@micro-zoe/micro-app@1.0.0-rc.30'
       axios:
         specifier: ^0.21.0
         version: 0.21.0
@@ -310,8 +304,8 @@ importers:
         specifier: workspace:*
         version: link:../../packages/core
       '@slides/reactive-react':
-        specifier: ^1.0.0
-        version: 1.0.0
+        specifier: npm:@formily/reactive-react@^2.3.4
+        version: '@formily/reactive-react@2.3.7(@types/react-dom@18.3.7(@types/react@18.3.29))(@types/react@18.3.29)(react-dom@18.3.1(react@18.3.1))(react-is@18.3.1)(react@18.3.1)'
       animate.css:
         specifier: ^4.1.1
         version: 4.1.1
@@ -650,9 +644,6 @@ importers:
       '@editor/typing':
         specifier: workspace:^
         version: link:../packages/typings
-      '@ld/file-upload':
-        specifier: ^1.0.22
-        version: 1.0.27
       '@ld/slide-editor':
         specifier: workspace:^
         version: link:../common/slide-editor
@@ -678,17 +669,20 @@ importers:
         specifier: workspace:^1.0.0
         version: link:../common/slide-shape
       '@slides/antd':
-        specifier: ^1.0.0
-        version: 1.0.0(react-dom@18.2.0(react@18.2.0))(react@18.2.0)
+        specifier: npm:@formily/antd-v5@^1.2.4
+        version: '@formily/antd-v5@1.2.4(@types/react-dom@18.3.7(@types/react@18.3.29))(@types/react@18.3.29)(antd@5.29.3(moment@2.30.1)(react-dom@18.2.0(react@18.2.0))(react@18.2.0))(react-dom@18.2.0(react@18.2.0))(react-is@18.3.1)(react@18.2.0)(typescript@5.9.3)'
       '@slides/react':
-        specifier: ^1.0.0
-        version: 1.0.0
+        specifier: npm:@formily/react@^2.3.4
+        version: '@formily/react@2.3.7(@types/react-dom@18.3.7(@types/react@18.3.29))(@types/react@18.3.29)(react-dom@18.2.0(react@18.2.0))(react-is@18.3.1)(react@18.2.0)(typescript@5.9.3)'
       '@slides/reactive-react':
-        specifier: ^1.0.0
-        version: 1.0.0
+        specifier: npm:@formily/reactive-react@^2.3.4
+        version: '@formily/reactive-react@2.3.7(@types/react-dom@18.3.7(@types/react@18.3.29))(@types/react@18.3.29)(react-dom@18.2.0(react@18.2.0))(react-is@18.3.1)(react@18.2.0)'
       '@vitejs/plugin-react':
         specifier: ^4.0.4
         version: 4.7.0(vite@4.5.14(@types/node@20.19.41)(less@4.6.4)(terser@5.48.0))
+      cos-js-sdk-v5:
+        specifier: ^1.10.1
+        version: 1.10.1
       hotkeys-js:
         specifier: ^4.0.4
         version: 4.0.4
@@ -787,14 +781,14 @@ importers:
         specifier: workspace:^1.0.0
         version: link:../../common/animate
       '@slides/json-schema':
-        specifier: ^1.0.0
-        version: 1.0.0
+        specifier: npm:@formily/json-schema@^2.3.4
+        version: '@formily/json-schema@2.3.7(typescript@5.9.3)'
       '@slides/path':
-        specifier: ^1.0.0
-        version: 1.0.0
+        specifier: npm:@formily/path@^2.3.4
+        version: '@formily/path@2.3.7'
       '@slides/reactive':
-        specifier: ^1.0.0
-        version: 1.0.0
+        specifier: npm:@formily/reactive@^2.3.4
+        version: '@formily/reactive@2.3.7'
     devDependencies:
       '@types/node':
         specifier: ^20.5.9
@@ -815,11 +809,11 @@ importers:
         specifier: workspace:^
         version: link:../../common/animate
       '@slides/reactive':
-        specifier: ^1.0.0
-        version: 1.0.0
+        specifier: npm:@formily/reactive@^2.3.4
+        version: '@formily/reactive@2.3.7'
       '@slides/reactive-react':
-        specifier: ^1.0.0
-        version: 1.0.0
+        specifier: npm:@formily/reactive-react@^2.3.4
+        version: '@formily/reactive-react@2.3.7(@types/react-dom@18.3.7(@types/react@18.3.29))(@types/react@18.3.29)(react-dom@18.3.1(react@18.3.1))(react-is@18.3.1)(react@18.3.1)'
       classnames:
         specifier: ^2.3.2
         version: 2.5.1
@@ -863,9 +857,6 @@ importers:
       '@editor/shared':
         specifier: workspace:^1.0.0
         version: link:../shared
-      '@ld/file-upload':
-        specifier: ^1.0.12
-        version: 1.0.27
       '@monaco-editor/loader':
         specifier: ^1.3.3
         version: 1.7.0
@@ -876,20 +867,20 @@ importers:
         specifier: ^1.5.1
         version: 1.9.0(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       '@slides/antd':
-        specifier: ^1.0.0
-        version: 1.0.0(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+        specifier: npm:@formily/antd-v5@^1.2.4
+        version: '@formily/antd-v5@1.2.4(@types/react-dom@18.3.7(@types/react@18.3.29))(@types/react@18.3.29)(antd@5.29.3(moment@2.30.1)(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(react-dom@18.3.1(react@18.3.1))(react-is@18.3.1)(react@18.3.1)(typescript@5.9.3)'
       '@slides/core':
-        specifier: ^1.0.0
-        version: 1.0.0
+        specifier: npm:@formily/core@^2.3.4
+        version: '@formily/core@2.3.7'
       '@slides/react':
-        specifier: ^1.0.0
-        version: 1.0.0
+        specifier: npm:@formily/react@^2.3.4
+        version: '@formily/react@2.3.7(@types/react-dom@18.3.7(@types/react@18.3.29))(@types/react@18.3.29)(react-dom@18.3.1(react@18.3.1))(react-is@18.3.1)(react@18.3.1)(typescript@5.9.3)'
       '@slides/reactive':
-        specifier: ^1.0.0
-        version: 1.0.0
+        specifier: npm:@formily/reactive@^2.3.4
+        version: '@formily/reactive@2.3.7'
       '@slides/shared':
-        specifier: ^1.0.0
-        version: 1.0.0
+        specifier: npm:@formily/shared@^2.3.4
+        version: '@formily/shared@2.3.7'
       classnames:
         specifier: ^2.3.2
         version: 2.5.1
@@ -1029,7 +1020,7 @@ importers:
         version: 27.5.1
       jest-watch-typeahead:
         specifier: ^1.0.0
-        version: 1.1.0(jest@27.5.1(ts-node@10.9.2(@swc/core@1.15.40)(@types/node@16.18.126)(typescript@4.9.5)))
+        version: 1.1.0(jest@27.5.1)
       mini-css-extract-plugin:
         specifier: ^2.4.5
         version: 2.10.2(webpack@5.107.2(@swc/core@1.15.40)(postcss@8.5.15))
@@ -1232,15 +1223,6 @@ importers:
       typescript:
         specifier: ^5.9.3
         version: 5.9.3
-
-  serverless/screenshot:
-    dependencies:
-      lodash.random:
-        specifier: ^3.2.0
-        version: 3.2.0
-      raw-body:
-        specifier: ^3.0.2
-        version: 3.0.2
 
   task:
     dependencies:
@@ -2810,6 +2792,79 @@ packages:
     resolution: {integrity: sha512-d9zaMRSTIKDLhctzH12MtXvJKSSUhaHcjV+2Z+GK+EEY7XKpP5yR4x+N3TAcHTcu963nIr+TMcCb4DBCYX1z6Q==}
     engines: {node: ^12.22.0 || ^14.17.0 || >=16.0.0}
 
+  '@formily/antd-v5@1.2.4':
+    resolution: {integrity: sha512-OaPJ9GtxQnPTPy4nKnNyWuGyIw9LVvVg0ptEOXP096/pBiFhOV/1UyIdgdp/4pM1CglLKwAf+DJw4e+CKYiTpg==}
+    engines: {npm: '>=3.0.0'}
+    peerDependencies:
+      '@types/react': '>=16.8.0 || >=17.0.0'
+      '@types/react-dom': '>=16.8.0 || >=17.0.0'
+      antd: ^5.13.0
+      react: 18.2.0
+      react-dom: 18.2.0
+      react-is: '>=16.8.0 || >=17.0.0'
+
+  '@formily/core@2.3.7':
+    resolution: {integrity: sha512-oqLE6gOoM2xjwlUrfH4cyjscO4kZJNpidtVytZeBvYp9v4OgL9EUm89laPcF4cnpWE2lZIqqzfGluOySxku8WQ==}
+    engines: {npm: '>=3.0.0'}
+
+  '@formily/grid@2.3.7':
+    resolution: {integrity: sha512-QTmmFkNVxcL+nQVvrqhBrUwhRCXDVy5iycTb4IJILqK4puYUKRajbsbm0oudTE0Yyo6ovpM6SD8QtdFU/cwLLw==}
+    engines: {npm: '>=3.0.0'}
+    peerDependencies:
+      typescript: 4.x || 5.x
+
+  '@formily/json-schema@2.3.7':
+    resolution: {integrity: sha512-YmDmH98sJLOPO5GAq5NJw+NP3i2vCELBoz4Y4w+nhpKI5n8eQHe2GczQKntWDOnTfchXD2dXcgpb0ub6KNeATw==}
+    engines: {npm: '>=3.0.0'}
+    peerDependencies:
+      typescript: '>4.1.5'
+
+  '@formily/path@2.3.7':
+    resolution: {integrity: sha512-uDqXlW3TwJ8dImi5FrKze/yAbnxqpE/z1ZzJLNSlNr+T4bJRrC7Ya2veOOYeDaM9EK6eQNQCXST55REj5DKVmQ==}
+    engines: {npm: '>=3.0.0'}
+
+  '@formily/react@2.3.7':
+    resolution: {integrity: sha512-yn3xhFgl5pdDECiyOtt/hlwhnxzpjjYkig1Oyyg4mgYDeP9UT9jd0V3/iLasOdoogUJj+j28XegFZRneITIuew==}
+    engines: {npm: '>=3.0.0'}
+    peerDependencies:
+      '@types/react': '>=16.8.0'
+      '@types/react-dom': '>=16.8.0'
+      react: 18.2.0
+      react-dom: 18.2.0
+      react-is: '>=16.8.0'
+    peerDependenciesMeta:
+      '@types/react':
+        optional: true
+      '@types/react-dom':
+        optional: true
+
+  '@formily/reactive-react@2.3.7':
+    resolution: {integrity: sha512-foUP2El31RrCS+cj6QhZ9nhO5h8HhTFT4kof6Dt9qI72pzcdoxjGSiPSSstfn4eFmUbyiD8APz8d/ynB4INo5Q==}
+    engines: {npm: '>=3.0.0'}
+    peerDependencies:
+      '@types/react': '>=16.8.0'
+      '@types/react-dom': '>=16.8.0'
+      react: 18.2.0
+      react-dom: 18.2.0
+      react-is: '>=16.8.0'
+    peerDependenciesMeta:
+      '@types/react':
+        optional: true
+      '@types/react-dom':
+        optional: true
+
+  '@formily/reactive@2.3.7':
+    resolution: {integrity: sha512-+ovdvYfig7K97Ktel8qY1xAUM4O1uxSm79yuk7xmaAhOJWDAkvDPvzGtcB95cQ3vhPN9d/2sOvRzxMlVlr/gpg==}
+    engines: {npm: '>=3.0.0'}
+
+  '@formily/shared@2.3.7':
+    resolution: {integrity: sha512-Xccuay6CP1CNvieyTjAniFG08biUVA+xBZZuZboCzdxoUO1gOCzUz9A2U7cvw0Xw+Hm4uI1sgISE95lCD5R3fQ==}
+    engines: {npm: '>=3.0.0'}
+
+  '@formily/validator@2.3.7':
+    resolution: {integrity: sha512-/bIZL0YoEhi/AxwbJz1FxkcAXI4tyzaMF8j7LTJigKgjrJLGCiLEU1GtSk+9OmUSRDHblr73jM/TWMlb/L3EuA==}
+    engines: {npm: '>=3.0.0'}
+
   '@gar/promisify@1.1.3':
     resolution: {integrity: sha512-k2Ty1JcVojjJFwrg/ThKi2ujJ7XNLYaFGNB/bWT9wGR+oSMJHMa5w+CUq6p/pVrKeNNgA7pCqEcjSnHVoqJQFw==}
 
@@ -3025,16 +3080,6 @@ packages:
   '@juggle/resize-observer@3.4.0':
     resolution: {integrity: sha512-dfLbk+PwWvFzSxwk3n5ySL0hfBog779o8h68wK/7/APo/7cgyWp5jcXockbxdk5kFRkbeXWm4Fbi9FrdN381sA==}
 
-  '@ld/ali-logger@1.1.5':
-    resolution: {integrity: sha512-NEGJIKaz07n/G6UAnRXINTM6j1Xld2NVXi9YES5io/vykWx6ExC4YqPSDDA/6PTYZ9KB6w2cobZfH1Guj72pcA==, tarball: https://npm.ledupeiyou.com/@ld/ali-logger/-/ali-logger-1.1.5.tgz}
-    engines: {node: '>= 18'}
-
-  '@ld/file-upload@1.0.27':
-    resolution: {integrity: sha512-sr13DGu0h/QBXlHni1vfGKPj7SnwXwcBHEPf7lCg6D43E/v5WABmh1gJ+GoRuplvf/CutkLfZFM5vjmzj7VO9Q==, tarball: https://npm.ledupeiyou.com/@ld/file-upload/-/file-upload-1.0.27.tgz}
-
-  '@ld/micro-app@0.0.1':
-    resolution: {integrity: sha512-QRy5IkKA0FmrBQeBu4C0wrqf5kPdp7X/YKBIsKRHqrpMa0VLTFjVthnPG3vltGTHmbl6qiMnQR/cPDqOQ9nZeQ==, tarball: https://npm.ledupeiyou.com/@ld/micro-app/-/micro-app-0.0.1.tgz}
-
   '@leichtgewicht/ip-codec@2.0.5':
     resolution: {integrity: sha512-Vo+PSpZG2/fmgmiNzYK9qWRh8h/CHrwD0mo1h1DzL4yzHNSfWYujGTYsWGreD000gcgmZ7K4Ys6Tx9TxtsKdDw==}
 
@@ -3060,6 +3105,9 @@ packages:
 
   '@mdx-js/util@1.6.22':
     resolution: {integrity: sha512-H1rQc1ZOHANWBvPcW+JpGwr+juXSxM8Q8YCkm3GhZd8REu1fHR3z99CErO1p9pkcfcxZnMdIZdIsXkOHY0NilA==}
+
+  '@micro-zoe/micro-app@1.0.0-rc.30':
+    resolution: {integrity: sha512-zHcDGoQTxvrvh8Tp5yIKmIQY4fQwr2IT1BcrbUZMdBL2ISfHjpvBTDU20xHVhK2znqufx+DZLDZV5yXioo+JQQ==}
 
   '@microsoft/tsdoc@0.15.1':
     resolution: {integrity: sha512-4aErSrCR/On/e5G2hDP0wjooqDdauzEbIq8hIkIe5pXV0rtWJZvdCEKL0ykZxex+IxIwBp0eGeV48hQN07dXtw==}
@@ -3708,36 +3756,6 @@ packages:
 
   '@sinonjs/fake-timers@8.1.0':
     resolution: {integrity: sha512-OAPJUAtgeINhh/TAlUID4QTs53Njm7xzddaVlEs/SXwgtiD1tW22zAB/W1wdqfrpmikgaWQ9Fw6Ws+hsiRm5Vg==}
-
-  '@slides/antd@1.0.0':
-    resolution: {integrity: sha512-qJtulpmSBeXJi5J7/sEhNWuU9RkTWihA6VnIN3Uc9moW+7v+jq6x4X6TOWwBqSZRe80IfnNEMp1Sjo5MAcktRA==, tarball: https://npm.ledupeiyou.com/@slides/antd/-/antd-1.0.0.tgz}
-
-  '@slides/core@1.0.0':
-    resolution: {integrity: sha512-pvkwuVkgv4nkdF61/V+4NXT8bnwXLYwuByhhIWeFan9adGCfBX3juda/O1I4XoSD3SXp3AsK0Rj9ng90vOYqUQ==, tarball: https://npm.ledupeiyou.com/@slides/core/-/core-1.0.0.tgz}
-
-  '@slides/grid@1.0.0':
-    resolution: {integrity: sha512-Fbld/Pr3qmrJxYa7xInrl79Uh++muokbYgdAu6vC0I/IBMr24SC6rpie/U3uJPwgRnYOCIvaq2KqK0i+aB8JLA==, tarball: https://npm.ledupeiyou.com/@slides/grid/-/grid-1.0.0.tgz}
-
-  '@slides/json-schema@1.0.0':
-    resolution: {integrity: sha512-YsDbyl2/4tZpj1O9A6iA6nanZXkp37ngeB9cStnAxq8m04/xbf1Tja183157X5taatYwOsP/rvz4yh88ayGLWg==, tarball: https://npm.ledupeiyou.com/@slides/json-schema/-/json-schema-1.0.0.tgz}
-
-  '@slides/path@1.0.0':
-    resolution: {integrity: sha512-bC1bcc+/5+9RIRUk+4GBynhNMs7p7usv+MQK5zs62euoqFQrqLaujoOeJwyQ3hmRm6rb6LkQhndmcupLw3ZJKw==, tarball: https://npm.ledupeiyou.com/@slides/path/-/path-1.0.0.tgz}
-
-  '@slides/react@1.0.0':
-    resolution: {integrity: sha512-UJk0+xeN+7DqWtvJgWHLtWlhl8zY9ACUso2jLx4H3LtsHSsdU+qxjL4UuWattzRCtkt3BWqEPaPXF7YmL3zHEw==, tarball: https://npm.ledupeiyou.com/@slides/react/-/react-1.0.0.tgz}
-
-  '@slides/reactive-react@1.0.0':
-    resolution: {integrity: sha512-YYkVcaDKIYJJbVBa3swKmr82+ooP9vQY2BqIxmz0Yq6wKD+li+dj2ahg6QyI32mhUgT3Zs5pxHP/yppzYV/XRg==, tarball: https://npm.ledupeiyou.com/@slides/reactive-react/-/reactive-react-1.0.0.tgz}
-
-  '@slides/reactive@1.0.0':
-    resolution: {integrity: sha512-7Ye+SARxIBj+pM9I+o+pLi6c7WdnpkMF7n0MyWi+vKYgeDu/JjrcSslcMWFH5DHxeMuBqJV4sCDUjnTNOVBgXQ==, tarball: https://npm.ledupeiyou.com/@slides/reactive/-/reactive-1.0.0.tgz}
-
-  '@slides/shared@1.0.0':
-    resolution: {integrity: sha512-K97BaZKbnaV86s3E78bfiyzFDwNhQLi9zfV4iSnX5c55M2wX4f0wPcm89OiPM7zBgchq6BRPZWZy5uGaE/Oe6g==, tarball: https://npm.ledupeiyou.com/@slides/shared/-/shared-1.0.0.tgz}
-
-  '@slides/validator@1.0.0':
-    resolution: {integrity: sha512-q2z/c5bdCEvPIE1U9AwDSpiEx5+ikIfFWani7VbluGyrTTLHUxDVjtsrV6Tvq8/mB9tG0tpSNCG8VrjPVM/R3g==, tarball: https://npm.ledupeiyou.com/@slides/validator/-/validator-1.0.0.tgz}
 
   '@storybook/addon-actions@6.5.16':
     resolution: {integrity: sha512-aADjilFmuD6TNGz2CRPSupnyiA/IGkPJHDBTqMpsDXTUr8xnuD122xkIhg6UxmCM2y1c+ncwYXy3WPK2xXK57g==}
@@ -6388,9 +6406,6 @@ packages:
     resolution: {integrity: sha512-r4ESw/IlusD17lgQi1O20Fa3qNnsckR126TdUuBgAu7GBYSIPvdNyONd3Zrxh0xCwA4+6w/TDArBPsMvhur+KQ==}
     engines: {node: '>= 0.10'}
 
-  crypto-js@4.2.0:
-    resolution: {integrity: sha512-KALDyEYgpY+Rlob/iriUtjV6d5Eq+Y191A5g4UqLAi8CyGP9N1+FdVbkc1SxKc2r4YAYqG8JzO2KGL+AizD70Q==}
-
   crypto-random-string@2.0.0:
     resolution: {integrity: sha512-v1plID3y9r/lPhviJ1wrXpLeyUIGAZ2SHNYTEapm7/8A9nLPoyvVp3RK/EPFqn5kEznyWgYZNsRtYYIWbuG8KA==}
     engines: {node: '>=8'}
@@ -6581,10 +6596,6 @@ packages:
   data-view-byte-offset@1.0.1:
     resolution: {integrity: sha512-BS8PfmtDGnrgYdOonGZQdLZslWIeCGFP9tpan0hi1Co2Zr2NKADsvGYA8XxuG/4UWgJ6Cjtv+YJnB6MM69QGlQ==}
     engines: {node: '>= 0.4'}
-
-  dateformat@5.0.3:
-    resolution: {integrity: sha512-Kvr6HmPXUMerlLcLF+Pwq3K7apHpYmGDVqrxcDasBg86UcKeTSNWbEzU8bwdXnxnR44FtMhJAxI4Bov6Y/KUfA==}
-    engines: {node: '>=12.20'}
 
   dayjs@1.11.21:
     resolution: {integrity: sha512-98IT+HOahAisibz/yjKbzuOBwYcjJ7BCLPzARyHiyEBmRz4fatF+KPJszEHXsGYjUG234aH/cOjW1wwTbKUZlA==}
@@ -8651,10 +8662,6 @@ packages:
     resolution: {integrity: sha512-fKzAra0rGJUUBwGBgNkHZuToZcn+TtXHpeCgmkMJMMYx1sQDYaCSyjJBSCa2nH1DGm7s3n1oBnohoVTBaN7Lww==}
     engines: {node: '>=8'}
 
-  is@3.3.2:
-    resolution: {integrity: sha512-a2xr4E3s1PjDS8ORcGgXpWx6V+liNs+O3JRD2mb9aeugD7rtkkZ0zgLdYgw0tWsKhsdiezGYptSiMlVazCBTuQ==}
-    engines: {node: '>= 0.4'}
-
   isarray@1.0.0:
     resolution: {integrity: sha512-VLghIWNM6ELQzo7zwmcg0NmTVyWKYjvIeM83yjp0wRDTmUnrM678fQbcKBo6n2CJEF0szoG//ytg+TKla89ALQ==}
 
@@ -9353,9 +9360,6 @@ packages:
 
   lodash.once@4.1.1:
     resolution: {integrity: sha512-Sb487aTOCr9drQVL8pIxOzVhafOjZN9UU54hiN8PU3uAiSV7lx1yYNpbNmex2PK6dSJoNTSJUUswT651yww3Mg==}
-
-  lodash.random@3.2.0:
-    resolution: {integrity: sha512-A6Vn7teN0+qSnhOsE8yx2bGowCS1G7D9e5abq8VhwOP98YHS/KrGMf43yYxA05lvcvloT+W9Z2ffkSajFTcPUA==}
 
   lodash.snakecase@4.1.1:
     resolution: {integrity: sha512-QZ1d4xoBHYUeuouhEq3lk3Uq7ldgyFXGBhg04+oRLnIz8o9T65Eh+8YdroUwn846zchkA9yDsDl5CVVaV2nqYw==}
@@ -11009,10 +11013,6 @@ packages:
     resolution: {integrity: sha512-s4VSOf6yN0rvbRZGxs8Om5CWj6seneMwK3oDb4lWDH0UPhWcxwOWw5+qk24bxq87szX1ydrwylIOp2uG1ojUpA==}
     engines: {node: '>= 0.8'}
 
-  raw-body@3.0.2:
-    resolution: {integrity: sha512-K5zQjDllxWkf7Z5xJdV0/B0WTNqx6vxG70zJE4N0kBs4LovmEYWJzQGxC9bS9RAKu3bgM40lrd5zoLJ12MQ5BA==}
-    engines: {node: '>= 0.10'}
-
   raw-loader@4.0.2:
     resolution: {integrity: sha512-ZnScIV3ag9A4wPX/ZayxL/jZH+euYb6FcUinPcgiQW0+UBtEv0O6Q3lGd3cqJ+GHH+rksEv3Pj99oxJ3u3VIKA==}
     engines: {node: '>= 10.13.0'}
@@ -11416,8 +11416,8 @@ packages:
       react: 18.2.0
       react-dom: 18.2.0
 
-  react-sticky-box@2.0.5:
-    resolution: {integrity: sha512-JEIuN7Q3razU1NNS0vddC12GXCUkj7T4aCpC9ZSTjgBddFsBdTcN1RhYXFLjCE/KDOQqX2Ix308BcdrqtSJbkQ==}
+  react-sticky-box@1.0.2:
+    resolution: {integrity: sha512-Kyvtppdtv1KqJyNU4DtrSMI0unyQRgtraZvVQ0GAazVbYiTsIVpyhpr+5R0Aavzu4uJNSe1awj2rk/qI7i6Zfw==}
     peerDependencies:
       react: 18.2.0
 
@@ -13858,6 +13858,16 @@ snapshots:
       react: 18.2.0
       react-dom: 18.2.0(react@18.2.0)
 
+  '@ant-design/icons@5.2.6(react-dom@18.3.1(react@18.3.1))(react@18.3.1)':
+    dependencies:
+      '@ant-design/colors': 7.2.1
+      '@ant-design/icons-svg': 4.4.2
+      '@babel/runtime': 7.29.7
+      classnames: 2.5.1
+      rc-util: 5.44.4(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+      react: 18.3.1
+      react-dom: 18.3.1(react@18.3.1)
+
   '@ant-design/icons@5.6.1(react-dom@18.2.0(react@18.2.0))(react@18.2.0)':
     dependencies:
       '@ant-design/colors': 7.2.1
@@ -15472,6 +15482,149 @@ snapshots:
 
   '@eslint/js@8.57.1': {}
 
+  '@formily/antd-v5@1.2.4(@types/react-dom@18.3.7(@types/react@18.3.29))(@types/react@18.3.29)(antd@5.29.3(moment@2.30.1)(react-dom@18.2.0(react@18.2.0))(react@18.2.0))(react-dom@18.2.0(react@18.2.0))(react-is@18.3.1)(react@18.2.0)(typescript@5.9.3)':
+    dependencies:
+      '@ant-design/cssinjs': 1.24.0(react-dom@18.2.0(react@18.2.0))(react@18.2.0)
+      '@ant-design/icons': 5.2.6(react-dom@18.2.0(react@18.2.0))(react@18.2.0)
+      '@dnd-kit/core': 6.3.1(react-dom@18.2.0(react@18.2.0))(react@18.2.0)
+      '@dnd-kit/sortable': 7.0.2(@dnd-kit/core@6.3.1(react-dom@18.2.0(react@18.2.0))(react@18.2.0))(react@18.2.0)
+      '@formily/core': 2.3.7
+      '@formily/grid': 2.3.7(typescript@5.9.3)
+      '@formily/json-schema': 2.3.7(typescript@5.9.3)
+      '@formily/react': 2.3.7(@types/react-dom@18.3.7(@types/react@18.3.29))(@types/react@18.3.29)(react-dom@18.2.0(react@18.2.0))(react-is@18.3.1)(react@18.2.0)(typescript@5.9.3)
+      '@formily/reactive': 2.3.7
+      '@formily/reactive-react': 2.3.7(@types/react-dom@18.3.7(@types/react@18.3.29))(@types/react@18.3.29)(react-dom@18.2.0(react@18.2.0))(react-is@18.3.1)(react@18.2.0)
+      '@formily/shared': 2.3.7
+      '@types/react': 18.3.29
+      '@types/react-dom': 18.3.7(@types/react@18.3.29)
+      antd: 5.29.3(moment@2.30.1)(react-dom@18.2.0(react@18.2.0))(react@18.2.0)
+      classnames: 2.5.1
+      react: 18.2.0
+      react-dom: 18.2.0(react@18.2.0)
+      react-is: 18.3.1
+      react-sticky-box: 1.0.2(react@18.2.0)
+    transitivePeerDependencies:
+      - typescript
+
+  '@formily/antd-v5@1.2.4(@types/react-dom@18.3.7(@types/react@18.3.29))(@types/react@18.3.29)(antd@5.29.3(moment@2.30.1)(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(react-dom@18.3.1(react@18.3.1))(react-is@18.3.1)(react@18.3.1)(typescript@5.9.3)':
+    dependencies:
+      '@ant-design/cssinjs': 1.24.0(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+      '@ant-design/icons': 5.2.6(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+      '@dnd-kit/core': 6.3.1(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+      '@dnd-kit/sortable': 7.0.2(@dnd-kit/core@6.3.1(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(react@18.3.1)
+      '@formily/core': 2.3.7
+      '@formily/grid': 2.3.7(typescript@5.9.3)
+      '@formily/json-schema': 2.3.7(typescript@5.9.3)
+      '@formily/react': 2.3.7(@types/react-dom@18.3.7(@types/react@18.3.29))(@types/react@18.3.29)(react-dom@18.3.1(react@18.3.1))(react-is@18.3.1)(react@18.3.1)(typescript@5.9.3)
+      '@formily/reactive': 2.3.7
+      '@formily/reactive-react': 2.3.7(@types/react-dom@18.3.7(@types/react@18.3.29))(@types/react@18.3.29)(react-dom@18.3.1(react@18.3.1))(react-is@18.3.1)(react@18.3.1)
+      '@formily/shared': 2.3.7
+      '@types/react': 18.3.29
+      '@types/react-dom': 18.3.7(@types/react@18.3.29)
+      antd: 5.29.3(moment@2.30.1)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+      classnames: 2.5.1
+      react: 18.3.1
+      react-dom: 18.3.1(react@18.3.1)
+      react-is: 18.3.1
+      react-sticky-box: 1.0.2(react@18.3.1)
+    transitivePeerDependencies:
+      - typescript
+
+  '@formily/core@2.3.7':
+    dependencies:
+      '@formily/reactive': 2.3.7
+      '@formily/shared': 2.3.7
+      '@formily/validator': 2.3.7
+
+  '@formily/grid@2.3.7(typescript@5.9.3)':
+    dependencies:
+      '@formily/reactive': 2.3.7
+      '@juggle/resize-observer': 3.4.0
+      typescript: 5.9.3
+
+  '@formily/json-schema@2.3.7(typescript@5.9.3)':
+    dependencies:
+      '@formily/core': 2.3.7
+      '@formily/reactive': 2.3.7
+      '@formily/shared': 2.3.7
+      typescript: 5.9.3
+
+  '@formily/path@2.3.7': {}
+
+  '@formily/react@2.3.7(@types/react-dom@18.3.7(@types/react@18.3.29))(@types/react@18.3.29)(react-dom@18.2.0(react@18.2.0))(react-is@18.3.1)(react@18.2.0)(typescript@5.9.3)':
+    dependencies:
+      '@formily/core': 2.3.7
+      '@formily/json-schema': 2.3.7(typescript@5.9.3)
+      '@formily/reactive': 2.3.7
+      '@formily/reactive-react': 2.3.7(@types/react-dom@18.3.7(@types/react@18.3.29))(@types/react@18.3.29)(react-dom@18.2.0(react@18.2.0))(react-is@18.3.1)(react@18.2.0)
+      '@formily/shared': 2.3.7
+      '@formily/validator': 2.3.7
+      hoist-non-react-statics: 3.3.2
+      react: 18.2.0
+      react-dom: 18.2.0(react@18.2.0)
+      react-is: 18.3.1
+    optionalDependencies:
+      '@types/react': 18.3.29
+      '@types/react-dom': 18.3.7(@types/react@18.3.29)
+    transitivePeerDependencies:
+      - typescript
+
+  '@formily/react@2.3.7(@types/react-dom@18.3.7(@types/react@18.3.29))(@types/react@18.3.29)(react-dom@18.3.1(react@18.3.1))(react-is@18.3.1)(react@18.3.1)(typescript@5.9.3)':
+    dependencies:
+      '@formily/core': 2.3.7
+      '@formily/json-schema': 2.3.7(typescript@5.9.3)
+      '@formily/reactive': 2.3.7
+      '@formily/reactive-react': 2.3.7(@types/react-dom@18.3.7(@types/react@18.3.29))(@types/react@18.3.29)(react-dom@18.3.1(react@18.3.1))(react-is@18.3.1)(react@18.3.1)
+      '@formily/shared': 2.3.7
+      '@formily/validator': 2.3.7
+      hoist-non-react-statics: 3.3.2
+      react: 18.3.1
+      react-dom: 18.3.1(react@18.3.1)
+      react-is: 18.3.1
+    optionalDependencies:
+      '@types/react': 18.3.29
+      '@types/react-dom': 18.3.7(@types/react@18.3.29)
+    transitivePeerDependencies:
+      - typescript
+
+  '@formily/reactive-react@2.3.7(@types/react-dom@18.3.7(@types/react@18.3.29))(@types/react@18.3.29)(react-dom@18.2.0(react@18.2.0))(react-is@18.3.1)(react@18.2.0)':
+    dependencies:
+      '@formily/reactive': 2.3.7
+      hoist-non-react-statics: 3.3.2
+      react: 18.2.0
+      react-dom: 18.2.0(react@18.2.0)
+      react-is: 18.3.1
+    optionalDependencies:
+      '@types/react': 18.3.29
+      '@types/react-dom': 18.3.7(@types/react@18.3.29)
+
+  '@formily/reactive-react@2.3.7(@types/react-dom@18.3.7(@types/react@18.3.29))(@types/react@18.3.29)(react-dom@18.3.1(react@18.3.1))(react-is@18.3.1)(react@18.3.1)':
+    dependencies:
+      '@formily/reactive': 2.3.7
+      hoist-non-react-statics: 3.3.2
+      react: 18.3.1
+      react-dom: 18.3.1(react@18.3.1)
+      react-is: 18.3.1
+    optionalDependencies:
+      '@types/react': 18.3.29
+      '@types/react-dom': 18.3.7(@types/react@18.3.29)
+
+  '@formily/reactive@2.3.7': {}
+
+  '@formily/shared@2.3.7':
+    dependencies:
+      '@formily/path': 2.3.7
+      camel-case: 4.1.2
+      lower-case: 2.0.2
+      no-case: 3.0.4
+      param-case: 3.0.4
+      pascal-case: 3.1.2
+      upper-case: 2.0.2
+
+  '@formily/validator@2.3.7':
+    dependencies:
+      '@formily/shared': 2.3.7
+
   '@gar/promisify@1.1.3': {}
 
   '@humanwhocodes/config-array@0.13.0':
@@ -15916,19 +16069,6 @@ snapshots:
 
   '@juggle/resize-observer@3.4.0': {}
 
-  '@ld/ali-logger@1.1.5': {}
-
-  '@ld/file-upload@1.0.27':
-    dependencies:
-      cos-js-sdk-v5: 1.10.1
-      crypto-js: 4.2.0
-      is: 3.3.2
-      lodash: 4.18.1
-      moment: 2.30.1
-      uuid: 9.0.1
-
-  '@ld/micro-app@0.0.1': {}
-
   '@leichtgewicht/ip-codec@2.0.5': {}
 
   '@ljharb/through@2.3.14':
@@ -15981,6 +16121,8 @@ snapshots:
       react: 18.2.0
 
   '@mdx-js/util@1.6.22': {}
+
+  '@micro-zoe/micro-app@1.0.0-rc.30': {}
 
   '@microsoft/tsdoc@0.15.1': {}
 
@@ -16701,90 +16843,6 @@ snapshots:
   '@sinonjs/fake-timers@8.1.0':
     dependencies:
       '@sinonjs/commons': 1.8.6
-
-  '@slides/antd@1.0.0(react-dom@18.2.0(react@18.2.0))(react@18.2.0)':
-    dependencies:
-      '@dnd-kit/core': 6.3.1(react-dom@18.2.0(react@18.2.0))(react@18.2.0)
-      '@dnd-kit/sortable': 7.0.2(@dnd-kit/core@6.3.1(react-dom@18.2.0(react@18.2.0))(react@18.2.0))(react@18.2.0)
-      '@dnd-kit/utilities': 3.2.2(react@18.2.0)
-      '@slides/core': 1.0.0
-      '@slides/grid': 1.0.0
-      '@slides/json-schema': 1.0.0
-      '@slides/react': 1.0.0
-      '@slides/reactive': 1.0.0
-      '@slides/reactive-react': 1.0.0
-      '@slides/shared': 1.0.0
-      moment: 2.30.1
-      react-sticky-box: 2.0.5(react@18.2.0)
-    transitivePeerDependencies:
-      - react
-      - react-dom
-
-  '@slides/antd@1.0.0(react-dom@18.3.1(react@18.3.1))(react@18.3.1)':
-    dependencies:
-      '@dnd-kit/core': 6.3.1(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
-      '@dnd-kit/sortable': 7.0.2(@dnd-kit/core@6.3.1(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(react@18.3.1)
-      '@dnd-kit/utilities': 3.2.2(react@18.3.1)
-      '@slides/core': 1.0.0
-      '@slides/grid': 1.0.0
-      '@slides/json-schema': 1.0.0
-      '@slides/react': 1.0.0
-      '@slides/reactive': 1.0.0
-      '@slides/reactive-react': 1.0.0
-      '@slides/shared': 1.0.0
-      moment: 2.30.1
-      react-sticky-box: 2.0.5(react@18.3.1)
-    transitivePeerDependencies:
-      - react
-      - react-dom
-
-  '@slides/core@1.0.0':
-    dependencies:
-      '@slides/reactive': 1.0.0
-      '@slides/shared': 1.0.0
-      '@slides/validator': 1.0.0
-
-  '@slides/grid@1.0.0':
-    dependencies:
-      '@juggle/resize-observer': 3.4.0
-      '@slides/reactive': 1.0.0
-
-  '@slides/json-schema@1.0.0':
-    dependencies:
-      '@slides/core': 1.0.0
-      '@slides/reactive': 1.0.0
-      '@slides/shared': 1.0.0
-
-  '@slides/path@1.0.0': {}
-
-  '@slides/react@1.0.0':
-    dependencies:
-      '@slides/core': 1.0.0
-      '@slides/json-schema': 1.0.0
-      '@slides/reactive': 1.0.0
-      '@slides/reactive-react': 1.0.0
-      '@slides/shared': 1.0.0
-      dateformat: 5.0.3
-
-  '@slides/reactive-react@1.0.0':
-    dependencies:
-      '@slides/reactive': 1.0.0
-      hoist-non-react-statics: 3.3.2
-
-  '@slides/reactive@1.0.0': {}
-
-  '@slides/shared@1.0.0':
-    dependencies:
-      '@slides/path': 1.0.0
-      camel-case: 4.1.2
-      lower-case: 2.0.2
-      param-case: 3.0.4
-      pascal-case: 3.1.2
-      upper-case: 2.0.2
-
-  '@slides/validator@1.0.0':
-    dependencies:
-      '@slides/shared': 1.0.0
 
   '@storybook/addon-actions@6.5.16(react-dom@18.2.0(react@18.2.0))(react@18.2.0)':
     dependencies:
@@ -20871,8 +20929,6 @@ snapshots:
       randombytes: 2.1.0
       randomfill: 1.0.4
 
-  crypto-js@4.2.0: {}
-
   crypto-random-string@2.0.0: {}
 
   css-blank-pseudo@3.0.3(postcss@8.5.15):
@@ -21118,8 +21174,6 @@ snapshots:
       call-bound: 1.0.4
       es-errors: 1.3.0
       is-data-view: 1.0.2
-
-  dateformat@5.0.3: {}
 
   dayjs@1.11.21: {}
 
@@ -21776,7 +21830,7 @@ snapshots:
       eslint: 8.57.1
       eslint-plugin-flowtype: 8.0.3(@babel/plugin-syntax-flow@7.29.7(@babel/core@7.29.7))(@babel/plugin-transform-react-jsx@7.29.7(@babel/core@7.29.7))(eslint@8.57.1)
       eslint-plugin-import: 2.32.0(@typescript-eslint/parser@5.62.0(eslint@8.57.1)(typescript@4.9.5))(eslint@8.57.1)
-      eslint-plugin-jest: 25.7.0(@typescript-eslint/eslint-plugin@5.62.0(@typescript-eslint/parser@5.62.0(eslint@8.57.1)(typescript@4.9.5))(eslint@8.57.1)(typescript@4.9.5))(eslint@8.57.1)(jest@27.5.1(ts-node@10.9.2(@swc/core@1.15.40)(@types/node@16.18.126)(typescript@4.9.5)))(typescript@4.9.5)
+      eslint-plugin-jest: 25.7.0(@typescript-eslint/eslint-plugin@5.62.0(@typescript-eslint/parser@5.62.0(eslint@8.57.1)(typescript@4.9.5))(eslint@8.57.1)(typescript@4.9.5))(eslint@8.57.1)(jest@27.5.1)(typescript@4.9.5)
       eslint-plugin-jsx-a11y: 6.10.2(eslint@8.57.1)
       eslint-plugin-react: 7.37.5(eslint@8.57.1)
       eslint-plugin-react-hooks: 4.6.2(eslint@8.57.1)
@@ -21846,7 +21900,7 @@ snapshots:
       - eslint-import-resolver-webpack
       - supports-color
 
-  eslint-plugin-jest@25.7.0(@typescript-eslint/eslint-plugin@5.62.0(@typescript-eslint/parser@5.62.0(eslint@8.57.1)(typescript@4.9.5))(eslint@8.57.1)(typescript@4.9.5))(eslint@8.57.1)(jest@27.5.1(ts-node@10.9.2(@swc/core@1.15.40)(@types/node@16.18.126)(typescript@4.9.5)))(typescript@4.9.5):
+  eslint-plugin-jest@25.7.0(@typescript-eslint/eslint-plugin@5.62.0(@typescript-eslint/parser@5.62.0(eslint@8.57.1)(typescript@4.9.5))(eslint@8.57.1)(typescript@4.9.5))(eslint@8.57.1)(jest@27.5.1)(typescript@4.9.5):
     dependencies:
       '@typescript-eslint/experimental-utils': 5.62.0(eslint@8.57.1)(typescript@4.9.5)
       eslint: 8.57.1
@@ -23635,8 +23689,6 @@ snapshots:
     dependencies:
       is-docker: 2.2.1
 
-  is@3.3.2: {}
-
   isarray@1.0.0: {}
 
   isarray@2.0.5: {}
@@ -24400,7 +24452,7 @@ snapshots:
       leven: 3.1.0
       pretty-format: 29.7.0
 
-  jest-watch-typeahead@1.1.0(jest@27.5.1(ts-node@10.9.2(@swc/core@1.15.40)(@types/node@16.18.126)(typescript@4.9.5))):
+  jest-watch-typeahead@1.1.0(jest@27.5.1):
     dependencies:
       ansi-escapes: 4.3.2
       chalk: 4.1.2
@@ -24843,8 +24895,6 @@ snapshots:
   lodash.mergewith@4.6.2: {}
 
   lodash.once@4.1.1: {}
-
-  lodash.random@3.2.0: {}
 
   lodash.snakecase@4.1.1: {}
 
@@ -26669,13 +26719,6 @@ snapshots:
       iconv-lite: 0.4.24
       unpipe: 1.0.0
 
-  raw-body@3.0.2:
-    dependencies:
-      bytes: 3.1.2
-      http-errors: 2.0.1
-      iconv-lite: 0.7.2
-      unpipe: 1.0.0
-
   raw-loader@4.0.2(webpack@4.47.0):
     dependencies:
       loader-utils: 2.0.4
@@ -27596,7 +27639,7 @@ snapshots:
       identity-obj-proxy: 3.0.0
       jest: 27.5.1(ts-node@10.9.2(@swc/core@1.15.40)(@types/node@16.18.126)(typescript@4.9.5))
       jest-resolve: 27.5.1
-      jest-watch-typeahead: 1.1.0(jest@27.5.1(ts-node@10.9.2(@swc/core@1.15.40)(@types/node@16.18.126)(typescript@4.9.5)))
+      jest-watch-typeahead: 1.1.0(jest@27.5.1)
       mini-css-extract-plugin: 2.10.2(webpack@5.107.2(postcss@8.5.15))
       postcss: 8.5.15
       postcss-flexbugs-fixes: 5.0.2(postcss@8.5.15)
@@ -27677,13 +27720,15 @@ snapshots:
       react: 18.3.1
       react-dom: 18.3.1(react@18.3.1)
 
-  react-sticky-box@2.0.5(react@18.2.0):
+  react-sticky-box@1.0.2(react@18.2.0):
     dependencies:
       react: 18.2.0
+      resize-observer-polyfill: 1.5.1
 
-  react-sticky-box@2.0.5(react@18.3.1):
+  react-sticky-box@1.0.2(react@18.3.1):
     dependencies:
       react: 18.3.1
+      resize-observer-polyfill: 1.5.1
 
   react@18.2.0:
     dependencies:

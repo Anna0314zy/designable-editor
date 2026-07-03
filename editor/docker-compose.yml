@@ -1,0 +1,8 @@
+services:
+  editor:
+    image: ${EDITOR_IMAGE:?set EDITOR_IMAGE to the pushed editor image}
+    pull_policy: always
+    environment:
+      API_UPSTREAM: http://8.141.7.113:5177
+    ports:
+      - "8080:80"

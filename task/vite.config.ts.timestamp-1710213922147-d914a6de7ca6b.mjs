@@ -81,12 +81,12 @@ var vite_config_default = defineConfig({
     port: 5176,
     proxy: {
       "/api": {
-        target: "https://test-class-api-online.saasp.vdyoo.com",
+        target: "",
         changeOrigin: true,
         rewrite: (path2) => path2.replace(/^\/api/, "")
       },
       "/test": {
-        target: "http://master-course-beta-inner.saasp.vdyoo.com",
+        target: "",
         changeOrigin: true,
         rewrite: (path2) => path2.replace(/^\/test/, "")
       }

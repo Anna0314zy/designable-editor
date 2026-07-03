@@ -3597,8 +3597,8 @@ System.register("chunks:///_virtual/NetWork.ts", ['./rollupPluginModLoBabelHelpe
           //判断是否是线上   URL里不加参数则默认为测试环境
           this.isOnlineEnv = this.GetIsOnline() == 'online'; // /classroom-slides/resources/cos/credential
 
-          this.BASE = this.isOnlineEnv ? 'https://class-api-online.saasp.vdyoo.com' : 'https://test-class-api-online.saasp.vdyoo.com';
-          this.COS_BUCKET = this.isOnlineEnv ? '' : 'class-slides-res-test-1313601664';
+          this.BASE = this.isOnlineEnv ? '' : '';
+          this.COS_BUCKET = this.isOnlineEnv ? '' : '';
           this.COS_URL = this.BASE + "/classroom-slides/resources/cos/credential?bucketName=" + this.COS_BUCKET;
           this.COS_REGION = 'ap-beijing';
           this.COS_BASE_URL = this.isOnlineEnv ? 'https://micro-class.xuepeiyou.com' : 'https://micro-class-test.xuepeiyou.com';

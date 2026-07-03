@@ -39,4 +39,9 @@ temp
 **/public/fonts
 *.zsh
 *.tmp
-*.env
+serverless/screenshot/s.fz.yaml
+
+# AI review generated reports
+ai-review-report.json
+ai-review-report.md
+.ai-review/

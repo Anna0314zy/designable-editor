@@ -15,7 +15,7 @@
 - [ ] 画布元素支持拖拽
 
 # designable-editor
-
+npm run deploy-tencent
 https://anna0314zy.github.io/designable-editor/test/slide-shot/index.html
 
 editor -> task:

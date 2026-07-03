@@ -27,6 +27,13 @@ enum PublishStatus {
   failed
 }
 
+enum PublishJobStatus {
+  pending
+  running
+  success
+  failed
+}
+
 model User {
   id           String    @id @default(uuid()) @db.Uuid
   username     String    @unique
@@ -65,6 +72,7 @@ model Slide {
   tasks                     CourseTask[]
   currentPublish            SlidePublishRecord? @relation("CurrentSlidePublish", fields: [currentPublishId], references: [id])
   publishRecords            SlidePublishRecord[] @relation("SlidePublishRecords")
+  publishJobs               PublishJob[]
 
   @@index([status, deletedAt])
   @@index([currentPublishId])
@@ -194,10 +202,32 @@ model SlidePublishRecord {
   slide            Slide        @relation("SlidePublishRecords", fields: [slideId], references: [id])
   currentForSlides Slide[]      @relation("CurrentSlidePublish")
   pages            PagePublishSnapshot[]
+  publishJob       PublishJob?
 
   @@unique([slideId, version])
   @@index([slideId, status])
   @@index([createdAt])
+}
+
+model PublishJob {
+  id              String           @id @default(uuid()) @db.Uuid
+  slideId          String           @db.Uuid
+  publishRecordId  String           @unique @db.Uuid
+  status          PublishJobStatus @default(pending)
+  attempts        Int              @default(0)
+  maxAttempts     Int              @default(3)
+  nextRunAt       DateTime         @default(now())
+  lockedAt        DateTime?
+  lockedBy        String?
+  errorMessage    String?
+  createdAt       DateTime         @default(now())
+  updatedAt       DateTime         @updatedAt
+  slide           Slide            @relation(fields: [slideId], references: [id])
+  publishRecord   SlidePublishRecord @relation(fields: [publishRecordId], references: [id])
+
+  @@index([status, nextRunAt])
+  @@index([slideId, status])
+  @@index([lockedAt])
 }
 
 model PagePublishSnapshot {

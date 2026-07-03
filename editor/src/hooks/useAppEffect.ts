@@ -8,7 +8,6 @@ import { useEffect, useCallback, useRef } from "react"
 import useAppFn from './useAppFn'
 import { getSlides, canEdit } from '../api/slides'
 import {host} from '../api'
-import {message} from 'antd'
 import { getToken } from '../utils/common'
 import {
 	getCosConfig,
@@ -66,7 +65,6 @@ const useAppEffect = (props) => {
     //   return
     // }
     if (!slideId) {
-      message.error('请输入正确的课件id')
       return
     }
     const init = async () => {
@@ -74,8 +72,9 @@ const useAppEffect = (props) => {
       console.log('res.slideStructure',res.slideStructure)
       setLoading(false)
       let initData = []
-      if (res.slideStructure) { // 已有课件挂载
-        const { pageList, mapResourceObj } = initSlideData(res.pageContentDtoList, JSON.parse(res.slideStructure))
+      const slideStructure = res.slideStructure ? JSON.parse(res.slideStructure) : []
+      if (slideStructure.length) { // 已有课件挂载
+        const { pageList, mapResourceObj } = initSlideData(res.pageContentDtoList, slideStructure)
         setGlobalResource(mapResourceObj)
         initData = pageList.filter((item) => item)
       } else { // 无课件新课件创建第一页
@@ -109,8 +108,9 @@ const useAppEffect = (props) => {
       lockTokenRef.current = res.lockToken || ''
       init()
     })
-  }, [])
+  }, [slideId])
   useEffect(() => {
+    if (!slideId) return
     if (import.meta.env.MODE !== 'dev' && !getToken()) {
       location.replace(homeUrl)
       return
@@ -134,7 +134,7 @@ const useAppEffect = (props) => {
       // clearInterval(autoSave)
       window.removeEventListener('beforeunload', handleBeforeUnload);
     }
-  }, [])
+  }, [slideId])
   useEffect(() => {
     const currentWorkspace = workbench.currentWorkspace
     const activeWorkspace = workbench.activeWorkspace
