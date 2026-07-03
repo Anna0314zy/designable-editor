@@ -43,6 +43,7 @@ GitHub Actions 中手动运行 `AI Review` workflow：
 - 推荐输入 `pr_number`，workflow 会自动解析 PR base/head。
 - 没有 PR number 时，可以输入 `base` 和 `head` refs。
 - DevOps/CI 固定使用 `--scope branch`，审查当前 PR 或 base/head 的待 merge diff。
+- CI 直接使用 Node 20 执行 `scripts/ai-review.mjs`，不安装 pnpm 依赖。
 
 workflow 会生成：
 
